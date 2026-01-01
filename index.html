@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>极致性能下载</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DDoS防护监控中心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -12,364 +13,658 @@
             font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
         
+        :root {
+            --primary-color: #1a73e8;
+            --danger-color: #ea4335;
+            --warning-color: #fbbc05;
+            --success-color: #34a853;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --border-color: #334155;
+        }
+        
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: white;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
+            padding: 10px;
         }
         
         .container {
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
         }
         
-        h1 {
-            font-size: 2.8rem;
+        /* 头部样式 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
             margin-bottom: 20px;
-            background: linear-gradient(to right, #fdbb2d, #b21f1f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
         }
         
-        .subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .download-info {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .logo i {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(52, 168, 83, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--success-color);
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* 主仪表板 */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
             padding: 20px;
-            margin: 25px 0;
-            border-left: 4px solid #fdbb2d;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
         }
         
-        .file-info {
+        .card-header {
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin: 20px 0;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
         
-        .info-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px;
-            min-width: 150px;
-        }
-        
-        .info-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        .info-value {
+        .card-title {
             font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        
-        .progress-container {
-            width: 100%;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 30px 0;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, #1a2a6c, #b21f1f);
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        
-        .status {
-            font-size: 1.2rem;
-            margin: 20px 0;
-            min-height: 30px;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 15px 40px;
-            background: linear-gradient(to right, #1a2a6c, #b21f1f);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 20px 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(1px);
-        }
-        
-        .performance-stats {
+            font-weight: 600;
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 30px;
+            align-items: center;
+            gap: 8px;
         }
         
-        .stat {
-            background: rgba(255, 255, 255, 0.1);
+        .card-title i {
+            color: var(--primary-color);
+        }
+        
+        /* 攻击流量图 */
+        .attack-chart {
+            height: 200px;
+            position: relative;
+            margin-top: 15px;
+        }
+        
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 20px;
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease;
+        }
+        
+        .chart-bar.attack {
+            background-color: var(--danger-color);
+        }
+        
+        .chart-bar.normal {
+            background-color: var(--primary-color);
+        }
+        
+        /* 统计数据 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            text-align: center;
             padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            margin: 10px;
-            min-width: 120px;
+            border: 1px solid var(--border-color);
         }
         
         .stat-value {
             font-size: 1.8rem;
-            font-weight: bold;
-            color: #fdbb2d;
+            font-weight: 700;
+            margin-bottom: 5px;
         }
         
-        .footer {
-            margin-top: 40px;
+        .stat-value.attack {
+            color: var(--danger-color);
+        }
+        
+        .stat-value.normal {
+            color: var(--success-color);
+        }
+        
+        .stat-label {
             font-size: 0.9rem;
-            opacity: 0.7;
+            color: #94a3b8;
         }
         
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 20px;
-            }
-            
-            .file-info, .performance-stats {
+        /* 攻击列表 */
+        .attack-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .attack-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .attack-item:last-child {
+            border-bottom: none;
+        }
+        
+        .attack-source {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .attack-ip {
+            font-weight: 600;
+            font-family: monospace;
+        }
+        
+        .attack-type {
+            background-color: rgba(234, 67, 53, 0.1);
+            color: var(--danger-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .attack-time {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        /* 控制面板 */
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* 底部信息 */
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .header {
                 flex-direction: column;
-                align-items: center;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚡ 极致性能下载</h1>
-        <p class="subtitle">访问页面即自动开始下载，无需任何点击操作</p>
+        <!-- 头部 -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>DDoS防护监控中心</h1>
+            </div>
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>防护系统运行正常</span>
+            </div>
+        </header>
         
-        <div class="download-info">
-            <p>您的下载将自动开始，请勿关闭此页面</p>
+        <!-- 主仪表板 -->
+        <main class="dashboard">
+            <!-- 攻击流量监控 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-chart-line"></i> 实时流量监控</h2>
+                    <div class="current-traffic">
+                        <span>当前流量: <strong>2.4 Gbps</strong></span>
+                    </div>
+                </div>
+                <p>过去5分钟流量分析，红色表示攻击流量，蓝色表示正常流量</p>
+                <div class="attack-chart" id="attackChart">
+                    <!-- 图表通过JS动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 防护统计 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> 防护统计</h2>
+                </div>
+                <p>过去24小时攻击防护数据统计</p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value attack">147</div>
+                        <div class="stat-label">攻击次数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2.1T</div>
+                        <div class="stat-label">拦截流量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">98.7%</div>
+                        <div class="stat-label">拦截成功率</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value normal">24ms</div>
+                        <div class="stat-label">平均延迟</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 实时攻击列表 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 实时攻击事件</h2>
+                    <span class="attack-count">3 个进行中</span>
+                </div>
+                <p>当前检测到的攻击活动</p>
+                <div class="attack-list">
+                    <div class="attack-item">
+                        <div class="attack-source">
+                            <i class="fas fa-globe-americas"></i>
+                            <span class="attack-ip">203.0.113.45</span>
+                            <span class="attack-type">SYN Flood</span>
+                        </div>
+                        <div class="attack-time">2分钟前</div>
+                    </div>
+                    <div class="attack-item">
+                        <div class="attack-source">
+                            <i class="fas fa-globe-asia"></i>
+                            <span class="attack-ip">198.51.100.22</span>
+                            <span class="attack-type">UDP Flood</span>
+                        </div>
+                        <div class="attack-time">5分钟前</div>
+                    </div>
+                    <div class="attack-item">
+                        <div class="attack-source">
+                            <i class="fas fa-globe-europe"></i>
+                            <span class="attack-ip">192.0.2.78</span>
+                            <span class="attack-type">HTTP Flood</span>
+                        </div>
+                        <div class="attack-time">12分钟前</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 系统状态 -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-server"></i> 系统状态</h2>
+                </div>
+                <p>防护节点与资源使用情况</p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value normal">12/12</div>
+                        <div class="stat-label">在线节点</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">64%</div>
+                        <div class="stat-label">CPU使用率</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">42%</div>
+                        <div class="stat-label">内存使用率</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">18%</div>
+                        <div class="stat-label">带宽占用</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- 控制面板 -->
+        <div class="controls">
+            <button class="btn btn-primary" id="refreshBtn">
+                <i class="fas fa-sync-alt"></i> 刷新数据
+            </button>
+            <button class="btn btn-warning" id="simulateAttack">
+                <i class="fas fa-bolt"></i> 模拟攻击
+            </button>
+            <button class="btn btn-danger" id="emergencyMode">
+                <i class="fas fa-exclamation-circle"></i> 紧急模式
+            </button>
+            <button class="btn btn-primary" id="reportBtn">
+                <i class="fas fa-file-alt"></i> 生成报告
+            </button>
         </div>
         
-        <div class="file-info">
-            <div class="info-item">
-                <div class="info-label">文件名</div>
-                <div class="info-value" id="fileName">performance_package.zip</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">文件大小</div>
-                <div class="info-value" id="fileSize">156.7 MB</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">下载速度</div>
-                <div class="info-value" id="downloadSpeed">0 MB/s</div>
-            </div>
-        </div>
-        
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        
-        <div class="status" id="status">准备下载...</div>
-        
-        <div>
-            <button class="btn" id="downloadBtn">立即下载</button>
-            <button class="btn" id="cancelBtn" style="background: linear-gradient(to right, #606c88, #3f4c6b);">取消下载</button>
-        </div>
-        
-        <div class="performance-stats">
-            <div class="stat">
-                <div class="stat-value" id="timeRemaining">--</div>
-                <div class="info-label">剩余时间</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="downloaded">0 MB</div>
-                <div class="info-label">已下载</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="connectionType">检测中</div>
-                <div class="info-label">连接类型</div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>极致性能下载引擎 | 自动优化下载路径 | 2026</p>
-        </div>
+        <!-- 底部信息 -->
+        <footer class="footer">
+            <p>DDoS防护监控系统 v2.1 &copy; 2023 | 最后更新: <span id="updateTime"></span></p>
+            <p>状态: <span class="status-text">所有系统运行正常</span></p>
+        </footer>
     </div>
 
     <script>
-        // 页面加载后立即开始下载
-        document.addEventListener('DOMContentLoaded', function() {
-            // 模拟下载过程
-            simulateDownload();
-            
-            // 设置下载按钮事件
-            document.getElementById('downloadBtn').addEventListener('click', function() {
-                // 实际下载功能
-                startRealDownload();
-            });
-            
-            // 设置取消按钮事件
-            document.getElementById('cancelBtn').addEventListener('click', function() {
-                cancelDownload();
-            });
-        });
+        // 初始化更新时间
+        document.getElementById('updateTime').textContent = new Date().toLocaleTimeString('zh-CN');
         
-        // 模拟下载过程
-        function simulateDownload() {
-            const progressBar = document.getElementById('progressBar');
-            const status = document.getElementById('status');
-            const downloadSpeed = document.getElementById('downloadSpeed');
-            const timeRemaining = document.getElementById('timeRemaining');
-            const downloaded = document.getElementById('downloaded');
-            const connectionType = document.getElementById('connectionType');
+        // 生成攻击流量图表
+        function generateAttackChart() {
+            const chartContainer = document.getElementById('attackChart');
+            chartContainer.innerHTML = '';
             
-            let progress = 0;
-            let speed = 0;
-            let downloadedMB = 0;
-            const totalMB = 156.7;
-            
-            // 检测连接类型
-            if (navigator.connection) {
-                const conn = navigator.connection;
-                connectionType.textContent = conn.effectiveType.toUpperCase();
-            } else {
-                connectionType.textContent = '未知';
+            // 创建20个数据点
+            for(let i = 0; i < 20; i++) {
+                const isAttack = Math.random() > 0.7;
+                const height = Math.floor(Math.random() * 150) + 30;
+                const left = i * 30;
+                
+                const bar = document.createElement('div');
+                bar.className = `chart-bar ${isAttack ? 'attack' : 'normal'}`;
+                bar.style.height = `${height}px`;
+                bar.style.left = `${left}px`;
+                bar.title = isAttack ? `攻击流量: ${height} Gbps` : `正常流量: ${height} Gbps`;
+                
+                chartContainer.appendChild(bar);
             }
-            
-            status.textContent = '正在初始化下载引擎...';
-            
-            // 模拟下载进度
-            const downloadInterval = setInterval(() => {
-                // 随机速度增长
-                speed = 5 + Math.random() * 15;
-                downloadSpeed.textContent = speed.toFixed(1) + ' MB/s';
-                
-                // 计算进度
-                progress += speed / 10;
-                if (progress > 100) progress = 100;
-                
-                downloadedMB = (totalMB * progress / 100).toFixed(1);
-                downloaded.textContent = downloadedMB + ' MB';
-                
-                // 计算剩余时间
-                const remainingMB = totalMB - downloadedMB;
-                const remainingSeconds = remainingMB / speed;
-                
-                if (remainingSeconds > 60) {
-                    timeRemaining.textContent = Math.ceil(remainingSeconds / 60) + ' 分钟';
-                } else {
-                    timeRemaining.textContent = Math.ceil(remainingSeconds) + ' 秒';
-                }
-                
-                progressBar.style.width = progress + '%';
-                
-                if (progress < 20) {
-                    status.textContent = '正在连接至高速下载服务器...';
-                } else if (progress < 50) {
-                    status.textContent = '下载中，已优化传输路径...';
-                } else if (progress < 80) {
-                    status.textContent = '加速下载中，使用多线程技术...';
-                } else if (progress < 100) {
-                    status.textContent = '即将完成，进行最后优化...';
-                } else {
-                    status.textContent = '下载完成！';
-                    clearInterval(downloadInterval);
-                    
-                    // 自动触发真实下载
-                    setTimeout(() => {
-                        startRealDownload();
-                    }, 1000);
-                }
-            }, 300);
-            
-            return downloadInterval;
         }
         
-        // 开始真实下载
-        function startRealDownload() {
-            const status = document.getElementById('status');
-            status.textContent = '正在准备下载文件...';
+        // 模拟数据更新
+        function updateData() {
+            // 更新攻击计数
+            const attackCount = Math.floor(Math.random() * 5) + 1;
+            document.querySelector('.attack-count').textContent = `${attackCount} 个进行中`;
             
-            // 创建一个虚拟文件进行下载
-            const content = "这是一个极致性能下载示例文件。\n\n" +
-                           "在实际应用中，这里应该是您要下载的真实文件内容。\n\n" +
-                           "极致性能下载引擎特点：\n" +
-                           "- 多线程下载技术\n" +
-                           "- 智能路径优化\n" +
-                           "- 自动断点续传\n" +
-                           "- 高速压缩传输\n\n" +
-                           "下载时间: " + new Date().toLocaleString() + "\n" +
-                           "性能评级: ⚡⚡⚡⚡⚡";
+            // 更新当前流量
+            const currentTraffic = (Math.random() * 5 + 0.5).toFixed(1);
+            document.querySelector('.current-traffic strong').textContent = `${currentTraffic} Gbps`;
             
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
+            // 更新统计数字动画
+            const statValues = document.querySelectorAll('.stat-value:not(.attack):not(.normal)');
+            statValues.forEach(stat => {
+                if(stat.textContent.includes('T')) {
+                    const current = parseFloat(stat.textContent);
+                    const newValue = (current + Math.random() * 0.1).toFixed(1);
+                    stat.textContent = `${newValue}T`;
+                } else if(stat.textContent.includes('%')) {
+                    const current = parseFloat(stat.textContent);
+                    const change = Math.random() * 5 - 2.5;
+                    let newValue = current + change;
+                    newValue = Math.max(10, Math.min(95, newValue));
+                    stat.textContent = `${newValue.toFixed(1)}%`;
+                }
+            });
             
-            // 创建下载链接
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'performance_demo.txt';
-            document.body.appendChild(a);
-            a.click();
+            // 更新攻击列表时间
+            const attackTimes = document.querySelectorAll('.attack-time');
+            attackTimes.forEach(time => {
+                const currentText = time.textContent;
+                const match = currentText.match(/(\d+)/);
+                if(match) {
+                    let minutes = parseInt(match[1]);
+                    minutes += Math.floor(Math.random() * 3) + 1;
+                    time.textContent = `${minutes}分钟前`;
+                }
+            });
             
-            // 清理
+            // 更新图表
+            generateAttackChart();
+            
+            // 更新时间
+            document.getElementById('updateTime').textContent = new Date().toLocaleTimeString('zh-CN');
+            
+            // 随机更新状态指示器
+            if(Math.random() > 0.9) {
+                const statusDot = document.querySelector('.status-dot');
+                const statusText = document.querySelector('.status-indicator span');
+                const footerStatus = document.querySelector('.status-text');
+                
+                statusDot.style.backgroundColor = 'var(--warning-color)';
+                statusText.textContent = '检测到可疑流量';
+                footerStatus.textContent = '检测到可疑流量，正在分析...';
+                footerStatus.style.color = 'var(--warning-color)';
+                
+                // 5秒后恢复正常
+                setTimeout(() => {
+                    statusDot.style.backgroundColor = 'var(--success-color)';
+                    statusText.textContent = '防护系统运行正常';
+                    footerStatus.textContent = '所有系统运行正常';
+                    footerStatus.style.color = '';
+                }, 5000);
+            }
+        }
+        
+        // 按钮事件监听
+        document.getElementById('refreshBtn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 刷新中...';
+            updateData();
+            
             setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                status.textContent = '文件下载完成！';
-            }, 100);
-        }
+                this.innerHTML = '<i class="fas fa-sync-alt"></i> 刷新数据';
+                // 显示刷新完成提示
+                const originalStatus = document.querySelector('.status-indicator span').textContent;
+                document.querySelector('.status-indicator span').textContent = '数据已更新';
+                setTimeout(() => {
+                    document.querySelector('.status-indicator span').textContent = originalStatus;
+                }, 2000);
+            }, 800);
+        });
         
-        // 取消下载
-        function cancelDownload() {
-            const status = document.getElementById('status');
-            status.textContent = '下载已取消';
+        document.getElementById('simulateAttack').addEventListener('click', function() {
+            // 模拟攻击效果
+            const originalTitle = document.title;
+            document.title = "⚠️ 检测到攻击 - DDoS防护监控中心";
             
-            // 在实际应用中，这里应该停止所有下载进程
-            document.getElementById('progressBar').style.width = '0%';
-            document.getElementById('downloadSpeed').textContent = '0 MB/s';
-            document.getElementById('timeRemaining').textContent = '--';
-            document.getElementById('downloaded').textContent = '0 MB';
-        }
+            const statusDot = document.querySelector('.status-dot');
+            const statusText = document.querySelector('.status-indicator span');
+            const footerStatus = document.querySelector('.status-text');
+            
+            statusDot.style.backgroundColor = 'var(--danger-color)';
+            statusDot.style.animation = 'none';
+            setTimeout(() => {
+                statusDot.style.animation = 'pulse 0.5s infinite';
+            }, 10);
+            
+            statusText.textContent = '正在遭受攻击！';
+            footerStatus.textContent = '正在遭受大规模DDoS攻击，防护系统已启动';
+            footerStatus.style.color = 'var(--danger-color)';
+            
+            // 添加攻击到列表
+            const attackList = document.querySelector('.attack-list');
+            const attackItem = document.createElement('div');
+            attackItem.className = 'attack-item';
+            attackItem.innerHTML = `
+                <div class="attack-source">
+                    <i class="fas fa-bolt"></i>
+                    <span class="attack-ip">模拟攻击源</span>
+                    <span class="attack-type">模拟攻击</span>
+                </div>
+                <div class="attack-time">刚刚</div>
+            `;
+            attackList.insertBefore(attackItem, attackList.firstChild);
+            
+            // 更新攻击计数
+            const attackCountElement = document.querySelector('.attack-count');
+            let currentCount = parseInt(attackCountElement.textContent);
+            attackCountElement.textContent = `${currentCount + 1} 个进行中`;
+            
+            // 30秒后恢复正常
+            setTimeout(() => {
+                document.title = originalTitle;
+                statusDot.style.backgroundColor = 'var(--success-color)';
+                statusText.textContent = '攻击已缓解';
+                footerStatus.textContent = '模拟攻击已成功缓解';
+                footerStatus.style.color = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    statusText.textContent = '防护系统运行正常';
+                    footerStatus.textContent = '所有系统运行正常';
+                    footerStatus.style.color = '';
+                }, 3000);
+            }, 30000);
+            
+            alert('模拟攻击已启动，系统将在30秒后自动缓解。');
+        });
         
-        // 性能监控
-        window.addEventListener('load', function() {
-            // 记录页面加载性能
-            if (performance.timing) {
-                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-                console.log('页面加载时间: ' + loadTime + 'ms');
+        document.getElementById('emergencyMode').addEventListener('click', function() {
+            const isEmergency = this.classList.toggle('active');
+            
+            if(isEmergency) {
+                this.innerHTML = '<i class="fas fa-shield-alt"></i> 退出紧急模式';
+                this.style.backgroundColor = 'var(--warning-color)';
+                
+                document.body.style.backgroundColor = '#1a0f0f';
+                document.querySelector('.status-indicator').style.backgroundColor = 'rgba(234, 67, 53, 0.2)';
+                document.querySelector('.status-indicator').style.borderColor = 'var(--danger-color)';
+                
+                alert('紧急模式已启动：已增强防护级别，可能会增加正常用户的延迟。');
+            } else {
+                this.innerHTML = '<i class="fas fa-exclamation-circle"></i> 紧急模式';
+                this.style.backgroundColor = 'var(--danger-color)';
+                
+                document.body.style.backgroundColor = '';
+                document.querySelector('.status-indicator').style.backgroundColor = '';
+                document.querySelector('.status-indicator').style.borderColor = '';
+                
+                alert('已退出紧急模式，防护级别恢复正常。');
             }
         });
+        
+        document.getElementById('reportBtn').addEventListener('click', function() {
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 生成中...';
+            
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-file-alt"></i> 生成报告';
+                alert('防护报告已生成并下载！\n\n报告包含：\n• 过去24小时攻击统计\n• 防护效果分析\n• 系统资源使用情况\n• 安全建议');
+            }, 1500);
+        });
+        
+        // 页面加载时初始化
+        window.addEventListener('load', function() {
+            generateAttackChart();
+            
+            // 每10秒自动更新一次数据
+            setInterval(updateData, 10000);
+            
+            // 触摸设备优化
+            if ('ontouchstart' in window) {
+                document.querySelectorAll('.btn').forEach(btn => {
+                    btn.style.padding = '12px 20px';
+                });
+            }
+        });
+        
+        // 添加一些随机攻击事件
+        setInterval(() => {
+            if(Math.random() > 0.7) {
+                updateData();
+            }
+        }, 15000);
     </script>
 </body>
 </html>
