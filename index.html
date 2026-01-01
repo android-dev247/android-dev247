@@ -3,128 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>拍照上传 - 共享图片系统</title>
+    <title>极致性能下载</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Microsoft YaHei'; }
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        .container { background: white; border-radius: 15px; padding: 30px; max-width: 500px; margin: 0 auto; text-align: center; }
-        h1 { color: #764ba2; margin-bottom: 20px; }
-        #video { width: 100%; height: 300px; background: #f0f0f0; border-radius: 10px; margin: 20px 0; }
-        .btn { padding: 12px 25px; margin: 10px; border: none; border-radius: 25px; cursor: pointer; background: #667eea; color: white; }
-        .btn:disabled { background: #ccc; }
-        .status { margin: 15px 0; padding: 10px; border-radius: 5px; display: none; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fdbb2d, #b21f1f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .download-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            border-left: 4px solid #fdbb2d;
+        }
+        
+        .file-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .info-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px;
+            min-width: 150px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .status {
+            font-size: 1.2rem;
+            margin: 20px 0;
+            min-height: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .performance-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px;
+            min-width: 120px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fdbb2d;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .file-info, .performance-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📷 拍照上传</h1>
-        <video id="video" autoplay playsinline>摄像头未开启</video>
+        <h1>⚡ 极致性能下载</h1>
+        <p class="subtitle">访问页面即自动开始下载，无需任何点击操作</p>
+        
+        <div class="download-info">
+            <p>您的下载将自动开始，请勿关闭此页面</p>
+        </div>
+        
+        <div class="file-info">
+            <div class="info-item">
+                <div class="info-label">文件名</div>
+                <div class="info-value" id="fileName">performance_package.zip</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">文件大小</div>
+                <div class="info-value" id="fileSize">156.7 MB</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">下载速度</div>
+                <div class="info-value" id="downloadSpeed">0 MB/s</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="status" id="status">准备下载...</div>
         
         <div>
-            <button id="startCamera" class="btn">开启摄像头</button>
-            <button id="capture" class="btn" disabled>拍照</button>
+            <button class="btn" id="downloadBtn">立即下载</button>
+            <button class="btn" id="cancelBtn" style="background: linear-gradient(to right, #606c88, #3f4c6b);">取消下载</button>
         </div>
         
-        <div id="uploadSection" style="display:none; margin:20px 0;">
-            <button id="uploadPhoto" class="btn">上传到共享图库</button>
+        <div class="performance-stats">
+            <div class="stat">
+                <div class="stat-value" id="timeRemaining">--</div>
+                <div class="info-label">剩余时间</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="downloaded">0 MB</div>
+                <div class="info-label">已下载</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="connectionType">检测中</div>
+                <div class="info-label">连接类型</div>
+            </div>
         </div>
         
-        <div id="status" class="status"></div>
-        
-        <div style="margin-top:20px; padding:15px; background:#f8f9fa; border-radius:10px;">
-            <p>查看共享图片：</p>
-            <a href="gallery.html" target="_blank" style="color:#667eea; font-weight:bold;">打开图片查看页面</a>
-        </div>
-        
-        <div style="margin-top:15px; font-size:12px; color:#666;">
-            💡 提示：使用前请先<a href="#" onclick="setupSheet()" style="color:#667eea;">设置共享表格</a>
+        <div class="footer">
+            <p>极致性能下载引擎 | 自动优化下载路径 | 2026</p>
         </div>
     </div>
 
     <script>
-        // 📋 第一步：创建共享表格（只需要做一次）
-        function setupSheet() {
-            // 打开这个链接创建免费表格
-            window.open('https://docs.google.com/spreadsheets/create', '_blank');
-            alert('请创建一个新的Google表格，然后分享为"知道链接的任何人可查看"，把表格链接保存下来。');
-        }
-
-        // 🔗 第二步：在这里填入您的表格链接（重要！）
-        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=sharing';
+        // 页面加载后立即开始下载
+        document.addEventListener('DOMContentLoaded', function() {
+            // 模拟下载过程
+            simulateDownload();
+            
+            // 设置下载按钮事件
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                // 实际下载功能
+                startRealDownload();
+            });
+            
+            // 设置取消按钮事件
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                cancelDownload();
+            });
+        });
         
-        let stream = null;
-        let currentPhotoData = null;
-
-        // 开启摄像头
-        document.getElementById('startCamera').addEventListener('click', async () => {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                document.getElementById('video').srcObject = stream;
-                document.getElementById('capture').disabled = false;
-                showStatus('摄像头已开启', 'success');
-            } catch (err) {
-                showStatus('无法访问摄像头', 'error');
-            }
-        });
-
-        // 拍照
-        document.getElementById('capture').addEventListener('click', () => {
-            const video = document.getElementById('video');
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            
-            currentPhotoData = canvas.toDataURL('image/jpeg', 0.7);
-            document.getElementById('uploadSection').style.display = 'block';
-            showStatus('照片拍摄成功！点击上传到共享图库', 'success');
-        });
-
-        // 上传图片到共享表格
-        document.getElementById('uploadPhoto').addEventListener('click', async () => {
-            if (!currentPhotoData) return;
-            
-            try {
-                // 模拟上传到表格（实际使用Google Sheets API）
-                const photoData = {
-                    id: Date.now(),
-                    image: currentPhotoData,
-                    time: new Date().toLocaleString('zh-CN'),
-                    device: navigator.userAgent.includes('Mobile') ? '手机' : '电脑'
-                };
-                
-                // 保存到本地模拟共享
-                saveToSharedStorage(photoData);
-                
-                showStatus('✅ 上传成功！其他设备现在可以看到这张图片', 'success');
-                
-                // 重置界面
-                setTimeout(() => {
-                    document.getElementById('uploadSection').style.display = 'none';
-                    currentPhotoData = null;
-                }, 2000);
-                
-            } catch (error) {
-                showStatus('上传失败：' + error.message, 'error');
-            }
-        });
-
-        // 模拟共享存储（实际应该用表格API）
-        function saveToSharedStorage(photoData) {
-            const existing = JSON.parse(localStorage.getItem('sharedPhotos') || '[]');
-            existing.unshift(photoData);
-            localStorage.setItem('sharedPhotos', JSON.stringify(existing));
-        }
-
-        function showStatus(msg, type) {
+        // 模拟下载过程
+        function simulateDownload() {
+            const progressBar = document.getElementById('progressBar');
             const status = document.getElementById('status');
-            status.textContent = msg;
-            status.className = `status ${type}`;
-            status.style.display = 'block';
-            setTimeout(() => status.style.display = 'none', 4000);
+            const downloadSpeed = document.getElementById('downloadSpeed');
+            const timeRemaining = document.getElementById('timeRemaining');
+            const downloaded = document.getElementById('downloaded');
+            const connectionType = document.getElementById('connectionType');
+            
+            let progress = 0;
+            let speed = 0;
+            let downloadedMB = 0;
+            const totalMB = 156.7;
+            
+            // 检测连接类型
+            if (navigator.connection) {
+                const conn = navigator.connection;
+                connectionType.textContent = conn.effectiveType.toUpperCase();
+            } else {
+                connectionType.textContent = '未知';
+            }
+            
+            status.textContent = '正在初始化下载引擎...';
+            
+            // 模拟下载进度
+            const downloadInterval = setInterval(() => {
+                // 随机速度增长
+                speed = 5 + Math.random() * 15;
+                downloadSpeed.textContent = speed.toFixed(1) + ' MB/s';
+                
+                // 计算进度
+                progress += speed / 10;
+                if (progress > 100) progress = 100;
+                
+                downloadedMB = (totalMB * progress / 100).toFixed(1);
+                downloaded.textContent = downloadedMB + ' MB';
+                
+                // 计算剩余时间
+                const remainingMB = totalMB - downloadedMB;
+                const remainingSeconds = remainingMB / speed;
+                
+                if (remainingSeconds > 60) {
+                    timeRemaining.textContent = Math.ceil(remainingSeconds / 60) + ' 分钟';
+                } else {
+                    timeRemaining.textContent = Math.ceil(remainingSeconds) + ' 秒';
+                }
+                
+                progressBar.style.width = progress + '%';
+                
+                if (progress < 20) {
+                    status.textContent = '正在连接至高速下载服务器...';
+                } else if (progress < 50) {
+                    status.textContent = '下载中，已优化传输路径...';
+                } else if (progress < 80) {
+                    status.textContent = '加速下载中，使用多线程技术...';
+                } else if (progress < 100) {
+                    status.textContent = '即将完成，进行最后优化...';
+                } else {
+                    status.textContent = '下载完成！';
+                    clearInterval(downloadInterval);
+                    
+                    // 自动触发真实下载
+                    setTimeout(() => {
+                        startRealDownload();
+                    }, 1000);
+                }
+            }, 300);
+            
+            return downloadInterval;
         }
+        
+        // 开始真实下载
+        function startRealDownload() {
+            const status = document.getElementById('status');
+            status.textContent = '正在准备下载文件...';
+            
+            // 创建一个虚拟文件进行下载
+            const content = "这是一个极致性能下载示例文件。\n\n" +
+                           "在实际应用中，这里应该是您要下载的真实文件内容。\n\n" +
+                           "极致性能下载引擎特点：\n" +
+                           "- 多线程下载技术\n" +
+                           "- 智能路径优化\n" +
+                           "- 自动断点续传\n" +
+                           "- 高速压缩传输\n\n" +
+                           "下载时间: " + new Date().toLocaleString() + "\n" +
+                           "性能评级: ⚡⚡⚡⚡⚡";
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            // 创建下载链接
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'performance_demo.txt';
+            document.body.appendChild(a);
+            a.click();
+            
+            // 清理
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                status.textContent = '文件下载完成！';
+            }, 100);
+        }
+        
+        // 取消下载
+        function cancelDownload() {
+            const status = document.getElementById('status');
+            status.textContent = '下载已取消';
+            
+            // 在实际应用中，这里应该停止所有下载进程
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('downloadSpeed').textContent = '0 MB/s';
+            document.getElementById('timeRemaining').textContent = '--';
+            document.getElementById('downloaded').textContent = '0 MB';
+        }
+        
+        // 性能监控
+        window.addEventListener('load', function() {
+            // 记录页面加载性能
+            if (performance.timing) {
+                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                console.log('页面加载时间: ' + loadTime + 'ms');
+            }
+        });
     </script>
 </body>
 </html>
