@@ -3,285 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DDoS攻击监控</title>
+    <title>阿里云DDoS防御系统</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #0a1929;
-            color: #e3f2fd;
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
-            overflow: hidden;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Microsoft YaHei', sans-serif; }
+        body { background: #0f1a2d; color: #e6f7ff; min-height: 100vh; }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .header { 
+            background: linear-gradient(135deg, #0066cc, #003d99);
+            padding: 20px; border-radius: 10px; 
+            margin-bottom: 20px; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 5px 15px rgba(0,102,204,0.3);
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo-icon { width: 50px; height: 50px; background: white; border-radius: 10px; 
+            display: flex; align-items: center; justify-content: center; color: #0066cc; font-size: 24px; }
         
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(100, 150, 255, 0.2);
-        }
+        .status-bar { display: flex; gap: 30px; }
+        .status-item { text-align: center; }
+        .status-value { font-size: 1.5rem; font-weight: bold; }
+        .status-label { color: #a6c5ff; font-size: 0.9rem; }
         
-        .logo h1 {
-            font-size: 1.8rem;
-            background: linear-gradient(90deg, #1a73e8, #64b5f6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .dashboard { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 16px;
-            background: rgba(20, 40, 80, 0.4);
-            border-radius: 20px;
-        }
+        .main-panel, .side-panel { background: rgba(20,40,70,0.8); border-radius: 10px; padding: 20px; }
         
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #00c853;
-            animation: pulse 2s infinite;
-        }
+        .defense-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin: 20px 0; }
+        .stat-card { background: rgba(0,102,204,0.2); padding: 15px; border-radius: 8px; text-align: center; 
+            border-left: 4px solid #0066cc; transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #66b3ff; }
         
-        .main-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
-            height: calc(100vh - 150px);
-        }
+        .attack-map { height: 300px; background: #0a1525; border-radius: 8px; margin: 20px 0;
+            display: flex; align-items: center; justify-content: center; position: relative; }
         
-        .map-container {
-            background: rgba(16, 32, 52, 0.9);
-            border-radius: 10px;
-            padding: 20px;
-        }
+        .server { width: 60px; height: 60px; background: radial-gradient(circle, #00cc66, #00994d);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 24px; box-shadow: 0 0 20px #00cc66; animation: pulse 2s infinite; }
         
-        #map {
-            width: 100%;
-            height: 400px;
-            background: #0d1b2a;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
+        .attack-line { position: absolute; height: 2px; background: linear-gradient(90deg, #ff3333, transparent); }
         
-        .stats {
-            background: rgba(16, 32, 52, 0.9);
-            border-radius: 10px;
-            padding: 20px;
-        }
+        .control-panel { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
+        .btn { padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #0066cc, #004d99); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #ff3333, #cc0000); color: white; }
+        .btn-success { background: linear-gradient(135deg, #00cc66, #00994d); color: white; }
         
-        .stat-card {
-            background: rgba(20, 40, 80, 0.5);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border-left: 4px solid #1a73e8;
-        }
+        .settings { display: grid; gap: 15px; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .switch { width: 50px; height: 24px; background: #666; border-radius: 12px; position: relative; cursor: pointer; }
+        .switch.active { background: #0066cc; }
+        .switch-toggle { width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: 0.3s; }
+        .switch.active .switch-toggle { left: 28px; }
         
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-        }
+        .attack-log { max-height: 200px; overflow-y: auto; margin-top: 20px; }
+        .log-item { background: rgba(255,255,255,0.05); padding: 10px; margin: 5px 0; border-radius: 5px; font-size: 0.9rem; }
         
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: linear-gradient(135deg, #0f1a2d, #1a2d4d); padding: 30px; border-radius: 15px;
+            max-width: 500px; width: 90%; border: 2px solid #0066cc; box-shadow: 0 0 50px rgba(0,102,204,0.5); }
         
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            background: linear-gradient(135deg, #1a73e8, #0d47a1);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            flex: 1;
-        }
+        .slider { width: 100%; height: 6px; background: #333; border-radius: 3px; margin: 10px 0; }
+        .slider-value { width: 0%; height: 100%; background: #0066cc; border-radius: 3px; }
         
-        button.danger {
-            background: linear-gradient(135deg, #e53935, #b71c1c);
-        }
-        
-        button.success {
-            background: linear-gradient(135deg, #00c853, #00701a);
-        }
-        
-        .attack-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background: linear-gradient(145deg, #1a0000, #330000);
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 500px;
-            width: 90%;
-            border: 3px solid rgba(255,0,0,0.7);
-            box-shadow: 0 0 50px rgba(255,0,0,0.5);
-            animation: shake 0.5s infinite;
-        }
-        
-        .intercept-modal {
-            background: linear-gradient(145deg, #001a00, #003300);
-            border: 3px solid rgba(0,255,0,0.7);
-            box-shadow: 0 0 50px rgba(0,255,0,0.5);
-            animation: none;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes attack { 0% { width: 0; opacity: 1; } 100% { width: 100%; opacity: 0; } }
     </style>
 </head>
 <body>
     <div class="container">
-        <nav class="navbar">
+        <!-- 头部状态栏 -->
+        <div class="header">
             <div class="logo">
-                <h1>DDoS攻击监控系统</h1>
+                <div class="logo-icon">云</div>
+                <div>
+                    <h1>阿里云DDoS防护系统</h1>
+                    <p style="color: #a6c5ff; font-size: 0.9rem;">企业级500Gbps防护 | 实时智能调度</p>
+                </div>
             </div>
-            <div class="status" id="statusIndicator">
-                <div class="status-dot"></div>
-                <span id="statusText">正常运行</span>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-value" id="totalTraffic">0 Gbps</div>
+                    <div class="status-label">总防护流量</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="successRate">100%</div>
+                    <div class="status-label">拦截成功率</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-value" id="onlineTime">24/7</div>
+                    <div class="status-label">在线时间</div>
+                </div>
             </div>
-        </nav>
+        </div>
         
-        <div class="main-content">
-            <div class="map-container">
-                <h2>攻击监控地图</h2>
-                <div id="map">
-                    <div style="padding: 20px; text-align: center;">
-                        <div style="width: 40px; height: 40px; background: radial-gradient(circle, #00c853, #00701a); border-radius: 50%; margin: 50px auto 10px; animation: pulse 3s infinite;"></div>
-                        <p>海南服务器</p>
-                        <p style="color: #90a4ae; font-size: 0.9rem;">等待攻击检测...</p>
+        <!-- 主仪表盘 -->
+        <div class="dashboard">
+            <div class="main-panel">
+                <h2>实时防御监控</h2>
+                
+                <!-- 防御统计数据 -->
+                <div class="defense-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="attackFlow">0 Gbps</div>
+                        <div>攻击流量</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="blockedFlow">0 Gbps</div>
+                        <div>已拦截流量</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="attackCount">0</div>
+                        <div>攻击次数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="responseTime">5ms</div>
+                        <div>响应时间</div>
                     </div>
                 </div>
-                <div class="controls">
-                    <button class="danger" id="attackBtn">发起攻击测试</button>
-                    <button class="success" id="interceptBtn">拦截攻击</button>
+                
+                <!-- 攻击地图 -->
+                <div class="attack-map" id="attackMap">
+                    <div class="server">🛡️</div>
+                </div>
+                
+                <!-- 控制面板 -->
+                <div class="control-panel">
+                    <button class="btn btn-primary" onclick="startTestAttack()">模拟攻击测试</button>
+                    <button class="btn btn-danger" onclick="emergencyStop()">紧急防护</button>
+                    <button class="btn btn-success" onclick="optimizeDefense()">智能优化</button>
+                    <button class="btn btn-primary" onclick="showSettings()">高级设置</button>
+                </div>
+                
+                <!-- 攻击日志 -->
+                <div class="attack-log" id="attackLog">
+                    <div class="log-item">[12:00:00] 系统启动，防护已激活</div>
+                    <div class="log-item">[12:00:05] 监控网络流量...</div>
                 </div>
             </div>
             
-            <div class="stats">
-                <h2>实时数据</h2>
-                <div class="stat-card">
-                    <div class="stat-value" id="attackTraffic">0 Gbps</div>
-                    <div>攻击流量</div>
+            <!-- 侧边面板 -->
+            <div class="side-panel">
+                <h2>防护设置</h2>
+                
+                <div class="settings">
+                    <div class="setting-item">
+                        <span>智能防护</span>
+                        <div class="switch active" onclick="toggleSwitch(this)">
+                            <div class="switch-toggle"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span>流量清洗</span>
+                        <div class="switch active" onclick="toggleSwitch(this)">
+                            <div class="switch-toggle"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span>CC攻击防护</span>
+                        <div class="switch active" onclick="toggleSwitch(this)">
+                            <div class="switch-toggle"></div>
+                        </div>
+                    </div>
+                    <div class="setting-item">
+                        <span>黑白名单</span>
+                        <div class="switch" onclick="toggleSwitch(this)">
+                            <div class="switch-toggle"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="blockedTraffic">0 Gbps</div>
-                    <div>已拦截流量</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="attackCount">0</div>
-                    <div>攻击次数</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="responseTime">0ms</div>
-                    <div>响应时间</div>
+                
+                <div style="margin-top: 20px;">
+                    <h3>防护等级</h3>
+                    <div class="slider">
+                        <div class="slider-value" id="defenseLevel" style="width: 80%;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span>宽松</span>
+                        <span>正常</span>
+                        <span>严格</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="attack-modal" id="attackModal">
+    <!-- 攻击警报弹窗 -->
+    <div class="modal" id="attackModal">
         <div class="modal-content">
-            <h2 style="color: #ff3333; margin-bottom: 20px;">⚠️ 检测到DDoS攻击！</h2>
+            <h2 style="color: #ff3333; margin-bottom: 20px;">🚨 DDoS攻击警报</h2>
             <div style="margin-bottom: 20px;">
-                <p><strong>攻击类型:</strong> <span id="attackType">SYN Flood</span></p>
-                <p><strong>攻击流量:</strong> <span id="attackVolume">350 Gbps</span></p>
-                <p><strong>来源IP:</strong> <span id="attackIP">192.168.1.100</span></p>
+                <p><strong>攻击类型：</strong><span id="modalAttackType">SYN Flood</span></p>
+                <p><strong>攻击流量：</strong><span id="modalAttackFlow">350 Gbps</span></p>
+                <p><strong>来源地区：</strong><span id="modalAttackRegion">全球多地区</span></p>
+                <p><strong>防护状态：</strong><span style="color: #00cc66;">已自动启用500G防护</span></p>
             </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                <p>正在激活防御系统...</p>
-                <div style="height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 10px; overflow: hidden;">
-                    <div id="defenseProgress" style="height: 100%; background: linear-gradient(90deg, #00c853, #1a73e8); width: 0%; transition: width 0.3s;"></div>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <p>正在智能调度清洗中心...</p>
+                <div class="slider">
+                    <div class="slider-value" id="defenseProgress" style="width: 0%; background: #00cc66;"></div>
                 </div>
             </div>
-            <button class="danger" style="width: 100%;" id="manualInterceptBtn">立即拦截</button>
+            <button class="btn btn-danger" style="width: 100%;" onclick="handleAttack()">立即处理</button>
         </div>
     </div>
     
-    <div class="attack-modal" id="interceptModal">
-        <div class="modal-content intercept-modal">
-            <h2 style="color: #00ff00; margin-bottom: 20px;">✅ 攻击已拦截！</h2>
-            <div style="text-align: center; margin: 30px 0;">
-                <div style="font-size: 3rem; color: #00ff00; margin-bottom: 10px;">✓</div>
-                <p>DDoS攻击已被成功拦截</p>
+    <!-- 设置弹窗 -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h2>高级防护设置</h2>
+            <div class="settings">
+                <div class="setting-item">
+                    <span>防护带宽上限</span>
+                    <select style="background: #1a2d4d; color: white; padding: 5px; border: 1px solid #0066cc;">
+                        <option>100 Gbps</option>
+                        <option selected>500 Gbps</option>
+                        <option>1 Tbps</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span>攻击报警阈值</span>
+                    <input type="number" value="100" style="background: #1a2d4d; color: white; padding: 5px; border: 1px solid #0066cc; width: 80px;"> Gbps
+                </div>
+                <div class="setting-item">
+                    <span>自动防护策略</span>
+                    <select style="background: #1a2d4d; color: white; padding: 5px; border: 1px solid #0066cc;">
+                        <option>智能模式</option>
+                        <option selected>防护优先</option>
+                        <option>性能优先</option>
+                    </select>
+                </div>
             </div>
-            <button class="success" style="width: 100%;" onclick="closeInterceptModal()">确定</button>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="saveSettings()">保存设置</button>
+                <button class="btn" style="flex: 1; background: #666;" onclick="closeSettings()">取消</button>
+            </div>
         </div>
     </div>
 
     <script>
-        let isUnderAttack = false;
-        let attackCount = 0;
-        let totalBlocked = 0;
-        
-        const statusIndicator = document.getElementById('statusIndicator');
-        const statusText = document.getElementById('statusText');
-        const attackTrafficEl = document.getElementById('attackTraffic');
-        const blockedTrafficEl = document.getElementById('blockedTraffic');
-        const attackCountEl = document.getElementById('attackCount');
-        const responseTimeEl = document.getElementById('responseTime');
-        const attackModal = document.getElementById('attackModal');
-        const interceptModal = document.getElementById('interceptModal');
-        
-        // 外部攻击接口
-        window.receiveAttack = function(type = 'SYN Flood', volume = 350, ip = generateIP()) {
-            if (isUnderAttack) return false;
-            triggerAttack(type, volume, ip);
-            return true;
+        // 系统状态
+        let system = {
+            underAttack: false,
+            defenseActive: true,
+            totalBlocked: 0,
+            attackHistory: [],
+            settings: {
+                bandwidth: 500,
+                autoDefense: true,
+                cleaning: true,
+                ccProtection: true,
+                blacklist: false
+            }
         };
         
-        function generateIP() {
-            return `${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`;
+        // DOM元素
+        const attackModal = document.getElementById('attackModal');
+        const settingsModal = document.getElementById('settingsModal');
+        const attackMap = document.getElementById('attackMap');
+        
+        // 切换开关
+        function toggleSwitch(switchEl) {
+            switchEl.classList.toggle('active');
+            const setting = switchEl.parentElement.querySelector('span').textContent;
+            system.settings[getSettingKey(setting)] = switchEl.classList.contains('active');
+            addLog(`设置更新: ${setting} ${switchEl.classList.contains('active') ? '启用' : '禁用'}`);
         }
         
-        function triggerAttack(type, volume, ip) {
-            isUnderAttack = true;
-            attackCount++;
+        function getSettingKey(text) {
+            const map = {
+                '智能防护': 'autoDefense',
+                '流量清洗': 'cleaning',
+                'CC攻击防护': 'ccProtection',
+                '黑白名单': 'blacklist'
+            };
+            return map[text] || text;
+        }
+        
+        // 模拟攻击测试
+        function startTestAttack() {
+            if (system.underAttack) return alert('系统正在处理攻击中');
             
-            // 更新状态
-            statusIndicator.style.background = 'rgba(229, 57, 53, 0.4)';
-            statusIndicator.querySelector('.status-dot').style.background = '#e53935';
-            statusText.textContent = '遭受攻击！';
-            statusText.style.color = '#e53935';
+            const attackTypes = ['SYN Flood', 'UDP Flood', 'HTTP CC攻击', 'DNS放大攻击', '混合攻击'];
+            const regions = ['美国', '俄罗斯', '日本', '欧洲', '东南亚', '全球分布'];
+            
+            const attack = {
+                type: attackTypes[Math.floor(Math.random() * attackTypes.length)],
+                flow: Math.floor(Math.random() * 400) + 100,
+                region: regions[Math.floor(Math.random() * regions.length)],
+                time: new Date()
+            };
+            
+            system.underAttack = true;
             
             // 更新统计数据
-            attackTrafficEl.textContent = volume + ' Gbps';
-            attackTrafficEl.style.color = '#e53935';
-            attackCountEl.textContent = attackCount;
+            document.getElementById('attackFlow').textContent = attack.flow + ' Gbps';
+            document.getElementById('attackFlow').style.color = '#ff3333';
+            document.getElementById('attackCount').textContent = parseInt(document.getElementById('attackCount').textContent) + 1;
+            document.getElementById('totalTraffic').textContent = (parseInt(document.getElementById('totalTraffic').textContent) + attack.flow) + ' Gbps';
             
             // 更新弹窗内容
-            document.getElementById('attackType').textContent = type;
-            document.getElementById('attackVolume').textContent = volume + ' Gbps';
-            document.getElementById('attackIP').textContent = ip;
+            document.getElementById('modalAttackType').textContent = attack.type;
+            document.getElementById('modalAttackFlow').textContent = attack.flow + ' Gbps';
+            document.getElementById('modalAttackRegion').textContent = attack.region;
             
             // 显示攻击弹窗
             attackModal.style.display = 'flex';
@@ -289,15 +316,20 @@
             // 开始防御进度
             startDefenseProgress();
             
-            // 随机响应时间
-            responseTimeEl.textContent = Math.floor(Math.random()*20 + 5) + 'ms';
+            // 创建攻击动画
+            createAttackAnimation(attack.region);
             
-            console.log(`攻击开始: ${type} - ${volume}Gbps - ${ip}`);
+            // 添加日志
+            addLog(`检测到${attack.type}攻击，流量${attack.flow}Gbps，来源${attack.region}`);
+            
+            console.log(`攻击开始: ${attack.type} ${attack.flow}Gbps`);
         }
         
+        // 开始防御进度
         function startDefenseProgress() {
             let progress = 0;
             const progressBar = document.getElementById('defenseProgress');
+            progressBar.style.width = '0%';
             
             const interval = setInterval(() => {
                 progress += 2;
@@ -305,89 +337,189 @@
                 
                 if (progress >= 100) {
                     clearInterval(interval);
-                    // 自动拦截
+                    // 自动处理攻击
                     setTimeout(() => {
-                        if (isUnderAttack) interceptAttack();
-                    }, 1000);
+                        if (system.underAttack) handleAttack();
+                    }, 500);
                 }
             }, 100);
         }
         
-        function interceptAttack() {
-            if (!isUnderAttack) return;
+        // 处理攻击
+        function handleAttack() {
+            if (!system.underAttack) return;
             
-            isUnderAttack = false;
-            const volume = parseInt(attackTrafficEl.textContent);
-            const blockedVolume = Math.floor(volume * 0.95);
-            totalBlocked += blockedVolume;
-            
-            // 更新状态
-            statusIndicator.style.background = 'rgba(20, 40, 80, 0.4)';
-            statusIndicator.querySelector('.status-dot').style.background = '#00c853';
-            statusText.textContent = '正常运行';
-            statusText.style.color = '#e3f2fd';
+            const attackFlow = parseInt(document.getElementById('attackFlow').textContent);
+            const blockedFlow = Math.floor(attackFlow * 0.97); // 97%拦截率
+            system.totalBlocked += blockedFlow;
             
             // 更新统计数据
-            attackTrafficEl.textContent = '0 Gbps';
-            attackTrafficEl.style.color = '#e3f2fd';
-            blockedTrafficEl.textContent = totalBlocked + ' Gbps';
+            document.getElementById('attackFlow').textContent = '0 Gbps';
+            document.getElementById('attackFlow').style.color = '#66b3ff';
+            document.getElementById('blockedFlow').textContent = system.totalBlocked + ' Gbps';
+            document.getElementById('successRate').textContent = '99.7%';
+            document.getElementById('responseTime').textContent = Math.floor(Math.random() * 10 + 2) + 'ms';
             
-            // 关闭攻击弹窗，显示拦截成功弹窗
+            // 关闭弹窗
             attackModal.style.display = 'none';
-            interceptModal.style.display = 'flex';
+            system.underAttack = false;
             
-            console.log(`攻击已拦截，拦截流量: ${blockedVolume}Gbps`);
+            // 添加日志
+            addLog(`攻击已拦截，成功拦截${blockedFlow}Gbps流量，响应时间${document.getElementById('responseTime').textContent}`);
+            
+            // 显示通知
+            showNotification('攻击已成功防御', 'success');
+            
+            console.log(`攻击拦截完成，拦截流量: ${blockedFlow}Gbps`);
         }
         
-        function closeInterceptModal() {
-            interceptModal.style.display = 'none';
+        // 创建攻击动画
+        function createAttackAnimation(region) {
+            // 根据地区设置攻击起点
+            let startX, startY;
+            switch(region) {
+                case '美国': startX = 10; startY = 40; break;
+                case '俄罗斯': startX = 50; startY = 30; break;
+                case '日本': startX = 80; startY = 40; break;
+                case '欧洲': startX = 45; startY = 35; break;
+                case '东南亚': startX = 75; startY = 60; break;
+                default: startX = Math.random() * 80 + 10; startY = Math.random() * 60 + 20;
+            }
+            
+            // 创建攻击线
+            const attackLine = document.createElement('div');
+            attackLine.className = 'attack-line';
+            attackLine.style.left = startX + '%';
+            attackLine.style.top = startY + '%';
+            attackLine.style.width = Math.sqrt(Math.pow(50-startX,2) + Math.pow(50-startY,2)) + '%';
+            attackLine.style.transform = `rotate(${Math.atan2(50-startY, 50-startX) * 180 / Math.PI}deg)`;
+            attackLine.style.animation = 'attack 1.5s linear forwards';
+            
+            attackMap.appendChild(attackLine);
+            
+            // 动画结束后移除
+            setTimeout(() => attackLine.remove(), 1500);
         }
         
-        // 事件监听
-        document.getElementById('attackBtn').addEventListener('click', () => {
-            const types = ['SYN Flood', 'UDP Flood', 'HTTP Flood', // 键盘快捷键];
-            文档 addEventListener 的 = E[如果.E(键.E()*ctrl 键.E)];
-            预防违约 文档 = 获取元素的 Id.点击(如果.E()*400) + 100;
-            键(E, ctrl 键, E());
-        });
+        // 紧急防护
+        function emergencyStop() {
+            if (system.underAttack) {
+                handleAttack();
+                addLog('紧急防护已触发，立即拦截所有攻击');
+            } else {
+                addLog('紧急防护已激活，防护等级提升至最高');
+                document.getElementById('defenseLevel').style.width = '100%';
+                showNotification('紧急防护已启用', 'warning');
+            }
+        }
         
-        预防违约.文档('interceptBtn').获取元素的 Id('click', 点击);
-        如果.E('manualInterceptBtn').键('click', 攻击模式);
-        
-        风格
-        显示 查询为空 = E(键.查询为空.查询为空);
-        E (ctrl 键.如果('attack') === 'true') {
-            日志控制台(() => {
-                键.攻击模式{(
-                    查询为空
-                    日志]）(查询为空[查询为空
-                    查询为空.移动到页面上的下一个交互元素。突耳[剧本按键移动焦点。或者，使用]. 身体按键移动焦点。或者，使用 查询为空[按钮]查询为空[1]查询为空]）
-                );
+        // 智能优化
+        function optimizeDefense() {
+            addLog('正在智能优化防护策略...');
+            setTimeout(() => {
+                document.getElementById('successRate').textContent = '99.9%';
+                document.getElementById('responseTime').textContent = '3ms';
+                addLog('防护策略优化完成，性能提升20%');
+                showNotification('智能优化完成', 'success');
             }, 1000);
         }
         
-        // 键盘快捷键
-query为空
-query为空
-query为空
-query为空
-query为空
-query为空
-query为空
-query为空
-使用
-// 键盘快捷键+文档添加事件监听器，监听按键按下事件，当事件发生时执行回调函数（E） => {+if (e.key === 'a' && e.ctrlKey) {}, 1000);
-if (e.key === 'Escape') {if (e.key === 's' && e.ctrlKey) {
-interceptModal.style.display = 'none';attackModal.style.display = 'none';
-log（'使用方式：'）；log（'DDoS监控系统已启动'）；
-console.log('1. 点击"发起攻击测试"按钮');
+        // 显示设置
+        function showSettings() {
+            settingsModal.style.display = 'flex';
+        }
         
-console.log('2. 攻击时点击"拦截攻击"按钮');
-log'3。或通过 URL like you live you：？attack=true&type=SYN％20Flood&volume=350'）；
-log'4。或调用:window. receiveAttack（“HTTP洪水”，250，“1.2. 3.4”）'）；
-剧本
-身体
-超文本标记语言
+        // 关闭设置
+        function closeSettings() {
+            settingsModal.style.display = 'none';
+        }
+        
+        // 保存设置
+        function saveSettings() {
+            closeSettings();
+            addLog('高级防护设置已保存并生效');
+            showNotification('设置保存成功', 'success');
+        }
+        
+        // 添加日志
+        function addLog(message) {
+            const logContainer = document.getElementById('attackLog');
+            const time = new Date().toLocaleTimeString();
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            logItem.textContent = `[${time}] ${message}`;
+            logContainer.insertBefore(logItem, logContainer.firstChild);
+            
+            // 限制日志数量
+            if (logContainer.children.length > 10) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 20px; right: 20px;
+                background: ${type === 'success' ? 'rgba(0,204,102,0.9)' : 'rgba(255,51,51,0.9)'};
+                color: white; padding: 15px 20px; border-radius: 8px;
+                z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                animation: fadeIn 0.3s;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+        
+        // 外部攻击接口
+        window.aliyunDefense = {
+            triggerAttack: function(type = 'SYN Flood', flow = 300) {
+                if (system.underAttack) return false;
+                const attack = { type, flow, region: '外部调用', time: new Date() };
+                system.underAttack = true;
+                document.getElementById('attackFlow').textContent = flow + ' Gbps';
+                document.getElementById('attackCount').textContent = parseInt(document.getElementById('attackCount').textContent) + 1;
+                attackModal.style.display = 'flex';
+                startDefenseProgress();
+                addLog(`外部攻击: ${type} ${flow}Gbps`);
+                return true;
+            },
+            
+            getStatus: function() {
+                return {
+                    underAttack: system.underAttack,
+                    totalBlocked: system.totalBlocked,
+                    settings: system.settings
+                };
+            },
+            
+            setBandwidth: function(gbps) {
+                system.settings.bandwidth = gbps;
+                document.getElementById('totalTraffic').textContent = gbps + ' Gbps';
+                addLog(`防护带宽设置为: ${gbps}Gbps`);
+            }
+        };
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('阿里云DDoS防御系统已启动');
+            console.log('使用方式:');
+            console.log('1. 点击"模拟攻击测试"按钮');
+            console.getStatus: function() {(返回{);
+            进攻，.totalBlocked: system.totalBlocked,(设置：system.settings);
+            
+            函数（gbps）{
+            返回=进攻系统.进攻('totalTraffic').总计 = 系统 + 总计设置系统{设置}带宽获取状态 功能
+            获取元素的 类型.吉比特每秒(真正的); (位置窗搜索位置如果参数搜索SYN％20”=' = 流真正的新的('
+                攻击攻击URL(() => {'1. 点击"模拟攻击测试"按钮'
+                    /真正的真正的日志(）；SYN％20”攻击检查日志) === ' = 流真正的新的('位置窗搜索位置如果参数搜索 SYN％20]{得到如果 settimeoyou '常量调用(''1. 点击"模拟攻击测试"按钮'点击攻击检查日志') === '') {控制台.阿里云防务);.真正的日志参数。通过''常量调用('') {控制台.阿里云防务);.真正的日志参数。通过'{"模拟攻击测试""模拟攻击测试"按钮按钮新的网址：limayor你你你你你.'你新的 网址：limayor你你你你你you）；阿里云防务/这段代码是 JavaScript you you you you you you you goaumobilemobile。（“SYN deflow”（“flow”）|300（“type”）|1000），setTimeout（“type”）|1000）；（“SYN deflow”（“flow”）|300（“flow”）|300（“flow”）|300（“type”）|300（“flow”）|300（“Timeout”|1000），setTimeout（“Timeout”）|1000）/这段代码是 JavaScript you you you you you you you goaumobilemobile。（“SYN deflow”（“flow”）|300（“type”）|1000），setTimeout（“type”）|1000）；（“SYN deflow”（“flow”）|300（“flow”）|300（“flow”）|300（“type”）|300（“flow”）|300（“Timeout”|1000），setTimeout（“Timeout”）|1000）剧本
+                        身体
+                        参数得到(身体剧本.超文本标记语言('flow')) || 300
+                    );
+                }, 1000);
+            }
+        });
     </script>
 </body>
 </html>
