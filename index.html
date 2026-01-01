@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>共享图片查看系统</title>
+    <title>拍照上传 - 共享图片系统</title>
     <style>
         * {
             margin: 0;
@@ -13,247 +13,183 @@
         }
         
         body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         
         h1 {
-            font-size: 2.2rem;
+            color: #764ba2;
             margin-bottom: 10px;
         }
         
         .subtitle {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            color: #666;
+            margin-bottom: 30px;
         }
         
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .section {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-            color: #2575fc;
-        }
-        
-        .camera-container {
-            text-align: center;
+        .camera-box {
+            margin: 20px 0;
         }
         
         #video {
             width: 100%;
             max-width: 400px;
             height: 300px;
-            background-color: #eee;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
             object-fit: cover;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #2575fc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin: 5px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            background: #1a68e3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn:disabled {
-            background: #a0c1f9;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
         }
         
         #capturedPhoto {
-            max-width: 100%;
-            max-height: 300px;
-            margin: 15px 0;
-            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            border-radius: 10px;
+            object-fit: cover;
             display: none;
         }
         
-        .photo-count {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #6a11cb;
-            font-weight: 600;
+        .btn-group {
+            margin: 20px 0;
         }
         
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+        .btn {
+            padding: 12px 25px;
+            margin: 5px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #764ba2;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #6a418c;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .upload-section {
+            display: none;
             margin-top: 20px;
-        }
-        
-        .gallery-item {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .gallery-item:hover {
-            transform: translateY(-5px);
-        }
-        
-        .gallery-img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .empty-gallery {
-            text-align: center;
-            padding: 40px 20px;
-            color: #6c757d;
-            font-style: italic;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            color: #6c757d;
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
-        }
-        
-        .timestamp {
-            font-size: 0.8rem;
-            color: #888;
-            padding: 5px 10px;
+            padding: 15px;
             background: #f8f9fa;
+            border-radius: 10px;
         }
         
-        .refresh-info {
-            font-size: 0.9rem;
-            color: #28a745;
-            margin-top: 10px;
+        .view-link {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+        }
+        
+        .view-link a {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .view-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>共享图片查看系统</h1>
-            <p class="subtitle">每个人都可以拍照并查看所有上传的图片</p>
-        </header>
+        <h1>📷 拍照上传</h1>
+        <p class="subtitle">拍摄照片并上传到共享图库</p>
         
-        <div class="main-content">
-            <div class="section">
-                <h2 class="section-title">拍照系统</h2>
-                <div class="camera-container">
-                    <video id="video" autoplay playsinline>摄像头未开启</video>
-                    <canvas id="canvas" style="display: none;"></canvas>
-                    <div>
-                        <button id="startCamera" class="btn">开启摄像头</button>
-                        <button id="capture" class="btn" disabled>拍照</button>
-                        <button id="stopCamera" class="btn btn-secondary" disabled>关闭摄像头</button>
-                    </div>
-                    
-                    
-                    
-                    <div id="capturedSection" style="display: none;">
-                        <p>已拍摄的照片：</p>
-                        <button id="uploadPhoto" class="btn">上传图片</button>
-                    </div>
-                    
-                    <div class="refresh-info">
-                        系统每30秒自动刷新图片库，确保您看到最新上传的图片
-                    </div>
-                </div>
-            </div>
+        <div class="camera-box">
+            <video id="video" autoplay playsinline>摄像头未开启</video>
             
-            <div class="section">
-                <h2 class="section-title">图片库</h2>
-                <div class="photo-count">当前共有 <span id="photoCount">0</span> 张图片</div>
-                
-                <div id="gallery" class="gallery">
-                    <div class="empty-gallery">
-                        还没有图片，请拍摄并上传第一张照片
-                    </div>
-                </div>
-            </div>
         </div>
         
-        <footer>
-            <p>© 2026 拍照与图片查看系统 | 每个人都可以查看所有图片</p>
-        </footer>
+        <div class="btn-group">
+            <button id="startCamera" class="btn btn-primary">开启摄像头</button>
+            <button id="capture" class="btn btn-secondary" disabled>拍照</button>
+            <button id="stopCamera" class="btn" disabled>关闭摄像头</button>
+        </div>
+        
+        <div id="uploadSection" class="upload-section">
+            <p>已拍摄照片，可以上传到共享图库</p>
+            <button id="uploadPhoto" class="btn btn-primary">上传图片</button>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <div class="view-link">
+            <p>查看所有共享图片：</p>
+            <a href="gallery.html" target="_blank">打开图片查看网站</a>
+        </div>
     </div>
 
     <script>
-        // 模拟后端存储（实际应用中需要真实后端API）
-        let sharedPhotos = JSON.parse(localStorage.getItem('sharedPhotos')) || [];
+        // 使用localStorage模拟共享存储（实际应用中使用服务器API）
+        const STORAGE_KEY = 'sharedPhotos';
         
         // DOM元素
         const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
         const capturedPhoto = document.getElementById('capturedPhoto');
         const startCameraBtn = document.getElementById('startCamera');
         const captureBtn = document.getElementById('capture');
         const stopCameraBtn = document.getElementById('stopCamera');
         const uploadPhotoBtn = document.getElementById('uploadPhoto');
-        const capturedSection = document.getElementById('capturedSection');
-        const gallery = document.getElementById('gallery');
-        const photoCount = document.getElementById('photoCount');
+        const uploadSection = document.getElementById('uploadSection');
+        const statusDiv = document.getElementById('status');
         
         let stream = null;
         let currentPhotoData = null;
@@ -261,13 +197,16 @@
         // 开启摄像头
         startCameraBtn.addEventListener('click', async () => {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: 'environment' } 
+                });
                 video.srcObject = stream;
                 captureBtn.disabled = false;
                 stopCameraBtn.disabled = false;
                 startCameraBtn.disabled = true;
+                showStatus('摄像头已开启', 'success');
             } catch (err) {
-                alert('无法访问摄像头: ' + err.message);
+                showStatus('无法访问摄像头: ' + err.message, 'error');
             }
         });
         
@@ -280,116 +219,68 @@
                 captureBtn.disabled = true;
                 stopCameraBtn.disabled = true;
                 startCameraBtn.disabled = false;
+                showStatus('摄像头已关闭', 'success');
             }
         });
         
         // 拍照
         captureBtn.addEventListener('click', () => {
             if (stream) {
+                const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
                 
-                currentPhotoData = canvas.toDataURL('image/png');
+                currentPhotoData = canvas.toDataURL('image/jpeg', 0.8);
                 capturedPhoto.src = currentPhotoData;
                 capturedPhoto.style.display = 'block';
-                capturedSection.style.display = 'block';
+                video.style.display = 'none';
+                uploadSection.style.display = 'block';
+                showStatus('照片拍摄成功！', 'success');
             }
         });
         
         // 上传图片
         uploadPhotoBtn.addEventListener('click', () => {
             if (currentPhotoData) {
-                // 创建图片对象
-                const photo = {
+                // 获取现有图片
+                const existingPhotos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                
+                // 创建新图片对象
+                const newPhoto = {
                     id: Date.now(),
                     data: currentPhotoData,
-                    timestamp: new Date().toLocaleString('zh-CN')
+                    timestamp: new Date().toLocaleString('zh-CN'),
+                    device: '手机' + (Math.floor(Math.random() * 1000) + 1) // 模拟设备标识
                 };
                 
-                // 添加到共享图片库
-                sharedPhotos.push(photo);
-                localStorage.setItem('sharedPhotos', JSON.stringify(sharedPhotos));
+                // 添加到图库
+                existingPhotos.unshift(newPhoto); // 新图片放在最前面
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(existingPhotos));
                 
-                // 更新界面
-                updateGallery();
+                showStatus('图片上传成功！其他设备现在可以看到这张图片。', 'success');
                 
-                // 重置拍照状态
-                capturedPhoto.style.display = 'none';
-                capturedSection.style.display = 'none';
-                currentPhotoData = null;
-                
-                alert('图片上传成功！');
+                // 重置界面
+                setTimeout(() => {
+                    capturedPhoto.style.display = 'none';
+                    video.style.display = 'block';
+                    uploadSection.style.display = 'none';
+                    currentPhotoData = null;
+                }, 2000);
             }
         });
         
-        // 更新图片库显示
-        function updateGallery() {
-            photoCount.textContent = sharedPhotos.length;
+        // 显示状态信息
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + type;
+            statusDiv.style.display = 'block';
             
-            if (sharedPhotos.length === 0) {
-                gallery.innerHTML = '<div class="empty-gallery">还没有图片，请拍摄并上传第一张照片</div>';
-                return;
-            }
-            
-            gallery.innerHTML = '';
-            sharedPhotos.forEach(photo => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
-                
-                galleryItem.innerHTML = `
-                    
-                    <div class="timestamp">${photo.timestamp}</div>
-                `;
-                
-                gallery.appendChild(galleryItem);
-            });
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
         }
-        
-        // 模拟其他设备上传图片（仅用于演示）
-        function simulateOtherDeviceUpload() {
-            if (Math.random() < 0.3) { // 30%的概率模拟上传
-                const sampleImages = [
-                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzI1NzVmYyIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiNmZmYiLz4KICA8dGV4dCB4PSIxMDAiIHk9IjExMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMjU3NWZjIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7lubTpgJo8L3RleHQ+Cjwvc3ZnPg==',
-                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2YwM2U1ZiIvPgogIDxwb2x5Z29uIHBvaW50cz0iMTAwLDUwIDE1MCwxMDAgMTAwLDE1MCA1MCwxMDAiIGZpbGw9IiNmZmYiLz4KICA8dGV4dCB4PSIxMDAiIHk9IjE3MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjZjAzZTVmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7lubTpgJo8L3RleHQ+Cjwvc3ZnPg==',
-                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzMzYjgzMyIvPgogIDxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNmZmYiLz4KICA8dGV4dCB4PSIxMDAiIHk9IjE3MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEyIiBmaWxsPSIjMzNiODMzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7lubTpgJo8L3RleHQ+Cjwvc3ZnPg=='
-                ];
-                
-                const randomImage = sampleImages[Math.floor(Math.random() * sampleImages.length)];
-                
-                const photo = {
-                    id: Date.now(),
-                    data: randomImage,
-                    timestamp: new Date().toLocaleString('zh-CN')
-                };
-                
-                sharedPhotos.push(photo);
-                localStorage.setItem('sharedPhotos', JSON.stringify(sharedPhotos));
-                updateGallery();
-                
-                console.log('模拟其他设备上传了一张图片');
-            }
-        }
-        
-        // 定期检查新图片（模拟实时更新）
-        setInterval(() => {
-            // 在实际应用中，这里应该从服务器获取最新图片列表
-            const storedPhotos = JSON.parse(localStorage.getItem('sharedPhotos')) || [];
-            
-            // 如果图片数量有变化，更新显示
-            if (storedPhotos.length !== sharedPhotos.length) {
-                sharedPhotos = storedPhotos;
-                updateGallery();
-                console.log('检测到新图片，已更新显示');
-            }
-            
-            // 模拟其他设备上传（仅用于演示）
-            simulateOtherDeviceUpload();
-        }, 30000); // 每30秒检查一次
-        
-        // 初始化
-        updateGallery();
     </script>
 </body>
 </html>
