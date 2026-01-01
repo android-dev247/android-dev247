@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片查看 - 共享图片系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #f5576c;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border-radius: 10px;
+            min-width: 150px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #f5576c;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .refresh-info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 15px 0;
+            color: #1976d2;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .photo-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .photo-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .photo-info {
+            padding: 15px;
+        }
+        
+        .photo-time {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .photo-device {
+            color: #f5576c;
+            font-weight: bold;
+        }
+        
+        .empty-gallery {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-gallery h2 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .upload-link {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .upload-link a {
+            color: white;
+            background: #f5576c;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-link a:hover {
+            background: #e04a5f;
+            transform: translateY(-2px);
+        }
+        
+        .last-update {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🖼️ 共享图片库</h1>
+            <p class="subtitle">查看所有设备上传的图片</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPhotos">0</div>
+                    <div class="stat-label">总图片数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="lastUpdate">0</div>
+                    <div class="stat-label">最后更新</div>
+                </div>
+            </div>
+            
+            <div class="refresh-info">
+                🔄 系统每10秒自动刷新，确保您看到最新图片
+            </div>
+        </header>
+        
+        <div id="gallery" class="gallery">
+            <div class="empty-gallery">
+                <h2>📷 图库空空如也</h2>
+                <p>还没有图片，请使用拍照网站上传第一张照片</p>
+            </div>
+        </div>
+        
+        <div class="upload-link">
+            <a href="upload.html" target="_blank">去拍照上传</a>
+        </div>
+        
+        <div class="last-update">
+            最后检查时间: <span id="lastCheckTime">--:--:--</span>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'sharedPhotos';
+        
+        // DOM元素
+        const gallery = document.getElementById('gallery');
+        const totalPhotos = document.getElementById('totalPhotos');
+        const lastUpdate = document.getElementById('lastUpdate');
+        const lastCheckTime = document.getElementById('lastCheckTime');
+        
+        // 加载图片
+        function loadPhotos() {
+            const photos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            
+            // 更新统计信息
+            totalPhotos.textContent = photos.length;
+            lastUpdate.textContent = photos.length > 0 ? 
+                new Date(photos[0].id).toLocaleTimeString('zh-CN') : '暂无';
+            lastCheckTime.textContent = new Date().toLocaleTimeString('zh-CN');
+            
+            // 更新图片显示
+            if (photos.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-gallery">
+                        <h2>📷 图库空空如也</h2>
+                        <p>还没有图片，请使用拍照网站上传第一张照片</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            gallery.innerHTML = photos.map(photo => `
+                <div class="photo-card">
+                    
+                    <div class="photo-info">
+                        <div class="photo-time">${photo.timestamp}</div>
+                        <div class="photo-device">来自: ${photo.device || '未知设备'}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // 自动刷新
+        function startAutoRefresh() {
+            loadPhotos(); // 立即加载一次
+            
+            // 每10秒刷新一次
+            setInterval(() => {
+                loadPhotos();
+            }, 10000);
+        }
+        
+        // 初始化
+        startAutoRefresh();
+    </script>
+</body>
+</html>
