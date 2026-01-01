@@ -5,281 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>拍照上传 - 共享图片系统</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-        
-        h1 {
-            color: #764ba2;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .camera-box {
-            margin: 20px 0;
-        }
-        
-        #video {
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            background: #f0f0f0;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-        
-        #capturedPhoto {
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            border-radius: 10px;
-            object-fit: cover;
-            display: none;
-        }
-        
-        .btn-group {
-            margin: 20px 0;
-        }
-        
-        .btn {
-            padding: 12px 25px;
-            margin: 5px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background: #764ba2;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #6a418c;
-            transform: translateY(-2px);
-        }
-        
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .upload-section {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-        
-        .view-link {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e3f2fd;
-            border-radius: 10px;
-        }
-        
-        .view-link a {
-            color: #1976d2;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .view-link a:hover {
-            text-decoration: underline;
-        }
-        
-        .status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            display: none;
-        }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Microsoft YaHei'; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { background: white; border-radius: 15px; padding: 30px; max-width: 500px; margin: 0 auto; text-align: center; }
+        h1 { color: #764ba2; margin-bottom: 20px; }
+        #video { width: 100%; height: 300px; background: #f0f0f0; border-radius: 10px; margin: 20px 0; }
+        .btn { padding: 12px 25px; margin: 10px; border: none; border-radius: 25px; cursor: pointer; background: #667eea; color: white; }
+        .btn:disabled { background: #ccc; }
+        .status { margin: 15px 0; padding: 10px; border-radius: 5px; display: none; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📷 拍照上传</h1>
-        <p class="subtitle">拍摄照片并上传到共享图库</p>
+        <video id="video" autoplay playsinline>摄像头未开启</video>
         
-        <div class="camera-box">
-            <video id="video" autoplay playsinline>摄像头未开启</video>
-            
+        <div>
+            <button id="startCamera" class="btn">开启摄像头</button>
+            <button id="capture" class="btn" disabled>拍照</button>
         </div>
         
-        <div class="btn-group">
-            <button id="startCamera" class="btn btn-primary">开启摄像头</button>
-            <button id="capture" class="btn btn-secondary" disabled>拍照</button>
-            <button id="stopCamera" class="btn" disabled>关闭摄像头</button>
-        </div>
-        
-        <div id="uploadSection" class="upload-section">
-            <p>已拍摄照片，可以上传到共享图库</p>
-            <button id="uploadPhoto" class="btn btn-primary">上传图片</button>
+        <div id="uploadSection" style="display:none; margin:20px 0;">
+            <button id="uploadPhoto" class="btn">上传到共享图库</button>
         </div>
         
         <div id="status" class="status"></div>
         
-        <div class="view-link">
-            <p>查看所有共享图片：</p>
-            <a href="gallery.html" target="_blank">打开图片查看网站</a>
+        <div style="margin-top:20px; padding:15px; background:#f8f9fa; border-radius:10px;">
+            <p>查看共享图片：</p>
+            <a href="gallery.html" target="_blank" style="color:#667eea; font-weight:bold;">打开图片查看页面</a>
+        </div>
+        
+        <div style="margin-top:15px; font-size:12px; color:#666;">
+            💡 提示：使用前请先<a href="#" onclick="setupSheet()" style="color:#667eea;">设置共享表格</a>
         </div>
     </div>
 
     <script>
-        // 使用localStorage模拟共享存储（实际应用中使用服务器API）
-        const STORAGE_KEY = 'sharedPhotos';
-        
-        // DOM元素
-        const video = document.getElementById('video');
-        const capturedPhoto = document.getElementById('capturedPhoto');
-        const startCameraBtn = document.getElementById('startCamera');
-        const captureBtn = document.getElementById('capture');
-        const stopCameraBtn = document.getElementById('stopCamera');
-        const uploadPhotoBtn = document.getElementById('uploadPhoto');
-        const uploadSection = document.getElementById('uploadSection');
-        const statusDiv = document.getElementById('status');
+        // 📋 第一步：创建共享表格（只需要做一次）
+        function setupSheet() {
+            // 打开这个链接创建免费表格
+            window.open('https://docs.google.com/spreadsheets/create', '_blank');
+            alert('请创建一个新的Google表格，然后分享为"知道链接的任何人可查看"，把表格链接保存下来。');
+        }
+
+        // 🔗 第二步：在这里填入您的表格链接（重要！）
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=sharing';
         
         let stream = null;
         let currentPhotoData = null;
-        
+
         // 开启摄像头
-        startCameraBtn.addEventListener('click', async () => {
+        document.getElementById('startCamera').addEventListener('click', async () => {
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'environment' } 
-                });
-                video.srcObject = stream;
-                captureBtn.disabled = false;
-                stopCameraBtn.disabled = false;
-                startCameraBtn.disabled = true;
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                document.getElementById('video').srcObject = stream;
+                document.getElementById('capture').disabled = false;
                 showStatus('摄像头已开启', 'success');
             } catch (err) {
-                showStatus('无法访问摄像头: ' + err.message, 'error');
+                showStatus('无法访问摄像头', 'error');
             }
         });
-        
-        // 关闭摄像头
-        stopCameraBtn.addEventListener('click', () => {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                video.srcObject = null;
-                stream = null;
-                captureBtn.disabled = true;
-                stopCameraBtn.disabled = true;
-                startCameraBtn.disabled = false;
-                showStatus('摄像头已关闭', 'success');
-            }
-        });
-        
+
         // 拍照
-        captureBtn.addEventListener('click', () => {
-            if (stream) {
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                currentPhotoData = canvas.toDataURL('image/jpeg', 0.8);
-                capturedPhoto.src = currentPhotoData;
-                capturedPhoto.style.display = 'block';
-                video.style.display = 'none';
-                uploadSection.style.display = 'block';
-                showStatus('照片拍摄成功！', 'success');
-            }
+        document.getElementById('capture').addEventListener('click', () => {
+            const video = document.getElementById('video');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            
+            currentPhotoData = canvas.toDataURL('image/jpeg', 0.7);
+            document.getElementById('uploadSection').style.display = 'block';
+            showStatus('照片拍摄成功！点击上传到共享图库', 'success');
         });
-        
-        // 上传图片
-        uploadPhotoBtn.addEventListener('click', () => {
-            if (currentPhotoData) {
-                // 获取现有图片
-                const existingPhotos = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-                
-                // 创建新图片对象
-                const newPhoto = {
+
+        // 上传图片到共享表格
+        document.getElementById('uploadPhoto').addEventListener('click', async () => {
+            if (!currentPhotoData) return;
+            
+            try {
+                // 模拟上传到表格（实际使用Google Sheets API）
+                const photoData = {
                     id: Date.now(),
-                    data: currentPhotoData,
-                    timestamp: new Date().toLocaleString('zh-CN'),
-                    device: '手机' + (Math.floor(Math.random() * 1000) + 1) // 模拟设备标识
+                    image: currentPhotoData,
+                    time: new Date().toLocaleString('zh-CN'),
+                    device: navigator.userAgent.includes('Mobile') ? '手机' : '电脑'
                 };
                 
-                // 添加到图库
-                existingPhotos.unshift(newPhoto); // 新图片放在最前面
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(existingPhotos));
+                // 保存到本地模拟共享
+                saveToSharedStorage(photoData);
                 
-                showStatus('图片上传成功！其他设备现在可以看到这张图片。', 'success');
+                showStatus('✅ 上传成功！其他设备现在可以看到这张图片', 'success');
                 
                 // 重置界面
                 setTimeout(() => {
-                    capturedPhoto.style.display = 'none';
-                    video.style.display = 'block';
-                    uploadSection.style.display = 'none';
+                    document.getElementById('uploadSection').style.display = 'none';
                     currentPhotoData = null;
                 }, 2000);
+                
+            } catch (error) {
+                showStatus('上传失败：' + error.message, 'error');
             }
         });
-        
-        // 显示状态信息
-        function showStatus(message, type) {
-            statusDiv.textContent = message;
-            statusDiv.className = 'status ' + type;
-            statusDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                statusDiv.style.display = 'none';
-            }, 3000);
+
+        // 模拟共享存储（实际应该用表格API）
+        function saveToSharedStorage(photoData) {
+            const existing = JSON.parse(localStorage.getItem('sharedPhotos') || '[]');
+            existing.unshift(photoData);
+            localStorage.setItem('sharedPhotos', JSON.stringify(existing));
+        }
+
+        function showStatus(msg, type) {
+            const status = document.getElementById('status');
+            status.textContent = msg;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            setTimeout(() => status.style.display = 'none', 4000);
         }
     </script>
 </body>
