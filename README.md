@@ -101,7 +101,6 @@
     </style>
 </head>
 <body>
-    <!-- 个人信息头部 -->
     <div class="profile-header">
         <div class="profile-username">android-dev247</div>
         <div class="profile-bio">专注Zygisk/KernelSU模块开发，适配红米K50/澎湃OS</div>
@@ -112,43 +111,6 @@
             </svg>
             活跃于GitHub · 安卓搞机领域
         </div>
-    </div>
-
-    <!-- 核心信息内容 -->
-    <div class="profile-content">
-        <h2 class="content-title">
-            <span>👋 Hi there!</span>
-        </h2>
-        <ul class="content-list">
-            <li>
-                <span class="icon">🔭</span>
-                <span>I’m currently working on <strong>Zygisk模块开发与KernelSU适配</strong>，主攻红米K50澎湃OS系统的模块注入优化</span>
-            </li>
-            <li>
-                <span class="icon">🌱</span>
-                <span>I’m currently learning <strong>安卓底层源码修改、Magisk/Zygisk核心注入原理</strong></span>
-            </li>
-            <li>
-                <span class="icon">👯</span>
-                <span>I’m looking to collaborate on <strong>澎湃OS兼容的LSPosed模块开发、Root隐藏方案优化</strong></span>
-            </li>
-            <li>
-                <span class="icon">🤔</span>
-                <span>I’m looking for help with <strong>红米K50内核调试、Zygisk Next高版本适配问题</strong></span>
-            </li>
-            <li>
-                <span class="icon">💬</span>
-                <span>Ask me about <strong>Android Root、Zygisk模块注入、KernelSU使用与调试</strong></span>
-            </li>
-            <li>
-                <span class="icon">📫</span>
-                <span>How to reach me: <a href="mailto:2470018839@qq.com">2470018839@qq.com</a></span>
-            </li>
-            <li>
-                <span class="icon">⚡</span>
-                <span>Fun fact: <strong>用Zygisk给澎湃OS注入过10+款功能模块，零系统崩溃记录</strong></span>
-            </li>
-        </ul>
     </div>
 </body>
 </html>
