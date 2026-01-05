@@ -3,296 +3,775 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QQ数据管理后台</title>
+    <title>黑川过检测 - 高端全防版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
         
         body {
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
             padding: 20px;
         }
         
-        .admin-container {
+        .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* 头部样式 */
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        
+        /* 作者信息 */
+        .author-info {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .author-info h2 {
+            color: #00dbde;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .author-info h2 i {
+            color: #fc00ff;
+        }
+        
+        .contact-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .contact-btn {
+            background: linear-gradient(90deg, #00dbde, #0077ff);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(0, 119, 255, 0.3);
+        }
+        
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 119, 255, 0.5);
+        }
+        
+        .contact-btn.qq {
+            background: linear-gradient(90deg, #12c2e9, #c471ed);
+        }
+        
+        .contact-btn.qq:hover {
+            box-shadow: 0 8px 20px rgba(196, 113, 237, 0.5);
+        }
+        
+        /* 功能模块 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
             overflow: hidden;
         }
         
-        .admin-header {
-            background: linear-gradient(45deg, #2c3e50, #34495e);
-            color: white;
-            padding: 30px;
-            text-align: center;
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 219, 222, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
         
-        .admin-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
         }
         
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            background: #f8f9fa;
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
         }
         
-        .stat-number {
-            font-size: 32px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
+        .feature-card p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
         
-        .stat-label {
-            color: #666;
-            font-size: 14px;
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(0, 255, 0, 0.1);
+            color: #0f0;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
         
-        .controls {
-            padding: 20px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #eee;
+        .status.active {
+            background: rgba(0, 255, 0, 0.2);
+            color: #0f0;
+        }
+        
+        .status.inactive {
+            background: rgba(255, 0, 0, 0.2);
+            color: #f00;
+        }
+        
+        /* 脚本展示区 */
+        .script-display {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .script-header {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
         
-        .btn {
-            padding: 10px 20px;
+        .script-header h2 {
+            color: #00dbde;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(90deg, #00dbde, #0077ff);
+            color: white;
             border: none;
-            border-radius: 5px;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-weight: 600;
             transition: all 0.3s;
         }
         
-        .btn-primary { background: #3498db; color: white; }
-        .btn-success { background: #27ae60; color: white; }
-        .btn-danger { background: #e74c3c; color: white; }
-        .btn-warning { background: #f39c12; color: white; }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .copy-btn:hover {
+            background: linear-gradient(90deg, #0077ff, #00dbde);
         }
         
-        .search-box {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        
-        .data-table {
+        pre {
+            background: #1e1e2e;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
             overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            border: 1px solid #333;
         }
         
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        code {
+            color: #8be9fd;
         }
         
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
+        .comment {
+            color: #6272a4;
         }
         
-        th {
-            background: #f8f9fa;
-            font-weight: 600;
-            color: #2c3e50;
+        .string {
+            color: #f1fa8c;
         }
         
-        tr:hover {
-            background: #f8f9fa;
+        .number {
+            color: #bd93f9;
         }
         
-        .storm-data {
-            background: #fff3cd !important;
+        .keyword {
+            color: #ff79c6;
         }
         
-        .pagination {
-            padding: 20px;
+        /* 下载区域 */
+        .download-section {
             text-align: center;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+            padding: 40px 0;
         }
         
-        .back-link {
+        .download-btn {
+            background: linear-gradient(90deg, #00dbde, #fc00ff);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 版本信息 */
+        .version-info {
             text-align: center;
-            padding: 20px;
-            border-top: 1px solid #eee;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
         }
         
-        .back-link a {
-            color: #3498db;
-            text-decoration: none;
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
+            
+            .contact-box {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* 动画 */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 219, 222, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 219, 222, 0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
         }
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <div class="admin-header">
-            <h1>QQ数据管理后台</h1>
-            <p>实时监控所有登录记录和数据统计</p>
-        </div>
-        
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="totalRecords">0</div>
-                <div class="stat-label">总记录数</div>
+    <div class="container">
+        <header>
+            <h1 class="logo">黑川过检测</h1>
+            <p class="subtitle">高端全防版 | PUBG Mobile 终极防护系统</p>
+            
+            <div class="author-info">
+                <h2><i class="fas fa-crown"></i> 作者信息</h2>
+                <p><strong>作者：</strong>宝X</p>
+                <p><strong>版本：</strong>v10.0 终极整合版</p>
+                <p><strong>更新日期：</strong>2024年1月</p>
+                <p><strong>支持：</strong>国际服/国服/越南服/韩服</p>
+                
+                <div class="contact-box">
+                    <a href="https://qm.qq.com/cgi-bin/qm/qr?k=your_qq_group_key" target="_blank" class="contact-btn qq pulse">
+                        <i class="fab fa-qq"></i> QQ群: 1026147424
+                    </a>
+                    <a href="https://t.me/your_telegram" target="_blank" class="contact-btn">
+                        <i class="fab fa-telegram"></i> Telegram频道
+                    </a>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="todayRecords">0</div>
-                <div class="stat-label">今日登录</div>
+        </header>
+        
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>全内存防护</h3>
+                <p>智能内存混淆技术，实时保护关键内存区域，防止反作弊系统扫描和检测。</p>
+                <span class="status active">✅ 100% 有效</span>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="stormRecords">0</div>
-                <div class="stat-label">风暴数据</div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>防闪退引擎</h3>
+                <p>内置case35防闪退修复，稳定运行不崩溃，支持长时间游戏会话。</p>
+                <span class="status active">✅ 稳定运行</span>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="uniqueIPs">0</div>
-                <div class="stat-label">独立IP</div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-secret"></i>
+                </div>
+                <h3>行为伪装</h3>
+                <p>智能行为模拟系统，完美绕过ACE行为检测和观察期监控。</p>
+                <span class="status active">✅ 无法检测</span>
             </div>
-        </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h3>网络拦截</h3>
+                <p>完全阻断腾讯云端上报，屏蔽服务器异常检测，防止数据泄露。</p>
+                <span class="status active">✅ 安全通信</span>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>代码混淆</h3>
+                <p>高级Lua代码混淆技术，防止特征码扫描，每次运行自动变换。</p>
+                <span class="status active">✅ 动态变换</span>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h3>自动更新</h3>
+                <p>智能版本检测，自动适配游戏更新，无需手动调整偏移地址。</p>
+                <span class="status">🔄 待更新</span>
+            </div>
+        </section>
         
-        <div class="controls">
-            <input type="text" class="search-box" id="searchInput" placeholder="搜索QQ号、密码或IP..." oninput="filterData()">
-            <button class="btn btn-primary" onclick="refreshData()">🔄 刷新数据</button>
-            <button class="btn btn-success" onclick="exportData()">💾 导出数据</button>
-            <button class="btn btn-danger" onclick="clearData()">🗑️ 清空数据</button>
-            <button class="btn btn-warning" onclick="generateSampleData()">⚡ 生成测试数据</button>
-        </div>
+        <section class="script-display">
+            <div class="script-header">
+                <h2><i class="fas fa-file-code"></i> 核心脚本代码</h2>
+                <button class="copy-btn" onclick="copyScript()">
+                    <i class="fas fa-copy"></i> 复制代码
+                </button>
+            </div>
+            <pre id="scriptCode"><code><span class="comment">-- ==================== 黑川过检测10.0 终极整合版 ====================</span>
+<span class="comment">-- 作者: 宝X | QQ群: 1026147424</span>
+<span class="comment">-- 版本: 终极整合版 v10.0</span>
+
+<span class="keyword">function</span> <span class="keyword">autoExecuteAll</span>()
+    gg.toast(<span class="string">"黑川过检测10.0 - 终极整合执行中..."</span>)
+    
+    <span class="comment">-- 隐藏GG进程</span>
+    gg.setVisible(<span class="keyword">false</span>)
+    
+    <span class="comment">-- 1. 执行Logo防闪</span>
+    executeLogoFix()
+    
+    <span class="comment">-- 2. 执行大厅过检测①</span>
+    executeLobbyFix1()
+    
+    <span class="comment">-- 3. 执行大厅过检测②</span>  
+    executeLobbyFix2()
+    
+    <span class="comment">-- 4. 执行框架区功能</span>
+    executeFrameworkFix()
+    
+    <span class="comment">-- 5. 执行root区功能</span>
+    executeRootFix()
+    
+    gg.toast(<span class="string">"所有功能执行完成！"</span>)
+    <span class="keyword">print</span>(<span class="string">"🎯 黑川过检测10.0 - 全功能自动执行完毕"</span>)
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> <span class="keyword">executeLogoFix</span>()
+    <span class="keyword">if</span> gg.getRangesList(<span class="string">"libanogs.so"</span>)[<span class="number">1</span>] <span class="keyword">then</span>
+        <span class="keyword">local</span> t = {}
+        t[<span class="number">1</span>] = gg.getRangesList(<span class="string">"libanogs.so"</span>)[<span class="number">1</span>][<span class="string">"start"</span>] + <span class="number">0xE39CC</span>
+        gg.setValues({
+            [<span class="number">1</span>] = { 
+                address = t[<span class="number">1</span>],
+                flags = <span class="number">4</span>,
+                value = -<span class="number">721215457</span>,
+            },
+        })
+    <span class="keyword">end</span>
+    
+    <span class="keyword">if</span> gg.getRangesList(<span class="string">"libUE4.so"</span>)[<span class="number">1</span>] <span class="keyword">then</span>
+        <span class="keyword">local</span> t = {}
+        t[<span class="number">1</span>] = gg.getRangesList(<span class="string">"libUE4.so"</span>)[<span class="number">1</span>][<span class="string">"start"</span>] + <span class="number">0x7856B28</span>
+        gg.setValues({
+            [<span class="number">1</span>] = { 
+                address = t[<span class="number">1</span>],
+                flags = <span class="number">4</span>,
+                value = -<span class="number">698416192</span>,
+            },
+        })
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> <span class="keyword">executeLobbyFix1</span>()
+    <span class="keyword">if</span> gg.getRangesList(<span class="string">"libgcloud.so"</span>)[<span class="number">1</span>] <span class="keyword">then</span>
+        <span class="keyword">local</span> t = {}
+        t[<span class="number">1</span>] = gg.getRangesList(<span class="string">"libgcloud.so"</span>)[<span class="number">1</span>][<span class="string">"start"</span>] + <span class="number">0x89DEC</span>
+        t[<span class="number">2</span>] = gg.getRangesList(<span class="string">"libgcloud.so"</span>)[<span class="number">1</span>][<span class="string">"start"</span>] + <span class="number">0x30C0E8</span>
+        gg.setValues({
+            [<span class="number">1</span>] = { 
+                address = t[<span class="number">1</span>],
+                flags = <span class="number">4</span>,
+                value = -<span class="number">698416192</span>,
+            },
+            [<span class="number">2</span>] = { 
+                address = t[<span class="number">2</span>],
+                flags = <span class="number">4</span>,
+                value = <span class="number">335544320</span>,
+            },
+        })
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- 自动执行</span>
+autoExecuteAll()</code></pre>
+        </section>
         
-        <div class="data-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>QQ号</th>
-                        <th>密码</th>
-                        <th>登录时间</th>
-                        <th>IP地址</th>
-                        <th>类型</th>
-                    </tr>
-                </thead>
-                <tbody id="dataBody">
-                    <tr>
-                        <td colspan="6" style="text-align: center; padding: 40px;">加载中...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <section class="download-section">
+            <button class="download-btn pulse" onclick="downloadScript()">
+                <i class="fas fa-download"></i> 下载完整脚本
+            </button>
+            <p style="margin-top: 15px; color: #aaa;">文件大小: 4.2KB | 格式: .lua</p>
+        </section>
         
-        <div class="pagination">
-            <button class="btn" onclick="prevPage()">上一页</button>
-            <span id="pageInfo">第 1 页</span>
-            <button class="btn" onclick="nextPage()">下一页</button>
-        </div>
-        
-        <div class="back-link">
-            <a href="index.html">← 返回QQ登录页面</a>
+        <div class="version-info">
+            <p>© 2024 黑川过检测 | 版本 10.0 | 技术支持: QQ群 1026147424</p>
+            <p>仅供学习研究使用，请勿用于非法用途</p>
         </div>
     </div>
-
+    
     <script>
-        let allData = [];
-        let filteredData = [];
-        let currentPage = 1;
-        const pageSize = 50;
+        // 复制脚本代码
+        function copyScript() {
+            const codeElement = document.getElementById('scriptCode');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.innerText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // 显示复制成功提示
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+            btn.style.background = 'linear-gradient(90deg, #00b09b, #96c93d)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(90deg, #00dbde, #0077ff)';
+            }, 2000);
+        }
         
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-            setInterval(refreshData, 2000); // 每2秒自动刷新
+        // 模拟下载功能
+        function downloadScript() {
+            const scriptContent = `-- ==================== 黑川过检测10.0 终极整合版 ====================
+-- 作者: 宝X | QQ群: 1026147424
+-- 版本: 终极整合版 v10.0
+
+function autoExecuteAll()
+    gg.toast("黑川过检测10.0 - 终极整合执行中...")
+    
+    -- 隐藏GG进程
+    gg.setVisible(false)
+    
+    -- 1. 执行Logo防闪
+    executeLogoFix()
+    
+    -- 2. 执行大厅过检测①
+    executeLobbyFix1()
+    
+    -- 3. 执行大厅过检测②  
+    executeLobbyFix2()
+    
+    -- 4. 执行框架区功能
+    executeFrameworkFix()
+    
+    -- 5. 执行root区功能
+    executeRootFix()
+    
+    gg.toast("所有功能执行完成！")
+    print("🎯 黑川过检测10.0 - 全功能自动执行完毕")
+end
+
+function executeLogoFix()
+    if gg.getRangesList("libanogs.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libanogs.so")[1]["start"] + 0xE39CC
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -721215457,
+            },
+        })
+    end
+    
+    if gg.getRangesList("libanogs.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libanogs.so")[1]["start"] + 0x5492D0
+        t[2] = gg.getRangesList("libanogs.so")[1]["start"] + 0x5492D4
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -763363328,
+            },
+            [2] = { 
+                address = t[2],
+                flags = 4,
+                value = -698416192,
+            },
+        })
+    end
+    
+    if gg.getRangesList("libUE4.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libUE4.so")[1]["start"] + 0x7856B28
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -698416192,
+            },
+        })
+    end
+    
+    if gg.getRangesList("libUE4.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libUE4.so")[1]["start"] + 0x30
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = 1,
+            },
+        })
+    end
+end
+
+function executeLobbyFix1()
+    if gg.getRangesList("libgcloud.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libgcloud.so")[1]["start"] + 0x89DEC
+        t[2] = gg.getRangesList("libgcloud.so")[1]["start"] + 0x30C0E8
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -698416192,
+            },
+            [2] = { 
+                address = t[2],
+                flags = 4,
+                value = 335544320,
+            },
+        })
+    end
+end
+
+function executeLobbyFix2()
+    if gg.getRangesList("libanogs.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libanogs.so")[1]["start"] + 0xE39CC
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -721215457,
+            },
+        })
+    end
+    
+    if gg.getRangesList("libUE4.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libUE4.so")[1]["start"] + 0x67345E4
+        t[2] = gg.getRangesList("libUE4.so")[1]["start"] + 0x6734734
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -721215457,
+            },
+            [2] = { 
+                address = t[2],
+                flags = 4,
+                value = -721215457,
+            },
+        })
+    end
+end
+
+function executeFrameworkFix()
+    if gg.getRangesList("libgcloud.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libgcloud.so")[1]["start"] + 0x89DEC
+        t[2] = gg.getRangesList("libgcloud.so")[1]["start"] + 0x30C0E8
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -698416192,
+            },
+            [2] = { 
+                address = t[2],
+                flags = 4,
+                value = 335544320,
+            },
+        })
+    end
+end
+
+function executeRootFix()
+    if gg.getRangesList("libUE4.so")[1] then
+        local t = {}
+        t[1] = gg.getRangesList("libUE4.so")[1]["start"] + 0x7856B28
+        gg.setValues({
+            [1] = { 
+                address = t[1],
+                flags = 4,
+                value = -698416192,
+            },
+        })
+    end
+end
+
+-- 自动执行
+autoExecuteAll()`;
+            
+            const blob = new Blob([scriptContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '黑川过检测10.0.lua';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // 显示下载成功提示
+            const btn = document.querySelector('.download-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> 下载完成';
+            btn.style.background = 'linear-gradient(90deg, #00b09b, #96c93d)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(90deg, #00dbde, #fc00ff)';
+            }, 2000);
+        }
+        
+        // 添加点击特效
+        document.querySelectorAll('.feature-card, .contact-btn, .copy-btn, .download-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const x = e.clientX - e.target.getBoundingClientRect().left;
+                const y = e.clientY - e.target.getBoundingClientRect().top;
+                
+                const ripple = document.createElement('span');
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
         });
         
-        function loadData() {
-            try {
-                allData = JSON.parse(localStorage.getItem('qq_login_records') || '[]');
-                filteredData = [...allData];
-                updateStats();
-                renderTable();
-            } catch (error) {
-                console.error('加载数据失败:', error);
-            }
-        }
-        
-        function updateStats() {
-            document.getElementById('totalRecords').textContent = allData.length.toLocaleString();
-            
-            // 今日记录
-            const today = new Date().toDateString();
-            const todayCount = allData.filter(item => 
-                new Date(item.loginTime).toDateString() === today
-            ).length;
-            document.getElementById('todayRecords').textContent = todayCount.toLocaleString();
-            
-            // 风暴数据
-            const stormCount = allData.filter(item => item.type === 'storm').length;
-            document.getElementById('stormRecords').textContent = stormCount.toLocaleString();
-            
-            // 独立IP
-            const uniqueIPs = new Set(allData.map(item => item.ip)).size;
-            document.getElementById('uniqueIPs').textContent = uniqueIPs.toLocaleString();
-        }
-        
-        function renderTable() {
-            const startIndex = (currentPage - 1) * pageSize;
-            const endIndex = startIndex + pageSize;
-            const pageData = filteredData.slice(startIndex, endIndex);
-            const tbody = document.getElementById('dataBody');
-            
-            if (pageData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">暂无数据</td></tr>';
-                return;
+        // 添加波纹效果样式
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.7);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+                width: 100px;
+                height: 100px;
+                margin-left: -50px;
+                margin-top: -50px;
             }
             
-            let html = '';
-            pageData.forEach((item, index) => {
-                const globalIndex = startIndex + index + 1;
-                const isStorm = item.type === 'storm';
-                const rowClass = isStorm ? 'storm-data' : '';
-                
-                html += `
-                    <tr class="${rowClass}">
-                        <td>${globalIndex}</td>
-                        <td>${item.qqNumber}</td>
-                        <td>${item.password}</td>
-                        <td>${new Date(item.loginTime).toLocaleString('zh-CN')}</td>
-                        <td>${item.ip}</td>
-                        <td>${isStorm ? '⚡风暴' : '正常'}</td>
-                    </tr>
-                `;
-            });
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
             
-            tbody.innerHTML = html;
-            document.getElementById('pageInfo').textContent = 
-                `第 ${currentPage} 页 / 共 ${Math.ceil(filteredData.length / pageSize)} 页`;
-        }
-        
-        function filterData() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            
-           
+            .feature-card, .contact-btn, .copy-btn, .download-btn {
+                position: relative;
+                overflow: hidden;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
