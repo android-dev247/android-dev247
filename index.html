@@ -3,192 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片展示</title>
+    <title>双图展示</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            color: #333;
+            justify-content: center;
+            padding: 40px 20px;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            color: #fff;
         }
         
-        .header {
-            text-align: center;
-            margin: 20px 0 30px;
+        .container {
             width: 100%;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .subtitle {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            max-width: 600px;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 40px;
             margin: 0 auto;
-            line-height: 1.6;
         }
         
-        .image-container {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            padding: 20px;
-            margin-bottom: 30px;
-            max-width: 1000px;
-            width: 100%;
-            text-align: center;
-            transition: transform 0.3s ease;
+        .image-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
         
-        .image-container:hover {
-            transform: translateY(-5px);
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
         }
         
         .image-frame {
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-            display: inline-block;
-            max-width: 100%;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: transform 0.3s ease;
         }
         
-        .main-image {
-            max-width: 100%;
+        .image-frame:hover {
+            transform: scale(1.02);
+        }
+        
+        .image-frame img {
+            width: 100%;
             height: auto;
             display: block;
             transition: transform 0.5s ease;
         }
         
-        .main-image:hover {
-            transform: scale(1.02);
+        .image-frame:hover img {
+            transform: scale(1.05);
         }
         
         .image-info {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            text-align: left;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         
-        .image-info h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #3498db;
+        .info-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
         }
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
         
         .info-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #ddd;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
         }
         
         .info-label {
-            font-weight: 600;
-            color: #555;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
         }
         
         .info-value {
-            color: #2c3e50;
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.95rem;
+            text-align: right;
+            word-break: break-all;
         }
         
-        .controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .card-number {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 6px rgba(50, 150, 250, 0.2);
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            z-index: 10;
         }
         
-        .btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(50, 150, 250, 0.3);
+        .card-1 .card-number {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
         }
         
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn-download {
-            background-color: #2ecc71;
-        }
-        
-        .btn-download:hover {
-            background-color: #27ae60;
-        }
-        
-        .btn-share {
-            background-color: #9b59b6;
-        }
-        
-        .btn-share:hover {
-            background-color: #8e44ad;
-        }
-        
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            padding: 20px;
-            width: 100%;
-            border-top: 1px solid #eee;
+        .card-2 .card-number {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
         }
         
         /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+            }
+        }
+        
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            body {
+                padding: 20px 15px;
             }
             
-            .image-container {
-                padding: 15px;
+            .container {
+                gap: 30px;
             }
             
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
+            .image-card {
+                padding: 20px;
             }
             
             .info-grid {
@@ -197,188 +172,107 @@
         }
         
         @media (max-width: 480px) {
-            h1 {
-                font-size: 1.7rem;
+            .image-card {
+                padding: 15px;
             }
             
-            .subtitle {
-                font-size: 1rem;
+            .info-title {
+                font-size: 1.1rem;
             }
             
-            .controls {
+            .info-item {
                 flex-direction: column;
-                align-items: center;
+                align-items: flex-start;
+                gap: 5px;
             }
             
-            .btn {
-                width: 100%;
-                max-width: 250px;
-                justify-content: center;
+            .info-value {
+                text-align: left;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>图片展示</h1>
-        <p class="subtitle">本页面展示您上传的图片。您可以将鼠标悬停在图片上查看放大效果，或使用下方按钮进行操作。</p>
-    </div>
-    
-    <div class="image-container">
-        <div class="image-frame">
-            <!-- 图片显示区域 -->
-            <img src="Image_1767320505249_135.jpg" alt="上传的图片" class="main-image" id="displayedImage">
-        </div>
-        
-        <div class="image-info">
-            <h3>图片信息</h3>
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">文件名:</span>
-                    <span class="info-value">Image_1767320505249_135.jpg</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">上传日期:</span>
-                    <span class="info-value" id="uploadDate">2026年2月3日</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">文件类型:</span>
-                    <span class="info-value">JPEG 图片</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">状态:</span>
-                    <span class="info-value">已成功加载</span>
+    <div class="container">
+        <!-- 第1张图片卡片 -->
+        <div class="image-card card-1">
+            <span class="card-number">1</span>
+            <div class="image-frame">
+                <img src="https://github.com/android-dev247/android-dev247/blob/f1cbdc0f432c1580c13a73190b31b42da0328cec/Screenshot_2026-02-03-21-31-30-38_9d26c6446fd7bb8e41d99b6262b17def.jpg?raw=true" 
+                     alt="第1张图片" 
+                     onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Crect width=\"100%25\" height=\"100%25\" fill=\"%23f0f0f0\"/%3E%3Ctext x=\"50%25\" y=\"50%25\" font-size=\"20\" text-anchor=\"middle\" fill=\"%23999\" font-family=\"sans-serif\"%3E图片加载失败%3C/text%3E%3C/svg%3E'">
+            </div>
+            
+            <div class="image-info">
+                <h3 class="info-title">图片详细信息</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">文件名：</span>
+                        <span class="info-value">Screenshot_2026-02-03-21-31-30-38_9d26c6446fd7bb8e41d99b6262b17def.jpg</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">来源：</span>
+                        <span class="info-value">GitHub Repository</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">提交哈希：</span>
+                        <span class="info-value">f1cbdc0f432c1580c13a73190b31b42da0328cec</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">文件路径：</span>
+                        <span class="info-value">android-dev247/android-dev247</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">更新时间：</span>
+                        <span class="info-value">2026年2月3日</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">文件大小：</span>
+                        <span class="info-value">约470 KB</span>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="controls">
-            <button class="btn btn-download" id="downloadBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                下载图片
-            </button>
-            <button class="btn btn-share" id="shareBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="18" cy="5" r="3"></circle>
-                    <circle cx="6" cy="12" r="3"></circle>
-                    <circle cx="18" cy="19" r="3"></circle>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                </svg>
-                分享图片
-            </button>
+        <!-- 第2张图片卡片 -->
+        <div class="image-card card-2">
+            <span class="card-number">2</span>
+            <div class="image-frame">
+                <img src="https://github.com/android-dev247/android-dev247/blob/f1cbdc0f432c1580c13a73190b31b42da0328cec/Screenshot_2026-02-03-21-31-23-14_9d26c6446fd7bb8e41d99b6262b17def.jpg?raw=true" 
+                     alt="第2张图片" 
+                     onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Crect width=\"100%25\" height=\"100%25\" fill=\"%23f0f0f0\"/%3E%3Ctext x=\"50%25\" y=\"50%25\" font-size=\"20\" text-anchor=\"middle\" fill=\"%23999\" font-family=\"sans-serif\"%3E图片加载失败%3C/text%3E%3C/svg%3E'">
+            </div>
+            
+            <div class="image-info">
+                <h3 class="info-title">图片详细信息</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">文件名：</span>
+                        <span class="info-value">Screenshot_2026-02-03-21-31-23-14_9d26c6446fd7bb8e41d99b6262b17def.jpg</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">来源：</span>
+                        <span class="info-value">GitHub Repository</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">提交哈希：</span>
+                        <span class="info-value">f1cbdc0f432c1580c13a73190b31b42da0328cec</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">文件路径：</span>
+                        <span class="info-value">android-dev247/android-dev247</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">更新时间：</span>
+                        <span class="info-value">2026年2月3日</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">文件大小：</span>
+                        <span class="info-value">约470 KB</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="footer">
-        <p>© 2026 图片展示页面 | 本页面专为展示上传的图片而设计</p>
-        <p>图片加载状态: <span id="imageStatus" style="color:#2ecc71;">✓ 图片已成功加载</span></p>
-    </div>
-
-    <script>
-        // 检查图片是否成功加载
-        const displayedImage = document.getElementById('displayedImage');
-        const imageStatus = document.getElementById('imageStatus');
-        const uploadDate = document.getElementById('uploadDate');
-        
-        displayedImage.onload = function() {
-            imageStatus.textContent = "✓ 图片已成功加载";
-            imageStatus.style.color = "#2ecc71";
-            
-            // 更新图片尺寸信息
-            updateImageInfo();
-        };
-        
-        displayedImage.onerror = function() {
-            imageStatus.textContent = "✗ 图片加载失败，请检查文件名是否正确";
-            imageStatus.style.color = "#e74c3c";
-            
-            // 如果图片加载失败，显示占位图
-            displayedImage.src = "data:image/svg+xml;charset=UTF-8,%3Csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' font-size='20' text-anchor='middle' fill='%23999' font-family='sans-serif'%3E图片加载失败%3C/text%3E%3C/svg%3E";
-            displayedImage.alt = "图片加载失败";
-        };
-        
-        // 设置当前日期
-        const today = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        uploadDate.textContent = today.toLocaleDateString('zh-CN', options);
-        
-        // 更新图片信息
-        function updateImageInfo() {
-            // 这里可以添加获取图片实际尺寸和文件大小的代码
-            // 但由于浏览器安全限制，我们无法通过JavaScript直接获取文件大小
-            // 我们可以显示图片的尺寸
-            const width = displayedImage.naturalWidth;
-            const height = displayedImage.naturalHeight;
-            
-            // 如果有尺寸信息，可以更新到页面上
-            if (width && height) {
-                // 可以选择创建一个新的信息项显示尺寸
-                const infoGrid = document.querySelector('.info-grid');
-                const sizeItem = document.createElement('div');
-                sizeItem.className = 'info-item';
-                sizeItem.innerHTML = `
-                    <span class="info-label">图片尺寸:</span>
-                    <span class="info-value">${width} × ${height} 像素</span>
-                `;
-                infoGrid.appendChild(sizeItem);
-            }
-        }
-        
-        // 下载按钮功能
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            const link = document.createElement('a');
-            link.href = displayedImage.src;
-            link.download = 'Image_1767320505249_135.jpg';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // 显示下载提示
-            alert('图片下载已开始，如果未自动下载，请检查浏览器设置。');
-        });
-        
-        // 分享按钮功能
-        document.getElementById('shareBtn').addEventListener('click', function() {
-            if (navigator.share) {
-                // 使用Web Share API
-                navigator.share({
-                    title: '查看我的图片',
-                    text: '我分享了一张图片',
-                    url: window.location.href,
-                })
-                .catch(error => console.log('分享失败:', error));
-            } else {
-                // 回退方案：复制链接到剪贴板
-                navigator.clipboard.writeText(window.location.href)
-                    .then(() => {
-                        alert('页面链接已复制到剪贴板，您可以粘贴分享给他人。');
-                    })
-                    .catch(err => {
-                        console.error('复制失败: ', err);
-                        alert('复制失败，请手动复制页面地址。');
-                    });
-            }
-        });
-        
-        // 页面加载完成后检查图片
-        window.addEventListener('load', function() {
-            // 如果图片已经加载完成（例如从缓存中）
-            if (displayedImage.complete) {
-                if (displayedImage.naturalWidth > 0) {
-                    imageStatus.textContent = "✓ 图片已成功加载";
-                    imageStatus.style.color = "#2ecc71";
-                    updateImageInfo();
-                } else {
-                    imageStatus.textContent = "✗ 图片加载失败，请检查文件名是否正确";
-                    imageStatus.style.color = "#e74c3c";
-                }
-            }
-        });
-    </script>
 </body>
 </html>
