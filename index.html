@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>双图展示</title>
+    <title>双图展示 - 数据统计</title>
     <style>
         * {
             margin: 0;
@@ -12,15 +12,23 @@
         }
         
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0c1445, #1a237e, #283593);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 40px 20px;
             font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             color: #fff;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         .container {
@@ -29,42 +37,84 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 40px;
-            margin: 0 auto;
+            margin: 0 auto 60px;
         }
         
         .image-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
             padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4fc3f7, #29b6f6, #0288d1);
+            background-size: 400% 400%;
+            animation: gradientBorder 6s ease infinite;
+        }
+        
+        @keyframes gradientBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         .image-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
         }
         
         .image-frame {
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
             margin-bottom: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
             position: relative;
-            transition: transform 0.3s ease;
+            transition: all 0.5s ease;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .image-frame::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #4fc3f7, #29b6f6, #0288d1);
+            z-index: -1;
+            border-radius: 25px;
+            opacity: 0.4;
+            filter: blur(10px);
         }
         
         .image-frame:hover {
             transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
         
         .image-frame img {
-            width: 100%;
-            height: auto;
+            max-width: 100%;
+            max-height: 100%;
             display: block;
-            transition: transform 0.5s ease;
+            transition: transform 0.7s ease;
         }
         
         .image-frame:hover img {
@@ -73,76 +123,577 @@
         
         .image-info {
             background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .image-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .image-info:hover::before {
+            transform: translateX(100%);
         }
         
         .info-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
             color: #fff;
             text-align: center;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 15px;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            position: relative;
         }
         
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+        .info-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #4fc3f7, #29b6f6, transparent);
         }
         
-        .info-item {
+        .id-card {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .id-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .id-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.05"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+        
+        .id-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
         
-        .info-item:last-child {
-            border-bottom: none;
+        .id-info:hover {
+            transform: translateX(5px);
         }
         
-        .info-label {
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
+        .id-info:last-child {
+            margin-bottom: 0;
         }
         
-        .info-value {
+        .id-label {
             font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+        
+        .id-value {
+            font-weight: 700;
             color: #fff;
-            font-size: 0.95rem;
-            text-align: right;
-            word-break: break-all;
+            font-size: 1.2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .card-number {
             position: absolute;
-            top: -12px;
-            right: -12px;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            top: -15px;
+            right: -15px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #4fc3f7, #29b6f6);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(79, 195, 247, 0.5);
             z-index: 10;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .card-number:hover {
+            transform: scale(1.1) rotate(15deg);
+            animation: none;
         }
         
         .card-1 .card-number {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(45deg, #4fc3f7, #29b6f6);
         }
         
         .card-2 .card-number {
-            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            background: linear-gradient(45deg, #81d4fa, #4fc3f7);
+        }
+        
+        /* 增强版数据统计区域 */
+        .data-section {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 45px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, 
+                #ff0080, #ff8c00, #ffeb3b, 
+                #4caf50, #2196f3, #9c27b0, 
+                #ff0080);
+            background-size: 400% 400%;
+            animation: gradientBorder 8s ease infinite, shimmer 3s ease-in-out infinite;
+        }
+        
+        .data-section::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, 
+                rgba(79, 195, 247, 0.1) 0%, 
+                rgba(41, 182, 246, 0.05) 25%, 
+                rgba(2, 136, 209, 0.1) 50%, 
+                rgba(129, 212, 250, 0.05) 75%, 
+                rgba(79, 195, 247, 0.1) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .data-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, #4fc3f7, transparent);
+        }
+        <!
+        
+        .data-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, 
+                #4fc3f7, #29b6f6, #81d4fa, 
+                #4fc3f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+            padding: 0 20px;
+        }
+        
+        .data-title::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                rgba(79, 195, 247, 0.2) 0%, 
+                rgba(41, 182, 246, 0.1) 50%, 
+                rgba(129, 212, 250, 0.2) 100%);
+            filter: blur(15px);
+            z-index: -1;
+            border-radius: 10px;
+        }
+        
+        .data-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 35px 30px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 25px 25px 0 0;
+        }
+        
+        .stat-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #4fc3f7, #29b6f6);
+        }
+        
+        .stat-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #ff4081, #f50057);
+        }
+        
+        .stat-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #4caf50, #2e7d32);
+        }
+        
+        .stat-card:nth-child(4)::before {
+            background: linear-gradient(90deg, #ff9800, #f57c00);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+        }
+        
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+        
+        .stat-card:hover::after {
+            transform: translateX(100%);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .stat-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-card:nth-child(1) .stat-icon {
+            background: linear-gradient(135deg, rgba(79, 195, 247, 0.3), rgba(41, 182, 246, 0.2));
+            color: #4fc3f7;
+            border: 2px solid rgba(79, 195, 247, 0.5);
+        }
+        
+        .stat-card:nth-child(2) .stat-icon {
+            background: linear-gradient(135deg, rgba(255, 64, 129, 0.3), rgba(245, 0, 87, 0.2));
+            color: #ff4081;
+            border: 2px solid rgba(255, 64, 129, 0.5);
+        }
+        
+        .stat-card:nth-child(3) .stat-icon {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(46, 125, 50, 0.2));
+            color: #4caf50;
+            border: 2px solid rgba(76, 175, 80, 0.5);
+        }
+        
+        .stat-card:nth-child(4) .stat-icon {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.3), rgba(245, 124, 0, 0.2));
+            color: #ff9800;
+            border: 2px solid rgba(255, 152, 0, 0.5);
+        }
+        
+        .stat-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-value::after {
+            content: '';
+            flex: 1;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            margin-left: 20px;
+            border-radius: 3px;
+        }
+        
+        .stat-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+        }
+        
+        .stat-progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 25px 0;
+            position: relative;
+            height: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-progress {
+            height: 100%;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: width 1.5s ease-out;
+        }
+        
+        .stat-progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.5), 
+                transparent);
+            animation: shimmerBar 2s infinite;
+        }
+        
+        @keyframes shimmerBar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .stat-card:nth-child(1) .stat-progress-bar {
+            background: linear-gradient(90deg, #4fc3f7, #29b6f6, #4fc3f7);
+            background-size: 200% 100%;
+            animation: gradientFlow 3s ease infinite;
+        }
+        
+        .stat-card:nth-child(2) .stat-progress-bar {
+            background: linear-gradient(90deg, #ff4081, #f50057, #ff4081);
+            background-size: 200% 100%;
+            animation: gradientFlow 3s ease infinite;
+        }
+        
+        .stat-card:nth-child(3) .stat-progress-bar {
+            background: linear-gradient(90deg, #4caf50, #2e7d32, #4caf50);
+            background-size: 200% 100%;
+            animation: gradientFlow 3s ease infinite;
+        }
+        
+        .stat-card:nth-child(4) .stat-progress-bar {
+            background: linear-gradient(90deg, #ff9800, #f57c00, #ff9800);
+            background-size: 200% 100%;
+            animation: gradientFlow 3s ease infinite;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .stat-change {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            padding: 8px 15px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .positive {
+            color: #4caf50;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.4);
+        }
+        
+        .negative {
+            color: #f44336;
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.4);
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+        
+        .data-item {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1), 
+                rgba(255, 255, 255, 0.05));
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4fc3f7, #29b6f6, #4fc3f7);
+            background-size: 200% 100%;
+            animation: gradientFlow 4s ease infinite;
+        }
+        
+        .data-item:hover {
+            transform: translateY(-8px) scale(1.03);
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.15), 
+                rgba(255, 255, 255, 0.08));
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .data-item-value {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin: 15px 0;
+            color: #fff;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .data-item-label {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+        
+        .data-item:nth-child(1) .data-item-value {
+            color: #4fc3f7;
+        }
+        
+        .data-item:nth-child(2) .data-item-value {
+            color: #ff4081;
+        }
+        
+        .data-item:nth-child(3) .data-item-value {
+            color: #4caf50;
+        }
+        
+        .data-item:nth-child(4) .data-item-value {
+            color: #ff9800;
+        }
+        
+        .data-item:nth-child(5) .data-item-value {
+            color: #9c27b0;
+        }
+        
+        .data-item:nth-child(6) .data-item-value {
+            color: #00bcd4;
         }
         
         /* 响应式设计 */
@@ -150,6 +701,10 @@
             .container {
                 grid-template-columns: 1fr;
                 max-width: 800px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         
@@ -162,117 +717,225 @@
                 gap: 30px;
             }
             
-            .image-card {
+            .image-card, .data-section {
                 padding: 20px;
             }
             
-            .info-grid {
+            .data-title {
+                font-size: 2rem;
+            }
+            
+            .data-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .stats-container {
                 grid-template-columns: 1fr;
+            }
+            
+            .stat-value {
+                font-size: 3rem;
+            }
+            
+            .stat-title {
+                font-size: 1.5rem;
             }
         }
         
         @media (max-width: 480px) {
-            .image-card {
+            .image-card, .data-section {
                 padding: 15px;
             }
             
-            .info-title {
-                font-size: 1.1rem;
+            .info-title, .stat-title {
+                font-size: 1.3rem;
             }
             
-            .info-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
+            .data-title {
+                font-size: 1.7rem;
             }
             
-            .info-value {
-                text-align: left;
+            .data-subtitle {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+            }
+            
+            .stat-value {
+                font-size: 2.5rem;
+            }
+            
+            .id-label, .id-value {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 第1张图片卡片 -->
         <div class="image-card card-1">
-            <span class="card-number">1</span>
+            <div class="card-number">1</div>
             <div class="image-frame">
-                <img src="https://github.com/android-dev247/android-dev247/blob/f1cbdc0f432c1580c13a73190b31b42da0328cec/Screenshot_2026-02-03-21-31-30-38_9d26c6446fd7bb8e41d99b6262b17def.jpg?raw=true" 
-                     alt="第1张图片" 
-                     onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Crect width=\"100%25\" height=\"100%25\" fill=\"%23f0f0f0\"/%3E%3Ctext x=\"50%25\" y=\"50%25\" font-size=\"20\" text-anchor=\"middle\" fill=\"%23999\" font-family=\"sans-serif\"%3E图片加载失败%3C/text%3E%3C/svg%3E'">
+                <img src="https://raw.githubusercontent.com/android-dev247/android-dev247/f1cbdc0f432c1580c13a73190b31b42da0328cec/Screenshot_2026-02-03-21-31-23-14_9d26c6446fd7bb8e41d99b6262b17def.jpg" alt="图片1">
             </div>
-            
             <div class="image-info">
-                <h3 class="info-title">图片详细信息</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">文件名：</span>
-                        <span class="info-value">Screenshot_2026-02-03-21-31-30-38_9d26c6446fd7bb8e41d99b6262b17def.jpg</span>
+                <h3 class="info-title">图片信息</h3>
+                <div class="id-card">
+                    <div class="id-info">
+                        <span class="id-label">姓名：</span>
+                        <span class="id-value">陈景明</span>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label">来源：</span>
-                        <span class="info-value">GitHub Repository</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">提交哈希：</span>
-                        <span class="info-value">f1cbdc0f432c1580c13a73190b31b42da0328cec</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">文件路径：</span>
-                        <span class="info-value">android-dev247/android-dev247</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">更新时间：</span>
-                        <span class="info-value">2026年2月3日</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">文件大小：</span>
-                        <span class="info-value">约470 KB</span>
+                    <div class="id-info">
+                        <span class="id-label">身份证号：</span>
+                        <span class="id-value">4600241978864055972</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- 第2张图片卡片 -->
         <div class="image-card card-2">
-            <span class="card-number">2</span>
+            <div class="card-number">2</div>
             <div class="image-frame">
-                <img src="https://github.com/android-dev247/android-dev247/blob/f1cbdc0f432c1580c13a73190b31b42da0328cec/Screenshot_2026-02-03-21-31-23-14_9d26c6446fd7bb8e41d99b6262b17def.jpg?raw=true" 
-                     alt="第2张图片" 
-                     onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\"800\" height=\"600\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Crect width=\"100%25\" height=\"100%25\" fill=\"%23f0f0f0\"/%3E%3Ctext x=\"50%25\" y=\"50%25\" font-size=\"20\" text-anchor=\"middle\" fill=\"%23999\" font-family=\"sans-serif\"%3E图片加载失败%3C/text%3E%3C/svg%3E'">
+                <img src="https://raw.githubusercontent.com/android-dev247/android-dev247/f1cbdc0f432c1580c13a73190b31b42da0328cec/Screenshot_2026-02-03-21-31-30-38_9d26c6446fd7bb8e41d99b6262b17def.jpg" alt="图片2">
             </div>
-            
             <div class="image-info">
-                <h3 class="info-title">图片详细信息</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">文件名：</span>
-                        <span class="info-value">Screenshot_2026-02-03-21-31-23-14_9d26c6446fd7bb8e41d99b6262b17def.jpg</span>
+                <h3 class="info-title">图片信息</h3>
+                <div class="id-card">
+                    <div class="id-info">
+                        <span class="id-label">姓名：</span>
+                        <span class="id-value">陈景明</span>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label">来源：</span>
-                        <span class="info-value">GitHub Repository</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">提交哈希：</span>
-                        <span class="info-value">f1cbdc0f432c1580c13a73190b31b42da0328cec</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">文件路径：</span>
-                        <span class="info-value">android-dev247/android-dev247</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">更新时间：</span>
-                        <span class="info-value">2026年2月3日</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">文件大小：</span>
-                        <span class="info-value">约470 KB</span>
+                    <div class="id-info">
+                        <span class="id-label">身份证号：</span>
+                        <span class="id-value">4600241978864055972</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+    
+    <!-- 增强版数据统计区域 -->
+    <div class="data-section">
+        <div class="data-header">
+            <h2 class="data-title">📊 系统数据统计面板</h2>
+            <div class="data-subtitle">🚀 实时动态更新 | 📅 最后更新: 2026年2月3日 21:31</div>
+        </div>
+        
+        <div class="stats-container">
+            <!-- 客户满意度卡片 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">😊 客户满意度</h3>
+                    <div class="stat-icon">⭐</div>
+                </div>
+                <div class="stat-value">94.7%</div>
+                <div class="stat-progress-container">
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 94.7%"></div>
+                    </div>
+                </div>
+                <div class="stat-details">
+                    <div>📈 本月数据</div>
+                    <div class="stat-change positive">↑ 2.3% 相比上月</div>
+                </div>
+                <div class="stat-details">
+                    <div>🎯 目标: 95%</div>
+                    <div>⚡ 响应时间: 2.4s</div>
+                </div>
+            </div>
+            
+            <!-- 黑客攻击数量卡片 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">🛡️ 黑客攻击拦截</h3>
+                    <div class="stat-icon">🔒</div>
+                </div>
+                <div class="stat-value">1,247</div>
+                <div class="stat-progress-container">
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 78%"></div>
+                    </div>
+                </div>
+                <div class="stat-details">
+                    <div>📅 本月拦截</div>
+                    <div class="stat-change positive">↓ 12% 相比上月</div>
+                </div>
+                <div class="stat-details">
+                    <div>✅ 成功率: 99.7%</div>
+                    <div>⚠️ 威胁等级: 中等</div>
+                </div>
+            </div>
+            
+            <!-- 系统性能卡片 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">⚙️ 系统性能</h3>
+                    <div class="stat-icon">🚀</div>
+                </div>
+                <div class="stat-value">98.2%</div>
+                <div class="stat-progress-container">
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 98.2%"></div>
+                    </div>
+                </div>
+                <div class="stat-details">
+                    <div>⏱️ 正常运行时间</div>
+                    <div class="stat-change positive">↑ 0.8% 相比上月</div>
+                </div>
+                <div class="stat-details">
+                    <div>📶 延迟: 45ms</div>
+                    <div>📊 负载: 34%</div>
+                </div>
+            </div>
+            
+            <!-- 数据处理卡片 -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h3 class="stat-title">💾 数据处理量</h3>
+                    <div class="stat-icon">📈</div>
+                </div>
+                <div class="stat-value">4.7TB</div>
+                <div class="stat-progress-container">
+                    <div class="stat-progress">
+                        <div class="stat-progress-bar" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="stat-details">
+                    <div>📦 本月处理</div>
+                    <div class="stat-change positive">↑ 18% 相比上月</div>
+                </div>
+                <div class="stat-details">
+                    <div>📥 日增量: 156GB</div>
+                    <div>🗜️ 压缩率: 42%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="data-grid">
+            <div class="data-item">
+                <div class="data-item-label">活跃用户</div>
+                <div class="data-item-value">12.8K</div>
+                <div class="stat-details">
+                    <div>日增长: +312</div>
+                </div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">API调用</div>
+                <div class="data-item-value">3.2M</div>
+                <div class="stat-details">
+                    <div>成功率: 99.2%</div>
+                </div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">存储使用</div>
+                <div class="data-item-value">78%</div>
+                <div class="stat-details">
+                    <div>剩余: 5.2TB</div>
+                </div>
+            </div>
+            <div class="data-item">
+                <div class="data-item-label">安全事件</div>
+                <div class="data-item-value">24</div>
+                <div class="stat-details">
+                    <div>已解决: 23</div>
+                </div>
+     
