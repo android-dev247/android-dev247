@@ -1,263 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>这个乐子笑死我了</title>
-    <!-- 全局基础样式：仅一次，重置+通用类 -->
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            overflow-x: hidden;
-            min-height: 100vh;
-            padding: 20px 0;
-        }
-        .container {
-            width: 1200px;
-            max-width: 90%;
-            margin: 0 auto;
-        }
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1.2s, transform 1.2s;
-        }
-        .fade-in.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
-    <script>
-        // 滚动渐显动画JS：元素进入视野触发active
-        window.addEventListener('DOMContentLoaded', function() {
-            const fadeElements = document.querySelectorAll('.fade-in');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, { threshold: 0.1 });
-            fadeElements.forEach(el => observer.observe(el));
-        });
-    </script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>局域网聊天</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#1e1e2e;color:#fff;padding:10px}
+#chat{height:70vh;overflow-y:auto;background:#2d2b42;padding:10px;border-radius:8px;margin-bottom:10px}
+.msg{margin:5px 0;padding:8px 12px;border-radius:6px;max-width:70%}
+.you{background:#4f46e5;color:#fff;margin-left:auto}
+.other{background:#3b3557;color:#fff}
+#input{display:flex;gap:5px}
+#text{flex:1;padding:10px;border:none;border-radius:8px;background:#3b3557;color:#fff}
+#send{padding:10px 16px;background:#4f46e5;color:#fff;border:none;border-radius:8px}
+</style>
 </head>
 <body>
-    <!-- 核心展示模块：图片+文字 -->
-    <section class="main-show fade-in">
-        <div class="container">
-            <div class="show-wrap">
-                <div class="show-img-box">
-                    <img src="https://raw.githubusercontent.com/android-dev247/android-dev247/49f1d1a2ab964db4a9055f123c6bc06645d1acf5/IMG_20260219_225112.jpg" alt="展示图片">
-                </div>
-                <div class="show-text"> 你看这个乐子</div>
-            </div>
-        </div>
-    </section>
-    <!-- 核心展示模块-专属CSS -->
-    <style>
-        .main-show {
-            padding: 40px 0;
-        }
-        .show-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 50px;
-        }
-        .show-img-box {
-            width: 100%;
-            max-width: 800px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 1.2s;
-            border: 3px solid #fff;
-        }
-        .show-img-box:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 25px rgba(255,132,0,0.2);
-            border-color: #ff8400;
-        }
-        .show-img-box img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: all 1.2s;
-        }
-        .show-img-box:hover img {
-            transform: scale(1.02);
-        }
-        .show-text {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ff8400;
-            text-align: center;
-            padding: 15px 30px;
-            border-radius: 8px;
-            transition: all 1.2s;
-        }
-        .show-text:hover {
-            transform: translateY(-5px);
-            color: #e07600;
-            background-color: rgba(255,132,0,0.1);
-        }
-        /* 响应式适配 */
-        @media (max-width: 768px) {
-            .show-wrap {
-                gap: 30px;
-            }
-            .show-text {
-                font-size: 24px;
-            }
-        }
-        @media (max-width: 480px) {
-            .show-text {
-                font-size: 20px;
-                padding: 10px 20px;
-            }
-            .show-img-box {
-                border-radius: 8px;
-            }
-        }
-    </style>
+<div id="chat"></div>
+<div id="input">
+  <input type="text" id="text" placeholder="输入消息..." autocomplete="off">
+  <button id="send">发送</button>
+</div>
 
-    <!-- 备用交互按钮模块：可选点击查看大图，符合交互动画要求 -->
-    <section class="btn-module fade-in">
-        <div class="container">
-            <button class="btn-view-big" id="viewBigBtn">查看大图</button>
-        </div>
-    </section>
-    <!-- 备用交互按钮模块-专属CSS -->
-    <style>
-        .btn-module {
-            padding: 20px 0 60px;
-            text-align: center;
-        }
-        .btn-view-big {
-            padding: 12px 36px;
-            background-color: #ff8400;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 1.2s;
-        }
-        .btn-view-big:hover {
-            background-color: #e07600;
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(255,132,0,0.3);
-        }
-    </style>
+<script>
+const chat = document.getElementById('chat');
+const text = document.getElementById('text');
+const send = document.getElementById('send');
+const channel = new BroadcastChannel('lan_chat');
 
-    <!-- 大图弹窗模块：符合弹窗样式要求（0.85不透明度+橙红主色） -->
-    <div class="modal-big-img" id="bigImgModal">
-        <div class="modal-mask">
-            <div class="modal-content">
-                <button class="modal-close" id="closeModal">&times;</button>
-                <img src="https://raw.githubusercontent.com/android-dev247/android-dev247/49f1d1a2ab964db4a9055f123c6bc06645d1acf5/IMG_20260219_225112.jpg" alt="大图">
-            </div>
-        </div>
-    </div>
-    <!-- 大图弹窗模块-专属CSS -->
-    <style>
-        .modal-big-img {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 1.2s;
-        }
-        .modal-big-img.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-mask {
-            width: 100%;
-            height: 100%;
-            background-color: #333;
-            opacity: 0.85;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-content {
-            position: relative;
-            width: 100%;
-            max-width: 1000px;
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: #fff;
-            transition: all 1.2s;
-            transform: scale(0.9);
-        }
-        .modal-big-img.active .modal-content {
-            transform: scale(1);
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 40px;
-            height: 40px;
-            background-color: #ff8400;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            font-size: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 1.2s;
-            z-index: 10;
-        }
-        .modal-close:hover {
-            background-color: #e07600;
-            transform: rotate(90deg) scale(1.1);
-        }
-        .modal-content img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-    </style>
-    <!-- 弹窗交互JS -->
-    <script>
-        const viewBigBtn = document.getElementById('viewBigBtn');
-        const bigImgModal = document.getElementById('bigImgModal');
-        const closeModal = document.getElementById('closeModal');
-        const modalMask = document.querySelector('.modal-mask');
+let name = prompt('输入你的名字：') || '游客';
 
-        viewBigBtn.addEventListener('click', () => {
-            bigImgModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-        closeModal.addEventListener('click', () => {
-            bigImgModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
-        modalMask.addEventListener('click', (e) => {
-            if (e.target === modalMask) {
-                bigImgModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-    </script>
+function addMsg(txt, isYou) {
+  const div = document.createElement('div');
+  div.className = isYou ? 'msg you' : 'msg other';
+  div.innerText = txt;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+send.onclick = () => {
+  const t = text.value.trim();
+  if(!t) return;
+  const msg = name + '：' + t;
+  channel.postMessage(msg);
+  addMsg(msg, true);
+  text.value = '';
+};
+
+text.onkeydown = e => e.key === 'Enter' && send.click();
+
+channel.onmessage = e => {
+  if(!e.data) return;
+  addMsg(e.data, false);
+};
+</script>
 </body>
 </html>
