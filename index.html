@@ -1,59 +1,78 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>局域网聊天</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#1e1e2e;color:#fff;padding:10px}
-#chat{height:70vh;overflow-y:auto;background:#2d2b42;padding:10px;border-radius:8px;margin-bottom:10px}
-.msg{margin:5px 0;padding:8px 12px;border-radius:6px;max-width:70%}
-.you{background:#4f46e5;color:#fff;margin-left:auto}
-.other{background:#3b3557;color:#fff}
-#input{display:flex;gap:5px}
-#text{flex:1;padding:10px;border:none;border-radius:8px;background:#3b3557;color:#fff}
-#send{padding:10px 16px;background:#4f46e5;color:#fff;border:none;border-radius:8px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
+body{background:#121212;color:#fff;padding:10px}
+#chat{height:75vh;overflow-y:auto;background:#1e1e1e;padding:10px;border-radius:8px;margin-bottom:10px}
+.msg{margin:6px 0;padding:10px;border-radius:6px;max-width:75%}
+.you{background:#0066cc;margin-left:auto}
+.other{background:#333}
+#box{display:flex;gap:6px}
+#msg{flex:1;padding:10px;border:none;border-radius:8px;background:#222;color:#fff}
+#send{padding:10px 14px;background:#0066cc;color:#fff;border:none;border-radius:8px}
 </style>
 </head>
 <body>
 <div id="chat"></div>
-<div id="input">
-  <input type="text" id="text" placeholder="输入消息..." autocomplete="off">
-  <button id="send">发送</button>
+<div id="box">
+<input id="msg" placeholder="输入消息..." autocomplete="off">
+<button id="send">发送</button>
 </div>
 
 <script>
 const chat = document.getElementById('chat');
-const text = document.getElementById('text');
+const msg = document.getElementById('msg');
 const send = document.getElementById('send');
-const channel = new BroadcastChannel('lan_chat');
 
-let name = prompt('输入你的名字：') || '游客';
+const username = prompt('你的名字：') || '用户';
+const KEY = 'lan_chat_data';
 
-function addMsg(txt, isYou) {
-  const div = document.createElement('div');
-  div.className = isYou ? 'msg you' : 'msg other';
-  div.innerText = txt;
-  chat.appendChild(div);
+function show(text, isYou){
+  const d = document.createElement('div');
+  d.className = 'msg ' + (isYou ? 'you' : 'other');
+  d.textContent = text;
+  chat.appendChild(d);
   chat.scrollTop = chat.scrollHeight;
 }
 
+function save(data){
+  localStorage.setItem(KEY, JSON.stringify(data));
+}
+
+function load(){
+  try{
+    return JSON.parse(localStorage.getItem(KEY)) || [];
+  }catch{return []}
+}
+
+function push(m){
+  const list = load();
+  list.push(m);
+  save(list.slice(-50));
+}
+
+function renderAll(){
+  chat.innerHTML = '';
+  load().forEach(i => show(i.text, i.from == username));
+}
+
 send.onclick = () => {
-  const t = text.value.trim();
+  const t = msg.value.trim();
   if(!t) return;
-  const msg = name + '：' + t;
-  channel.postMessage(msg);
-  addMsg(msg, true);
-  text.value = '';
-};
+  const data = {from:username, text:username+'：'+t};
+  push(data);
+  renderAll();
+  msg.value = '';
+}
 
-text.onkeydown = e => e.key === 'Enter' && send.click();
+msg.onkeydown = e => e.key == 'Enter' && send.click();
 
-channel.onmessage = e => {
-  if(!e.data) return;
-  addMsg(e.data, false);
-};
+setInterval(renderAll, 800);
+renderAll();
 </script>
 </body>
 </html>
