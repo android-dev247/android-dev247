@@ -3,76 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>局域网聊天</title>
+<title>福利通道</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
-body{background:#121212;color:#fff;padding:10px}
-#chat{height:75vh;overflow-y:auto;background:#1e1e1e;padding:10px;border-radius:8px;margin-bottom:10px}
-.msg{margin:6px 0;padding:10px;border-radius:6px;max-width:75%}
-.you{background:#0066cc;margin-left:auto}
-.other{background:#333}
-#box{display:flex;gap:6px}
-#msg{flex:1;padding:10px;border:none;border-radius:8px;background:#222;color:#fff}
-#send{padding:10px 14px;background:#0066cc;color:#fff;border:none;border-radius:8px}
+body{
+  background:#111;
+  text-align:center;
+  padding:40px 20px;
+  font-family:Arial, sans-serif;
+}
+.container{
+  max-width:340px;
+  margin:0 auto;
+}
+.title{
+  color:#fff;
+  font-size:24px;
+  margin-bottom:10px;
+  opacity:0;
+  animation:show 2s forwards;
+}
+.info{
+  color:#faa;
+  font-size:15px;
+  margin-bottom:30px;
+  opacity:0;
+  animation:show 2s .4s forwards;
+}
+.btn{
+  display:block;
+  width:100%;
+  padding:20px;
+  margin:10px 0;
+  background:#222;
+  color:#fff;
+  border:1px solid #ff4444;
+  border-radius:10px;
+  text-decoration:none;
+  font-size:16px;
+  opacity:0;
+  transform:translateY(40px);
+  animation:up 2s ease-out forwards;
+}
+.btn:nth-child(4){animation-delay:.5s}
+.btn:nth-child(5){animation-delay:1s}
+.btn:nth-child(6){animation-delay:1.5s}
+.btn:nth-child(7){animation-delay:2s}
+.btn:nth-child(8){animation-delay:2.5s}
+@keyframes up{
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes show{
+  to{opacity:1}
+}
 </style>
 </head>
 <body>
-<div id="chat"></div>
-<div id="box">
-<input id="msg" placeholder="输入消息..." autocomplete="off">
-<button id="send">发送</button>
+<div class="container">
+  <div class="title">🔥 福利通道 🔥</div>
+  <div class="info">小姐姐上门｜全国包邮｜真人在线｜极速服务</div>
+
+  <a class="btn" href="https://73119z.sm549.vip" target="_blank">👉 一号通道：上门服务</a>
+  <a class="btn" href="https://73119z.sm549.vip" target="_blank">👉 二号通道：全国包邮</a>
+  <a class="btn" href="https://73119z.sm549.vip" target="_blank">👉 三号通道：真人在线</a>
+  <a class="btn" href="https://73119z.sm549.vip" target="_blank">👉 四号通道：极速匹配</a>
+  <a class="btn" href="https://73119z.sm549.vip" target="_blank">👉 五号通道：私密服务</a>
 </div>
-
-<script>
-const chat = document.getElementById('chat');
-const msg = document.getElementById('msg');
-const send = document.getElementById('send');
-
-const username = prompt('你的名字：') || '用户';
-const KEY = 'lan_chat_data';
-
-function show(text, isYou){
-  const d = document.createElement('div');
-  d.className = 'msg ' + (isYou ? 'you' : 'other');
-  d.textContent = text;
-  chat.appendChild(d);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function save(data){
-  localStorage.setItem(KEY, JSON.stringify(data));
-}
-
-function load(){
-  try{
-    return JSON.parse(localStorage.getItem(KEY)) || [];
-  }catch{return []}
-}
-
-function push(m){
-  const list = load();
-  list.push(m);
-  save(list.slice(-50));
-}
-
-function renderAll(){
-  chat.innerHTML = '';
-  load().forEach(i => show(i.text, i.from == username));
-}
-
-send.onclick = () => {
-  const t = msg.value.trim();
-  if(!t) return;
-  const data = {from:username, text:username+'：'+t};
-  push(data);
-  renderAll();
-  msg.value = '';
-}
-
-msg.onkeydown = e => e.key == 'Enter' && send.click();
-
-setInterval(renderAll, 800);
-renderAll();
-</script>
 </body>
 </html>
