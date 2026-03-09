@@ -3,106 +3,569 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网址无法打开</title>
+    <title>HTML安全攻击靶场 | 学习与防御</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
+        
         body {
-            background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(135deg, #0c1e3e 0%, #152642 100%);
+            color: #e0e0e0;
             min-height: 100vh;
             padding: 20px;
         }
-        .illustration {
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #2a3f5f;
             margin-bottom: 30px;
-            text-align: center;
         }
-        .illustration svg {
-            width: 280px;
-            height: auto;
-        }
+        
         h1 {
-            font-size: 36px;
-            color: #000;
-            font-weight: 500;
-            margin-bottom: 12px;
+            color: #4fc3f7;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
-        .desc {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 40px;
-            text-align: center;
+        
+        .subtitle {
+            color: #90a4ae;
+            font-size: 1.1rem;
         }
-        .buttons {
-            display: flex;
-            gap: 20px;
+        
+        .warning {
+            background-color: #311b1b;
+            border-left: 5px solid #f44336;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
         }
+        
+        .warning h3 {
+            color: #ff8a80;
+            margin-bottom: 8px;
+        }
+        
+        .scenarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .scenario-card {
+            background-color: #1e2b3e;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .scenario-title {
+            color: #80d8ff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2d4059;
+        }
+        
+        .attack-area {
+            background-color: #111a28;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b0bec5;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #111a28;
+            border: 1px solid #2d4059;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+        
         button {
-            padding: 12px 32px;
-            border-radius: 12px;
-            font-size: 18px;
+            background-color: #1565c0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.2s;
+            font-weight: bold;
+            transition: background-color 0.3s;
         }
-        .btn-detail {
-            border: 1px solid #ccc;
-            background: #fff;
-            color: #666;
+        
+        button:hover {
+            background-color: #0d47a1;
         }
-        .btn-retry {
-            border: 1px solid #ccc;
-            background: #fff;
-            color: #666;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        
+        .defense-tip {
+            background-color: #1b3229;
+            border-left: 5px solid #4caf50;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 0 5px 5px 0;
+            font-size: 0.9rem;
         }
-        .btn-retry:hover, .btn-detail:hover {
-            background-color: #f5f5f5;
+        
+        .code-block {
+            background-color: #0d1520;
+            padding: 12px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
         }
-        .retry-icon {
-            font-size: 20px;
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #2a3f5f;
+            color: #78909c;
+            font-size: 0.9rem;
         }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .easy { background-color: #1b5e20; color: #a5d6a7; }
+        .medium { background-color: #f57f17; color: #fff; }
+        .hard { background-color: #b71c1c; color: #ffcdd2; }
+        
+        .result-area {
+            background-color: #0d1520;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            min-height: 60px;
+            border: 1px dashed #2d4059;
+        }
+        
+        .success { color: #4caf50; }
+        .danger { color: #f44336; }
     </style>
 </head>
 <body>
-    <div class="illustration">
-        <!-- 简化插画：人物+问号气泡+纸箱 -->
-        <svg viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
-            <!-- 人物 -->
-            <path d="M120,160 L140,120 L160,160" fill="none" stroke="#e0e0e0" stroke-width="4"/>
-            <path d="M130,120 L130,80 Q140,60 155,65 L175,75 L170,100 L150,90 L140,110" fill="#415EAC"/>
-            <path d="M130,80 L110,90 L105,110 L120,105" fill="#415EAC"/>
-            <path d="M135,75 C142,68 150,70 152,78 C150,86 142,88 135,81" fill="#fff"/>
-            <circle cx="142" cy="72" r="2" fill="#333"/>
-            <circle cx="148" cy="74" r="2" fill="#333"/>
-            <path d="M143,80 Q146,83 150,82" fill="none" stroke="#333" stroke-width="1.5"/>
-            <!-- 手机 -->
-            <rect x="122" y="95" width="12" height="20" rx="2" fill="#333"/>
-            <!-- 问号气泡 -->
-            <circle cx="190" cy="80" r="30" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
-            <text x="190" y="88" font-size="28" fill="#9C27B0" text-anchor="middle">?</text>
-            <!-- 纸箱 -->
-            <rect x="150" y="130" width="60" height="40" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
-            <path d="M150,130 L180,115 L210,130" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
-            <rect x="185" y="140" width="5" height="25" fill="#9FA8DA"/>
-        </svg>
+    <div class="container">
+        <header>
+            <h1>HTML安全攻击靶场</h1>
+            <p class="subtitle">了解常见HTML攻击向量，学习如何防御它们 | 仅供教育目的</p>
+        </header>
+        
+        <div class="warning">
+            <h3>⚠️ 重要安全声明</h3>
+            <p>本页面仅为教育和研究目的设计，旨在帮助开发者了解HTML相关的安全漏洞及其防御方法。请勿将这些技术用于非法目的。所有攻击示例仅在本地环境中模拟，不会对真实系统造成危害。</p>
+        </div>
+        
+        <div class="scenarios">
+            <!-- 场景1: XSS攻击 -->
+            <div class="scenario-card">
+                <h3 class="scenario-title">场景1: 反射型XSS攻击
+                    <span class="difficulty easy">简单</span>
+                </h3>
+                <p>攻击者通过URL参数注入恶意脚本，当页面显示参数值时执行攻击代码。</p>
+                
+                <div class="attack-area">
+示例攻击载荷: 
+&lt;script&gt;alert('XSS攻击成功!')&lt;/script&gt;
+&lt;img src="x" onerror="alert('通过onerror执行XSS')"&gt;
+&lt;svg onload="alert('SVG XSS')"&gt;&lt;/svg&gt;
+                </div>
+                
+                <div class="input-group">
+                    <label for="xss-input">输入搜索内容:</label>
+                    <input type="text" id="xss-input" placeholder="输入恶意脚本测试XSS漏洞">
+                </div>
+                
+                <button onclick="simulateXSS()">模拟搜索</button>
+                
+                <div class="result-area" id="xss-result">
+                    <!-- 这里将显示搜索结果 -->
+                </div>
+                
+                <div class="defense-tip">
+                    <strong>防御方法:</strong> 对用户输入进行HTML编码，使用innerText而非innerHTML，设置Content-Security-Policy头，使用框架的自动转义功能。
+                </div>
+            </div>
+            
+            <!-- 场景2: HTML注入 -->
+            <div class="scenario-card">
+                <h3 class="scenario-title">场景2: HTML注入攻击
+                    <span class="difficulty easy">简单</span>
+                </h3>
+                <p>用户输入被直接插入到DOM中，导致HTML结构被篡改。</p>
+                
+                <div class="attack-area">
+示例攻击载荷: 
+&lt;h2 style="color:red"&gt;网站已被黑&lt;/h2&gt;
+&lt;iframe src="http://恶意网站.com" width="0" height="0"&gt;&lt;/iframe&gt;
+&lt;div onclick="alert('点击劫持')" style="position:fixed;top:0;left:0;width:100%;height:100%;background:transparent;"&gt;&lt;/div&gt;
+                </div>
+                
+                <div class="input-group">
+                    <label for="html-input">输入评论内容:</label>
+                    <input type="text" id="html-input" placeholder="输入HTML标签测试注入">
+                </div>
+                
+                <button onclick="simulateHTMLInjection()">发布评论</button>
+                
+                <div class="result-area" id="html-result">
+                    <!-- 这里将显示评论内容 -->
+                </div>
+                
+                <div class="defense-tip">
+                    <strong>防御方法:</strong> 严格验证用户输入，使用白名单过滤允许的HTML标签，对特殊字符进行转义，避免使用innerHTML直接插入用户内容。
+                </div>
+            </div>
+            
+            <!-- 场景3: 点击劫持 -->
+            <div class="scenario-card">
+                <h3 class="scenario-title">场景3: 点击劫持攻击
+                    <span class="difficulty medium">中等</span>
+                </h3>
+                <p>攻击者使用透明iframe覆盖在正常按钮上，诱导用户点击恶意内容。</p>
+                
+                <div class="code-block">
+&lt;!-- 恶意网站代码示例 --&gt;
+&lt;style&gt;
+  iframe {
+    position: absolute;
+    opacity: 0.1;
+    z-index: 9999;
+    top: 100px;
+    left: 100px;
+  }
+&lt;/style&gt;
+&lt;iframe src="https://真实银行网站.com/转账页面"&gt;&lt;/iframe&gt;
+&lt;button style="position:absolute;top:105px;left:105px;z-index:10000;"&gt;
+  点击抽奖!
+&lt;/button&gt;
+                </div>
+                
+                <div class="defense-tip">
+                    <strong>防御方法:</strong> 使用X-Frame-Options头部防止页面被嵌入iframe，或使用CSP的frame-ancestors指令，JavaScript防御代码检查是否在iframe中。
+                </div>
+                
+                <button onclick="simulateClickjacking()">模拟点击劫持</button>
+                
+                <div id="clickjacking-demo" style="margin-top: 15px; position: relative; height: 150px; background-color: #0d1520; border-radius: 5px; overflow: hidden;">
+                    <button id="real-button" style="position: absolute; top: 50px; left: 50px; padding: 10px 20px; background-color: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer;">真实按钮</button>
+                </div>
+            </div>
+            
+            <!-- 场景4: 开放重定向 -->
+            <div class="scenario-card">
+                <h3 class="scenario-title">场景4: 开放重定向攻击
+                    <span class="difficulty medium">中等</span>
+                </h3>
+                <p>利用网站的重定向功能，将用户导向恶意网站。</p>
+                
+                <div class="code-block">
+// 漏洞代码示例
+function redirect() {
+  const url = new URLSearchParams(window.location.search).get('redirect');
+  if(url) {
+    window.location.href = url; // 危险: 未验证重定向目标
+  }
+}
+
+// 恶意URL示例
+https://example.com/login?redirect=https://钓鱼网站.com
+                </div>
+                
+                <div class="input-group">
+                    <label for="redirect-input">输入重定向URL:</label>
+                    <input type="text" id="redirect-input" placeholder="https://example.com?param=value" value="https://legitimate-site.com">
+                </div>
+                
+                <button onclick="simulateRedirect()">测试重定向</button>
+                
+                <div class="defense-tip">
+                    <strong>防御方法:</strong> 使用白名单验证重定向目标，避免使用用户输入直接重定向，使用中间页面警告用户即将离开本站，对重定向URL进行签名和验证。
+                </div>
+            </div>
+            
+            <!-- 场景5: 基于DOM的漏洞 -->
+            <div class="scenario-card">
+                <h3 class="scenario-title">场景5: 基于DOM的漏洞
+                    <span class="difficulty hard">困难</span>
+                </h3>
+                <p>客户端JavaScript不安全地处理用户可控数据导致的漏洞。</p>
+                
+                <div class="code-block">
+// 漏洞代码示例
+let userData = JSON.parse(decodeURIComponent(window.location.hash.substring(1)));
+document.getElementById("profile").innerHTML = userData.name;
+
+// 攻击载荷
+https://example.com/#{"name":"&lt;img src=x onerror='stealCookies()'&gt;"}
+                </div>
+                
+                <div class="defense-tip">
+                    <strong>防御方法:</strong> 避免使用innerHTML插入用户数据，使用textContent代替，对来自URL hash/fragment的数据进行验证和清理，实现严格的CSP策略。
+                </div>
+                
+                <div class="result-area" id="dom-vuln-result">
+                    <!-- 这里将演示DOM漏洞 -->
+                </div>
+                
+                <button onclick="simulateDOMVuln()">演示DOM漏洞</button>
+            </div>
+            
+            <!-- 场景6: 防御示例 -->
+            <div class="scenario-card">
+                <h3 class="scenario-title">场景6: 安全编码示例
+                    <span class="difficulty easy">安全</span>
+                </h3>
+                <p>展示如何安全地处理用户输入，防止攻击。</p>
+                
+                <div class="code-block">
+// 安全处理用户输入
+function safeOutput(userInput) {
+  // 方法1: 使用textContent避免HTML解析
+  element.textContent = userInput;
+  
+  // 方法2: 手动转义HTML特殊字符
+  function escapeHTML(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+  
+  // 方法3: 使用DOMPurify库清理HTML
+  // const cleanHTML = DOMPurify.sanitize(userInput);
+}
+                </div>
+                
+                <div class="input-group">
+                    <label for="safe-input">输入测试内容:</label>
+                    <input type="text" id="safe-input" placeholder="<script>alert('xss')</script>">
+                </div>
+                
+                <button onclick="demonstrateSafeOutput()">安全输出</button>
+                
+                <div class="result-area" id="safe-result">
+                    <!-- 这里将显示安全输出 -->
+                </div>
+                
+                <div class="defense-tip">
+                    <strong>最佳实践:</strong> 对所有用户输入进行验证和清理，使用安全的API，实施CSP策略，保持库和框架更新，进行安全代码审查。
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>HTML安全攻击靶场 | 仅供教育和研究目的 | 通过了解攻击来更好地防御 | 本页面不包含真实攻击代码</p>
+            <p>记住: 永远不要信任用户输入，始终对输出进行编码，实施深度防御策略。</p>
+        </footer>
     </div>
-    <h1>网址暂时无法打开</h1>
-    <p class="desc">请确认网址输入或切换网络后刷新</p>
-    <div class="buttons">
-        <button class="btn-detail">查看详情</button>
-        <button class="btn-retry">
-            <span class="retry-icon">⟳</span>
-            重试
-        </button>
-    </div>
+
+    <script>
+        // 场景1: 反射型XSS攻击模拟
+        function simulateXSS() {
+            const userInput = document.getElementById('xss-input').value;
+            const resultElement = document.getElementById('xss-result');
+            
+            // 漏洞: 直接使用innerHTML插入未经验证的用户输入
+            resultElement.innerHTML = `<p>搜索结果: 您搜索了 "${userInput}"</p>`;
+            
+            // 安全方法应该是:
+            // resultElement.textContent = `搜索结果: 您搜索了 "${userInput}"`;
+            
+            if (userInput.includes('<script>') || userInput.includes('onerror') || userInput.includes('onload')) {
+                resultElement.innerHTML += `<p class="danger">⚠️ 检测到可能的XSS攻击载荷!</p>`;
+            }
+        }
+        
+        // 场景2: HTML注入模拟
+        function simulateHTMLInjection() {
+            const userInput = document.getElementById('html-input').value;
+            const resultElement = document.getElementById('html-result');
+            
+            // 漏洞: 直接插入用户输入到DOM
+            resultElement.innerHTML = `<div class="comment">用户评论: ${userInput}</div>`;
+            
+            if (userInput.includes('<iframe') || userInput.includes('style="position:fixed"')) {
+                resultElement.innerHTML += `<p class="danger">⚠️ 检测到HTML注入攻击!</p>`;
+            }
+        }
+        
+        // 场景3: 点击劫持模拟
+        function simulateClickjacking() {
+            const demoArea = document.getElementById('clickjacking-demo');
+            const realButton = document.getElementById('real-button');
+            
+            // 创建透明覆盖层
+            const overlay = document.createElement('div');
+            overlay.style.position = 'absolute';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(255, 0, 0, 0.1)';
+            overlay.style.zIndex = '1000';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.flexDirection = 'column';
+            overlay.innerHTML = `
+                <div style="background-color: #ff9800; padding: 20px; border-radius: 5px; margin-bottom: 10px; text-align: center;">
+                    <p style="color: white; font-weight: bold;">恶意覆盖层!</p>
+                    <p style="color: white; font-size: 0.9rem;">您以为点击的是下面的按钮，实际点击的是我的覆盖层</p>
+                </div>
+                <button style="padding: 10px 20px; background-color: #2196f3; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    点击这里领取奖励!
+                </button>
+            `;
+            
+            // 移除之前的覆盖层（如果存在）
+            const oldOverlay = demoArea.querySelector('.clickjacking-overlay');
+            if (oldOverlay) {
+                oldOverlay.remove();
+            }
+            
+            overlay.classList.add('clickjacking-overlay');
+            demoArea.appendChild(overlay);
+            
+            // 3秒后移除覆盖层
+            setTimeout(() => {
+                overlay.remove();
+                alert("点击劫持演示结束。攻击者可能已经诱使您点击了恶意内容。");
+            }, 3000);
+        }
+        
+        // 场景4: 开放重定向模拟
+        function simulateRedirect() {
+            const redirectInput = document.getElementById('redirect-input').value;
+            
+            // 检查是否是恶意URL
+            const maliciousDomains = ['evil.com', 'phishing-site.com', 'malicious.example'];
+            let isMalicious = false;
+            
+            for (const domain of maliciousDomains) {
+                if (redirectInput.includes(domain)) {
+                    isMalicious = true;
+                    break;
+                }
+            }
+            
+            if (isMalicious) {
+                alert(`⚠️ 警告: 检测到可能的重定向到恶意网站: ${redirectInput}\n\n安全做法: 应验证重定向目标是否在白名单中。`);
+                return false;
+            }
+            
+            // 安全重定向应验证目标
+            const allowedDomains = ['example.com', 'legitimate-site.com', 'trusted-domain.org'];
+            let isAllowed = false;
+            
+            for (const domain of allowedDomains) {
+                if (redirectInput.includes(domain)) {
+                    isAllowed = true;
+                    break;
+                }
+            }
+            
+            if (isAllowed) {
+                alert(`安全重定向到: ${redirectInput}\n\n(演示环境中不执行真实重定向)`);
+            } else {
+                alert(`⚠️ 安全警告: 重定向到未经验证的域名: ${redirectInput}\n\n应拒绝此重定向请求。`);
+            }
+            
+            return false;
+        }
+        
+        // 场景5: 基于DOM的漏洞模拟
+        function simulateDOMVuln() {
+            const resultElement = document.getElementById('dom-vuln-result');
+            
+            // 模拟从URL hash获取数据
+            const mockHashData = '{"name": "<img src=\'x\' onerror=\'alert(\\"Cookie可能被盗!\\")\'>小明", "age": 25}';
+            
+            try {
+                const userData = JSON.parse(mockHashData);
+                
+                // 漏洞: 直接使用innerHTML
+                resultElement.innerHTML = `
+                    <h4>用户资料:</h4>
+                    <p>姓名: ${userData.name}</p>
+                    <p>年龄: ${userData.age}</p>
+                `;
+                
+                resultElement.innerHTML += `<p class="danger">⚠️ 漏洞: 用户输入的JSON数据被直接插入到innerHTML中!</p>`;
+                
+            } catch (e) {
+                resultElement.innerHTML = `<p>解析用户数据时出错: ${e.message}</p>`;
+            }
+        }
+        
+        // 场景6: 安全输出演示
+        function demonstrateSafeOutput() {
+            const userInput = document.getElementById('safe-input').value;
+            const resultElement = document.getElementById('safe-result');
+            
+            // 方法1: 使用textContent（安全）
+            resultElement.textContent = `用户输入(使用textContent): ${userInput}`;
+            
+            // 方法2: 转义HTML（安全）
+            setTimeout(() => {
+                const escapedHTML = escapeHTML(userInput);
+                resultElement.innerHTML += `<br><br>用户输入(转义后): ${escapedHTML}`;
+                
+                resultElement.innerHTML += `<p class="success">✓ 即使用户输入包含HTML标签，也已安全处理</p>`;
+            }, 500);
+        }
+        
+        // HTML转义函数
+        function escapeHTML(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置一些示例攻击载荷
+            document.getElementById('xss-input').value = "<img src='x' onerror='alert(\"XSS攻击成功!\")'>";
+            document.getElementById('html-input').value = "<h3 style='color:red'>网站已被入侵!</h3><button onclick='alert(1)'>点击我</button>";
+            document.getElementById('safe-input').value = "<script>alert('恶意代码')</script><img src='x' onerror='alert(1)'>";
+        });
+    </script>
 </body>
 </html>
