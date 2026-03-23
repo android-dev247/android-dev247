@@ -50,7 +50,8 @@ ndows 10 ISO到U盘</h1>
     <button class="copy-btn" onclick="copyToClipboard('sudo umount /dev/sdb1')">复制此命令</button>
 </div>
 
-<h2>2. 写入Windows 10 ISO镜像（从桌面）</h2>
+<h2>2. 写入Windows 10 ISO镜dd if=/home/kali/Documents/Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress
+像（从桌面）</h2>
 <div class="command-box">
     <code>sudo dd if=/home/kali/Desktop/Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress</code><br><br>
     <button class="copy-btn" onclick="copyToClipboard('sudo dd if=/home/kali/Desktop/Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress')">复制此命令</button>
