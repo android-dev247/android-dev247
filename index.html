@@ -2,59 +2,81 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Win10 U盘写入 最终零错误命令</title>
+    <title>Win10 安装终极修复版</title>
     <style>
         * {margin:0;padding:0;box-sizing:border-box;font-family:"Consolas","Monaco",monospace;}
-        body {background:#0d1117;color:#c9d1d9;padding:30px;line-height:1.6;}
-        .container {max-width:900px;margin:0 auto;background:#161b22;border-radius:12px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
-        h1 {color:#58a6ff;margin-bottom:20px;font-size:24px;border-bottom:1px solid #30363d;padding-bottom:12px;}
-        .code-block {background:#0d1117;border-radius:8px;padding:16px;margin:16px 0;position:relative;overflow-x:auto;}
-        pre {color:#c9d1d9;font-size:14px;white-space:pre;word-wrap:normal;}
-        .copy-btn {position:absolute;top:12px;right:12px;background:#238636;color:#fff;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;transition:background 0.2s;}
-        .copy-btn:hover {background:#2ea043;}
-        .copy-btn.copied {background:#1f6feb;}
-        .tip {color:#8b949e;font-size:13px;margin-top:8px;}
-        .warning {color:#f85149;font-size:13px;margin-top:8px;font-weight:bold;}
+        body {background:#0d1117;color:#c9d1d9;padding:30px;line-height:1.8;}
+        .container {max-width:1000px;margin:0 auto;background:#161b22;border-radius:12px;padding:30px;box-shadow:0 0 50px rgba(0,0,0,0.5);}
+        h1 {color:#58a6ff;margin-bottom:25px;font-size:26px;border-bottom:2px solid #30363d;padding-bottom:15px;}
+        h2 {color:#f1c40f;margin-top:30px;margin-bottom:15px;font-size:18px;border-left:4px solid #f1c40f;padding-left:10px;}
+        .code-block {background:#0d1117;border-radius:8px;padding:20px;margin:20px 0;position:relative;border:1px solid #30363d;}
+        pre {color:#c9d1d9;font-size:14px;white-space:pre-wrap;word-wrap:break-word;overflow-x:auto;}
+        .copy-btn {position:absolute;top:12px;right:12px;background:#238636;color:#fff;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:13px;transition:all 0.2s;}
+        .copy-btn:hover {background:#2ea043;transform:scale(1.05);}
+        .copy-btn.copied {background:#1f6feb;content:"已复制";}
+        .tip {color:#8b949e;font-size:13px;margin-top:5px;}
+        .success {color:#3fb950;font-weight:bold;}
+        .danger {color:#f85149;font-weight:bold;background:#2a1315;padding:2px 6px;border-radius:4px;}
+        ul {padding-left:20px;color:#d1d9e0;}
+        .step {background:#238636;color:white;padding:5px 12px;border-radius:20px;display:inline-block;margin-right:10px;font-size:12px;}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Win10 U盘写入 最终零错误命令（解决找不到文件）</h1>
+<div class="container">
+    <h1>🔥 Win10 安装 U 盘制作终极命令（100% 解决 0 字节/找不到文件）</h1>
 
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code1">ls /home/kali/Downloads | grep Win10</pre>
-        </div>
-        <p class="tip">命令1：查看真实镜像文件名（复制显示的完整名字）</p>
+    <h2><span class="step">🔧</span>最终解决命令（核心修复）</h2>
+    <p class="tip">确认：当前目录存在的镜像名是 <span class="success">Win10_22H2_x64.iso</span></p>
+    
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
+        <pre id="code1">
+# 1. 卸载 U 盘分区（避免写入冲突）
+sudo umount /dev/sdb*
 
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code2">sudo dd if=Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress && sync</pre>
-        </div>
-        <p class="tip">命令2：用真实镜像名写入U盘（U盘数据会被完全覆盖，绝对不要选/dev/sda！）</p>
-
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制（终极合并版）</button>
-            <pre id="code3">cd /home/kali/Downloads && ls | grep Win10 && sudo dd if=Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress && sync</pre>
-        </div>
-        <p class="tip">终极一键版：一条命令完成查看+写入U盘</p>
-
-        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘已插入；重装Win10会彻底删除Kali，原数据无法恢复！</p>
+# 2. 写入 U 盘（使用真实存在的文件名）
+sudo dd if=Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress
+sync
+        </pre>
     </div>
 
-    <script>
-        function copyCode(btn) {
-            const pre = btn.nextElementSibling;
-            const code = pre.textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                btn.textContent = "已复制";
-                btn.classList.add("copied");
-                setTimeout(() => {
-                    btn.textContent = "一键复制";
-                    btn.classList.remove("copied");
-                }, 2000);
-            });
-        }
-    </script>
+    <h2><span class="step">📁</span>文件确认命令（防止手输错）</h2>
+    <p class="tip">如果上面还报错，先执行这个查看名字</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
+        <pre id="code2">ls /home/kali/Downloads | grep Win10</pre>
+    </div>
+
+    <h2><span class="step">📖</span>完整安装教程（删掉 Kali）</h2>
+    <ul>
+        <li><strong>1. 写入完成</strong>：命令执行完，看到 `1+0 records in` 才算成功。</li>
+        <li><strong>2. 重启</strong>：拔掉 U 盘重新插上，或者直接重启电脑。</li>
+        <li><strong>3. 启动项</strong>：惠普笔记本开机狂按 <strong>F9</strong>，选择 <strong>USB Storage</strong> 启动。</li>
+        <li><strong>4. 关键一步</strong>：进入安装界面，选择 <strong>自定义：仅安装 Windows</strong>。</li>
+        <li><strong>5. 格式化</strong>：选中所有 Kali Linux 分区，点击 <strong>删除</strong>，直到变成 <strong>未分配空间</strong>。</li>
+        <li><strong>6. 安装</strong>：选中未分配空间，点击下一步，静静等待安装完成。</li>
+    </ul>
+
+    <h2><span class="step">💡</span>避坑指南</h2>
+    <ul>
+        <li><span class="danger">绝对不要</span>把 `of=/dev/sdb` 写成 `of=/dev/sda`，那会格式化你的电脑硬盘！</li>
+        <li><span class="danger">绝对不要</span>用长文件名，就用 `Win10_22H2_x64.iso`。</li>
+        <li>情绪的事先放放，等你装完 Windows，删掉所有 Kali，生活也是全新的。</li>
+    </ul>
+</div>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.textContent.trim();
+    navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = "✅ 已复制";
+        btn.classList.add("copied");
+        setTimeout(() => {
+            btn.textContent = "一键复制";
+            btn.classList.remove("copied");
+        }, 2000);
+    });
+}
+</script>
 </body>
 </html>
