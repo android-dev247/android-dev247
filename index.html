@@ -2,52 +2,61 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Win10 终极修复（重下+写入）</title>
+    <title>Win10 安装 U 盘制作（成功版）</title>
     <style>
-        * {margin:0;padding:0;box-sizing:border-box;font-family:"Consolas",monospace;}
-        body {background:#0d1117;color:#c9d1d9;padding:20px;}
-        .container {max-width:900px;margin:0;background:#161b22;border-radius:12px;padding:24px;}
-        h1 {color:#ff5555;margin-bottom:20px;font-size:22px;}
-        h2 {color:#50fa7b;margin-top:25px;margin-bottom:10px;font-size:16px;}
-        .code {background:#000;border-radius:8px;padding:15px;margin:10px 0;position:relative;}
-        pre {color:#f8f8f2;}
-        .btn {position:absolute;top:10px;right:10px;background:#bd93f9;color:#000;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;}
-        .tip {color:#8be9fd;font-size:12px;}
-        .danger {color:#ff5555;font-weight:bold;}
+        * {margin:0;padding:0;box-sizing:border-box;font-family:"Consolas","Monaco",monospace;}
+        body {background:#0d1117;color:#c9d1d9;padding:30px;line-height:1.6;}
+        .container {max-width:900px;margin:0 auto;background:#161b22;border-radius:12px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+        h1 {color:#58a6ff;margin-bottom:20px;font-size:24px;border-bottom:1px solid #30363d;padding-bottom:12px;}
+        h2 {color:#50fa7b;margin-top:25px;margin-bottom:10px;font-size:18px;}
+        .code-block {background:#000;border-radius:8px;padding:20px;margin:15px 0;position:relative;border:1px solid #30363d;}
+        pre {color:#f8f8f2;font-size:14px;white-space:pre-wrap;word-wrap:break-word;}
+        .copy-btn {position:absolute;top:12px;right:12px;background:#238636;color:#000;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:13px;transition:all 0.2s;}
+        .copy-btn:hover {background:#2ea043;transform:scale(1.05);}
+        .copy-btn.copied {background:#1f6feb;content:"已复制";}
+        .tip {color:#8b949e;font-size:13px;margin-top:8px;}
+        .success {color:#3fb950;font-weight:bold;}
+        .warning {color:#f85149;font-weight:bold;}
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>🔥 问题根源：ISO 文件是空的！必须重下！</h1>
+    <h1>🔥 Win10 U 盘制作终极命令（镜像已完整 5.7GB）</h1>
 
-    <h2>1. 删除损坏的空文件</h2>
-    <div class="code">
-        <button class="btn" onclick="copyCode(this)">复制</button>
-        <pre>rm /home/kali/Downloads/Win10_22H2_x64.iso</pre>
+    <h2>📌 镜像确认（大小正常 5.7GiB）</h2>
+    <p class="tip">文件名：<span class="success">Win10_22H2_Chinese_Simplified_x64v1.iso</span></p>
+
+    <h2>1. 卸载 U 盘分区</h2>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        <pre>sudo umount /dev/sdb*</pre>
     </div>
 
-    <h2>2. 彻底重新下载 Win10 (稳定源)</h2>
-    <div class="code">
-        <button class="btn" onclick="copyCode(this)">复制</button>
-        <pre>cd /home/kali/Downloads && wget -c -O Win10_22H2_x64.iso https://mirrors.tuna.tsinghua.edu.cn/microsoft/windows/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso</pre>
+    <h2>2. 写入 U 盘（最终一步）</h2>
+    <p class="warning">⚠ 注意：这会彻底覆盖 U 盘里的 Kali，变成 Win10 安装盘！</p>
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">复制</button>
+        <pre>sudo dd if=/home/kali/Desktop/Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress && sync</pre>
     </div>
-    <p class="tip">提示：下载需要时间，耐心等，看到 100% 再继续！</p>
 
-    <h2>3. 写入 U 盘 (确认是 /dev/sdb)</h2>
-    <div class="code">
-        <button class="btn" onclick="copyCode(this)">复制</button>
-        <pre>sudo umount /dev/sdb* && sudo dd if=/home/kali/Downloads/Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress && sync</pre>
-    </div>
-    
-    <p class="danger">⚠ 警告：这次写进去的是真正的 Win10 镜像，不是空文件，写完就能装。</p>
+    <h2>✅ 成功后操作</h2>
+    <ul>
+        <li>写入完成后，看到 `1+0 records in` 才算成功。</li>
+        <li>重启电脑，按 <strong>F9</strong> 选择 USB 启动。</li>
+        <li>进入 Win10 安装，删除所有 Kali 分区，安装 Windows。</li>
+    </ul>
 </div>
 
 <script>
 function copyCode(btn) {
     const code = btn.nextElementSibling.textContent.trim();
     navigator.clipboard.writeText(code).then(() => {
-        btn.innerText = "✅ 已复制";
-        setTimeout(() => btn.innerText = "复制", 1500);
+        btn.textContent = "✅ 已复制";
+        btn.classList.add("copied");
+        setTimeout(() => {
+            btn.textContent = "复制";
+            btn.classList.remove("copied");
+        }, 2000);
     });
 }
 </script>
