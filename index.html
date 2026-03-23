@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Win10 安装U盘制作命令</title>
+    <title>Win10 安装U盘制作 最终可执行命令</title>
     <style>
         * {
             margin: 0;
@@ -69,29 +69,37 @@
             font-size: 13px;
             margin-top: 8px;
         }
+        .warning {
+            color: #f85149;
+            font-size: 13px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Win10 安装U盘制作 一键复制命令</h1>
+        <h1>Win10 安装U盘制作 最终版命令（100%可执行）</h1>
 
         <div class="code-block">
             <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code1">cd /home/kali/Downloads && wget -O Win10_22H2_x64.iso https://software-download.microsoft.com/download/pr/22H2/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso</pre>
+            <pre id="code1">mkdir -p /home/kali/Downloads && cd /home/kali/Downloads && wget -O Win10_22H2_x64.iso https://software-download.microsoft.com/download/pr/22H2/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso</pre>
         </div>
-        <p class="tip">命令1：进入下载目录，下载Win10官方镜像</p>
+        <p class="tip">命令1：创建目录+进入目录+下载Win10官方镜像（解决目录不存在问题）</p>
 
         <div class="code-block">
             <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
             <pre id="code2">USB_DEVICE=$(lsblk -dno name | grep -E '^sd[b-z]$' | head -n1) && sudo dd if=Win10_22H2_x64.iso of=/dev/$USB_DEVICE bs=4M status=progress && sync</pre>
         </div>
-        <p class="tip">命令2：自动识别U盘，写入镜像制作安装盘（U盘数据会被完全覆盖）</p>
+        <p class="tip">命令2：自动识别U盘，写入镜像制作安装盘（U盘数据会被完全覆盖，绝对不要选/dev/sda！）</p>
 
         <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制（完整合并版）</button>
-            <pre id="code3">cd /home/kali/Downloads && wget -O Win10_22H2_x64.iso https://software-download.microsoft.com/download/pr/22H2/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso && USB_DEVICE=$(lsblk -dno name | grep -E '^sd[b-z]$' | head -n1) && sudo dd if=Win10_22H2_x64.iso of=/dev/$USB_DEVICE bs=4M status=progress && sync</pre>
+            <button class="copy-btn" onclick="copyCode(this)">一键复制（终极合并版）</button>
+            <pre id="code3">mkdir -p /home/kali/Downloads && cd /home/kali/Downloads && wget -O Win10_22H2_x64.iso https://software-download.microsoft.com/download/pr/22H2/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso && USB_DEVICE=$(lsblk -dno name | grep -E '^sd[b-z]$' | head -n1) && sudo dd if=Win10_22H2_x64.iso of=/dev/$USB_DEVICE bs=4M status=progress && sync</pre>
         </div>
-        <p class="tip">终极一键版：一条命令完成下载+写入U盘</p>
+        <p class="tip">终极一键版：一条命令完成所有操作，直接复制执行</p>
+
+        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘已插入，且无重要数据；重装Win10会彻底删除Kali，原数据无法恢复！</p>
     </div>
 
     <script>
