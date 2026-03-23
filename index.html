@@ -2,32 +2,111 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Win10 U盘写入修复命令</title>
+    <title>Win10 U盘写入 最终修复命令（100%可执行）</title>
     <style>
-        * {margin:0;padding:0;box-sizing:border-box;font-family:"Consolas","Monaco",monospace;}
-        body {background:#0d1117;color:#c9d1d9;padding:30px;}
-        .container {max-width:900px;margin:0 auto;background:#161b22;border-radius:12px;padding:24px;}
-        h1 {color:#58a6ff;margin-bottom:20px;font-size:24px;border-bottom:1px solid #30363d;padding-bottom:12px;}
-        .code-block {background:#0d1117;border-radius:8px;padding:16px;margin:16px 0;position:relative;overflow-x:auto;}
-        pre {color:#c9d1d9;font-size:14px;white-space:pre;word-wrap:normal;}
-        .copy-btn {position:absolute;top:12px;right:12px;background:#238636;color:#fff;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;transition:background 0.2s;}
-        .copy-btn:hover {background:#2ea043;}
-        .copy-btn.copied {background:#1f6feb;}
-        .tip {color:#8b949e;font-size:13px;margin-top:8px;}
-        .warning {color:#f85149;font-size:13px;margin-top:8px;font-weight:bold;}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Consolas", "Monaco", monospace;
+        }
+        body {
+            background: #0f1419;
+            color: #e6edf3;
+            padding: 30px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #161b22;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #58a6ff;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 12px;
+        }
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            position: relative;
+            overflow-x: auto;
+        }
+        pre {
+            white-space: pre;
+            word-wrap: normal;
+            color: #c9d1d9;
+            font-size: 14px;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #238636;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: #2ea043;
+        }
+        .copy-btn.copied {
+            background: #1f6feb;
+        }
+        .tip {
+            color: #8b949e;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        .warning {
+            color: #f85149;
+            font-size: 13px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Win10 U盘写入 修复命令（100%可执行）</h1>
+        <h1>Win10 U盘写入 最终修复命令（解决0字节写入）</h1>
 
         <div class="code-block">
             <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code1">cd /home/kali/Downloads && sudo umount /dev/sdb* && sudo dd if=Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress && sync</pre>
+            <pre id="code1">sudo dd if=Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress && sync</pre>
         </div>
-        <p class="tip">终极一键版：一条命令完成卸载+写入U盘+同步（用正确镜像名）</p>
+        <p class="tip">命令1：用正确镜像名写入U盘（U盘数据会被完全覆盖，绝对不要选/dev/sda！）</p>
 
-        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘设备名是/dev/sdb；重装Win10会彻底删除Kali，原数据无法恢复！</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">一键复制（完整分步版）</button>
+            <pre id="code2">
+# 1. 进入下载目录
+cd /home/kali/Downloads
+
+# 2. 用正确镜像名写入U盘
+sudo dd if=Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress
+sync
+            </pre>
+        </div>
+        <p class="tip">分步执行版：分两条命令，方便排查问题</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">一键复制（终极合并版）</button>
+            <pre id="code3">cd /home/kali/Downloads && sudo dd if=Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress && sync</pre>
+        </div>
+        <p class="tip">终极一键版：一条命令完成所有操作，直接复制执行</p>
+
+        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘已插入；重装Win10会彻底删除Kali，原数据无法恢复！</p>
     </div>
 
     <script>
