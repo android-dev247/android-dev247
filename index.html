@@ -2,104 +2,32 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Win10 U盘写入 终极零错误命令</title>
+    <title>Win10 U盘写入 最终命令（U盘是/dev/sdb）</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Consolas", "Monaco", monospace;
-        }
-        body {
-            background: #0f1419;
-            color: #e6edf3;
-            padding: 30px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #161b22;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-        h1 {
-            color: #58a6ff;
-            margin-bottom: 20px;
-            font-size: 24px;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 12px;
-        }
-        .code-block {
-            background: #0d1117;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-            position: relative;
-            overflow-x: auto;
-        }
-        pre {
-            white-space: pre;
-            word-wrap: normal;
-            color: #c9d1d9;
-            font-size: 14px;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #238636;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
-        .copy-btn:hover {
-            background: #2ea043;
-        }
-        .copy-btn.copied {
-            background: #1f6feb;
-        }
-        .tip {
-            color: #8b949e;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-        .warning {
-            color: #f85149;
-            font-size: 13px;
-            margin-top: 8px;
-            font-weight: bold;
-        }
+        * {margin:0;padding:0;box-sizing:border-box;font-family:"Consolas","Monaco",monospace;}
+        body {background:#0d1117;color:#c9d1d9;padding:30px;line-height:1.6;}
+        .container {max-width:900px;margin:0 auto;background:#161b22;border-radius:12px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+        h1 {color:#58a6ff;margin-bottom:20px;font-size:24px;border-bottom:1px solid #30363d;padding-bottom:12px;}
+        .code-block {background:#0d1117;border-radius:8px;padding:16px;margin:16px 0;position:relative;overflow-x:auto;}
+        pre {color:#c9d1d9;font-size:14px;white-space:pre;word-wrap:normal;}
+        .copy-btn {position:absolute;top:12px;right:12px;background:#238636;color:#fff;border:none;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;transition:background 0.2s;}
+        .copy-btn:hover {background:#2ea043;}
+        .copy-btn.copied {background:#1f6feb;}
+        .tip {color:#8b949e;font-size:13px;margin-top:8px;}
+        .warning {color:#f85149;font-size:13px;margin-top:8px;font-weight:bold;}
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Win10 U盘写入 终极零错误命令（解决0字节写入）</h1>
+        <h1>Win10 U盘写入 最终命令（U盘是/dev/sdb）</h1>
 
         <div class="code-block">
             <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code1">ls -lh /home/kali/Downloads/Win10_22H2_x64.iso</pre>
+            <pre id="code1">sudo umount /dev/sdb* && sudo dd if=/home/kali/Downloads/Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress && sync</pre>
         </div>
-        <p class="tip">命令1：检查镜像大小（正常5-6GB，0字节就是损坏，必须重下）</p>
+        <p class="tip">终极一键版：一条命令完成卸载+写入U盘+同步（U盘数据会被完全覆盖）</p>
 
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code2">lsblk</pre>
-        </div>
-        <p class="tip">命令2：查看U盘真实设备名（RM=1的就是U盘，绝对不要选/dev/sda！）</p>
-
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code3">sudo dd if=/home/kali/Downloads/Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress && sync</pre>
-        </div>
-        <p class="tip">命令3：用绝对路径写入U盘（彻底解决路径/文件名错误）</p>
-
-        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘已插入，且无重要数据；重装Win10会彻底删除Kali，原数据无法恢复！</p>
+        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘无重要数据；重装Win10会彻底删除Kali，原数据无法恢复！</p>
     </div>
 
     <script>
