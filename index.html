@@ -1,29 +1,51 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>枫叶官网 - 系统工具合集</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family: "Microsoft YaHei",sans-serif;}
-body{background:#121212;color:#e0e0e0;padding:30px;}
-.container{max-width:900px;margin:0 auto;}
-h1{color:#42a5f5;text-align:center;margin-bottom:30px;font-size:28px;}
-.card{background:#1e1e1e;border-radius:12px;padding:20px;margin-bottom:15px;}
-.card h2{color:#64ffda;margin-bottom:10px;font-size:20px;}
-.card a{color:#42a5f5;text-decoration:none;font-size:16px;display:block;margin:5px 0;}
-.card a:hover{color:#64ffda;}
-</style>
+    <meta charset="UTF-8">
+    <title>系统镜像下载</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Arial;background:#f5f5f5;padding:20px}
+        .container{max-width:900px;margin:0 auto}
+        .panel{background:#fff;border-radius:8px;margin-bottom:15px;overflow:hidden}
+        .panel-header{background:#2d89ef;color:#fff;padding:12px 15px;font-size:16px;font-weight:bold}
+        .panel-body{padding:15px}
+        .download-list{list-style:none}
+        .download-list li{margin:10px 0}
+        .download-list a{color:#0066cc;text-decoration:none}
+        .download-list a:hover{text-decoration:underline}
+    </style>
 </head>
 <body>
 <div class="container">
-<h1>枫叶官网 - 系统工具</h1>
+    <div class="panel">
+        <div class="panel-header">Windows 官方镜像</div>
+        <div class="panel-body">
+            <ul class="download-list">
+                <li>Windows 10：<a href="https://www.microsoft.com/zh-cn/software-download/windows10" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows10</a></li>
+                <li>Windows 11：<a href="https://www.microsoft.com/zh-cn/software-download/windows11" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows11</a></li>
+            </ul>
+        </div>
+    </div>
 
-<div class="card">
-<h2>WinToGo 相关工具</h2>
-<a href="https://rufus.ie/zh/" target="_blank">Rufus 中文官网</a>
-<a href="https://www.easyuefi.com/wintousb/" target="_blank">WinToUSB 官网</a>
-</div>
+    <div class="panel">
+        <div class="panel-header">启动盘制作工具</div>
+        <div class="panel-body">
+            <ul class="download-list">
+                <li>Rufus 官网地址：<a href="https://rufus.ie/zh/" target="_blank">https://rufus.ie/zh/</a></li>
+            </ul>
+        </div>
+    </div>
 
+    <div class="panel">
+        <div class="panel-header">其他系统下载</div>
+        <div class="panel-body">
+            <ul class="download-list">
+                <li>MSDN 镜像索引：<a href="https://next.itellyou.cn" target="_blank">https://next.itellyou.cn</a></li>
+                <li>Ubuntu 系统：<a href="https://ubuntu.com/download" target="_blank">https://ubuntu.com/download</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 </body>
 </html>
