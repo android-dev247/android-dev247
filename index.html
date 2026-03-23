@@ -1,64 +1,79 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Win10 安装 U 盘制作（成功版）</title>
+    <title>Kali写入Windows ISO命令</title>
     <style>
-        * {margin:0;padding:0;box-sizing:border-box;font-family:"Consolas","Monaco",monospace;}
-        body {background:#0d1117;color:#c9d1d9;padding:30px;line-height:1.6;}
-        .container {max-width:900px;margin:0 auto;background:#161b22;border-radius:12px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
-        h1 {color:#58a6ff;margin-bottom:20px;font-size:24px;border-bottom:1px solid #30363d;padding-bottom:12px;}
-        h2 {color:#50fa7b;margin-top:25px;margin-bottom:10px;font-size:18px;}
-        .code-block {background:#000;border-radius:8px;padding:20px;margin:15px 0;position:relative;border:1px solid #30363d;}
-        pre {color:#f8f8f2;font-size:14px;white-space:pre-wrap;word-wrap:break-word;}
-        .copy-btn {position:absolute;top:12px;right:12px;background:#238636;color:#000;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:13px;transition:all 0.2s;}
-        .copy-btn:hover {background:#2ea043;transform:scale(1.05);}
-        .copy-btn.copied {background:#1f6feb;content:"已复制";}
-        .tip {color:#8b949e;font-size:13px;margin-top:8px;}
-        .success {color:#3fb950;font-weight:bold;}
-        .warning {color:#f85149;font-weight:bold;}
+        body { 
+            background: #0f0f0f; 
+            color: #00ff00; 
+            font-family: monospace; 
+            padding: 20px; 
+            line-height: 1.6;
+        }
+        .command-box { 
+            background: #1a1a1a; 
+            border: 2px solid #00ff00; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 5px;
+        }
+        .copy-btn { 
+            background: #00aa00; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            margin: 10px 5px 10px 0; 
+            border-radius: 3px; 
+            cursor: pointer;
+            font-family: monospace;
+        }
+        .copy-btn:hover { background: #00cc00; }
+        .copy-btn:active { transform: scale(0.98); }
+        h1, h2 { color: #00ffaa; }
+        .warning { color: #ff5555; background: #2a0000; padding: 10px; border-left: 4px solid #ff0000; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🔥 Win10 U 盘制作终极命令（镜像已完整 5.7GB）</h1>
 
-    <h2>📌 镜像确认（大小正常 5.7GiB）</h2>
-    <p class="tip">文件名：<span class="success">Win10_22H2_Chinese_Simplified_x64v1.iso</span></p>
+<h1>Kali Linux写入Windows 10 ISO到U盘</h1>
 
-    <h2>1. 卸载 U 盘分区</h2>
-    <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">复制</button>
-        <pre>sudo umount /dev/sdb*</pre>
-    </div>
+<div class="warning">
+    <strong>⚠️ 警告：</strong>请确认U盘设备是<code>/dev/sdb</code>，而不是系统盘<code>/dev/sda</code>！
+</div>
 
-    <h2>2. 写入 U 盘（最终一步）</h2>
-    <p class="warning">⚠ 注意：这会彻底覆盖 U 盘里的 Kali，变成 Win10 安装盘！</p>
-    <div class="code-block">
-        <button class="copy-btn" onclick="copyCode(this)">复制</button>
-        <pre>sudo dd if=/home/kali/Desktop/Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress && sync</pre>
-    </div>
+<h2>1. 卸载U盘（如果已挂载）</h2>
+<div class="command-box">
+    <code>sudo umount /dev/sdb1</code><br><br>
+    <button class="copy-btn" onclick="copyToClipboard('sudo umount /dev/sdb1')">复制此命令</button>
+</div>
 
-    <h2>✅ 成功后操作</h2>
-    <ul>
-        <li>写入完成后，看到 `1+0 records in` 才算成功。</li>
-        <li>重启电脑，按 <strong>F9</strong> 选择 USB 启动。</li>
-        <li>进入 Win10 安装，删除所有 Kali 分区，安装 Windows。</li>
-    </ul>
+<h2>2. 写入Windows 10 ISO镜像（从桌面）</h2>
+<div class="command-box">
+    <code>sudo dd if=/home/kali/Desktop/Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress</code><br><br>
+    <button class="copy-btn" onclick="copyToClipboard('sudo dd if=/home/kali/Desktop/Win10_22H2_Chinese_Simplified_x64v1.iso of=/dev/sdb bs=4M status=progress')">复制此命令</button>
+</div>
+
+<h2>3. 检查设备（可选）</h2>
+<div class="command-box">
+    <code>lsblk</code><br><br>
+    <button class="copy-btn" onclick="copyToClipboard('lsblk')">复制此命令</button>
 </div>
 
 <script>
-function copyCode(btn) {
-    const code = btn.nextElementSibling.textContent.trim();
-    navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = "✅ 已复制";
-        btn.classList.add("copied");
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✓ 已复制';
+        btn.style.background = '#008800';
+        
         setTimeout(() => {
-            btn.textContent = "复制";
-            btn.classList.remove("copied");
+            btn.textContent = originalText;
+            btn.style.background = '#00aa00';
         }, 2000);
     });
 }
 </script>
+
 </body>
 </html>
