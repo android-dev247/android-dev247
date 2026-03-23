@@ -2,50 +2,115 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>系统镜像下载</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统镜像与工具下载汇总</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:Arial;background:#f5f5f5;padding:20px}
-        .container{max-width:900px;margin:0 auto}
-        .panel{background:#fff;border-radius:8px;margin-bottom:15px;overflow:hidden}
-        .panel-header{background:#2d89ef;color:#fff;padding:12px 15px;font-size:16px;font-weight:bold}
-        .panel-body{padding:15px}
-        .download-list{list-style:none}
-        .download-list li{margin:10px 0}
-        .download-list a{color:#0066cc;text-decoration:none}
-        .download-list a:hover{text-decoration:underline}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #f8f9fa;
+            padding: 30px;
+        }
+        .download-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 25px;
+        }
+        .download-title {
+            font-size: 20px;
+            color: #212529;
+            border-left: 4px solid #007bff;
+            padding-left: 15px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .download-section {
+            margin-bottom: 25px;
+        }
+        .section-subtitle {
+            font-size: 16px;
+            color: #007bff;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .download-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+        .download-item {
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .download-item a {
+            color: #007bff;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .download-item a:hover {
+            text-decoration: underline;
+        }
+        .download-item span {
+            color: #6c757d;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="panel">
-        <div class="panel-header">Windows 官方镜像</div>
-        <div class="panel-body">
+    <div class="download-container">
+        <h1 class="download-title">Windows 镜像及启动盘工具下载</h1>
+        
+        <!-- Windows官方镜像下载区 -->
+        <div class="download-section">
+            <h2 class="section-subtitle">Windows 官方镜像下载</h2>
             <ul class="download-list">
-                <li>Windows 10：<a href="https://www.microsoft.com/zh-cn/software-download/windows10" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows10</a></li>
-                <li>Windows 11：<a href="https://www.microsoft.com/zh-cn/software-download/windows11" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows11</a></li>
+                <li class="download-item">
+                    <span>Windows 10：</span>
+                    <a href="https://www.microsoft.com/zh-cn/software-download/windows10" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows10</a>
+                </li>
+                <li class="download-item">
+                    <span>Windows 11：</span>
+                    <a href="https://www.microsoft.com/zh-cn/software-download/windows11" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows11</a>
+                </li>
             </ul>
         </div>
-    </div>
 
-    <div class="panel">
-        <div class="panel-header">启动盘制作工具</div>
-        <div class="panel-body">
+        <!-- 启动盘制作工具区 -->
+        <div class="download-section">
+            <h2 class="section-subtitle">USB启动盘制作工具</h2>
             <ul class="download-list">
-                <li>Rufus 官网地址：<a href="https://rufus.ie/zh/" target="_blank">https://rufus.ie/zh/</a></li>
+                <li class="download-item">
+                    <span>Rufus 官网：</span>
+                    <a href="https://rufus.ie/zh/" target="_blank">https://rufus.ie/zh/</a>
+                </li>
+                <li class="download-item">
+                    <span>微软媒体创建工具：</span>
+                    <a href="https://www.microsoft.com/zh-cn/software-download/windows10" target="_blank">集成于Windows 10官方下载页</a>
+                </li>
             </ul>
         </div>
-    </div>
 
-    <div class="panel">
-        <div class="panel-header">其他系统下载</div>
-        <div class="panel-body">
+        <!-- 可信第三方镜像区 -->
+        <div class="download-section">
+            <h2 class="section-subtitle">可信第三方镜像下载（版本更全）</h2>
             <ul class="download-list">
-                <li>MSDN 镜像索引：<a href="https://next.itellyou.cn" target="_blank">https://next.itellyou.cn</a></li>
-                <li>Ubuntu 系统：<a href="https://ubuntu.com/download" target="_blank">https://ubuntu.com/download</a></li>
+                <li class="download-item">
+                    <span>MSDN I Tell You 新版：</span>
+                    <a href="https://next.itellyou.cn/" target="_blank">https://next.itellyou.cn/</a>
+                </li>
+                <li class="download-item">
+                    <span>TechBench 直链下载：</span>
+                    <a href="https://tb.rg-adguard.net/" target="_blank">https://tb.rg-adguard.net/</a>
+                </li>
             </ul>
         </div>
     </div>
-</div>
 </body>
 </html>
