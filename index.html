@@ -2,119 +2,69 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Win10 安装U盘制作 最终可执行命令</title>
+    <title>Win10 重装终极教程（解决400错误）</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Consolas", "Monaco", monospace;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Consolas, Monaco, monospace; }
         body {
-            background: #0f1419;
-            color: #e6edf3;
-            padding: 30px;
+            background: #f5f5f5;
+            padding: 20px;
             line-height: 1.6;
         }
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            background: #161b22;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-        h1 {
-            color: #58a6ff;
-            margin-bottom: 20px;
-            font-size: 24px;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 12px;
-        }
-        .code-block {
-            background: #0d1117;
+            background: #fff;
+            padding: 30px;
             border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-            position: relative;
-            overflow-x: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        pre {
-            white-space: pre;
-            word-wrap: normal;
-            color: #c9d1d9;
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        code {
+            display: block;
+            padding: 15px;
+            margin: 15px 0;
+            background: #f8f9fa;
+            border-left: 4px #2386cd solid;
+            border-radius: 4px;
+            color: #24292f;
             font-size: 14px;
         }
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #238636;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
-        .copy-btn:hover {
-            background: #2ea043;
-        }
-        .copy-btn.copied {
-            background: #1f6feb;
-        }
         .tip {
-            color: #8b949e;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-        .warning {
-            color: #f85149;
-            font-size: 13px;
-            margin-top: 8px;
+            color: #e53935;
             font-weight: bold;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Win10 安装U盘制作 最终版命令（100%可执行）</h1>
-
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code1">mkdir -p /home/kali/Downloads && cd /home/kali/Downloads && wget -O Win10_22H2_x64.iso https://software-download.microsoft.com/download/pr/22H2/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso</pre>
-        </div>
-        <p class="tip">命令1：创建目录+进入目录+下载Win10官方镜像（解决目录不存在问题）</p>
-
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code2">USB_DEVICE=$(lsblk -dno name | grep -E '^sd[b-z]$' | head -n1) && sudo dd if=Win10_22H2_x64.iso of=/dev/$USB_DEVICE bs=4M status=progress && sync</pre>
-        </div>
-        <p class="tip">命令2：自动识别U盘，写入镜像制作安装盘（U盘数据会被完全覆盖，绝对不要选/dev/sda！）</p>
-
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制（终极合并版）</button>
-            <pre id="code3">mkdir -p /home/kali/Downloads && cd /home/kali/Downloads && wget -O Win10_22H2_x64.iso https://software-download.microsoft.com/download/pr/22H2/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso && USB_DEVICE=$(lsblk -dno name | grep -E '^sd[b-z]$' | head -n1) && sudo dd if=Win10_22H2_x64.iso of=/dev/$USB_DEVICE bs=4M status=progress && sync</pre>
-        </div>
-        <p class="tip">终极一键版：一条命令完成所有操作，直接复制执行</p>
-
-        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘已插入，且无重要数据；重装Win10会彻底删除Kali，原数据无法恢复！</p>
-    </div>
-
-    <script>
-        function copyCode(btn) {
-            const pre = btn.nextElementSibling;
-            const code = pre.textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                btn.textContent = "已复制";
-                btn.classList.add("copied");
-                setTimeout(() => {
-                    btn.textContent = "一键复制";
-                    btn.classList.remove("copied");
-                }, 2000);
-            });
-        }
-    </script>
+<div class="container">
+    <h2>⚠️ 解决 400 错误 - 重装 Windows 终极命令</h2>
+    
+    <div class="tip">第一步：安装下载依赖（必执行）</div>
+    <code>apt update && apt install -y wget curl</code>
+    
+    <div class="tip">第二步：下载 Windows 镜像（稳定链接）</div>
+    <code>wget -O Win10_22H2_x64.iso https://massgrave.dev/r/Win10_22H2_x64_CN.html</code>
+    
+    <div class="tip">第三步：写入 U 盘（确认 U 盘设备名）</div>
+    <code>
+# 查看 U 盘设备名
+lsblk -dno name | grep -E '^sd[b-z]$'
+# 写入镜像（替换 /dev/sdb 为实际 U 盘设备）
+dd if=Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress
+sync
+    </code>
+    
+    <div class="tip">关键说明：</div>
+    <ul>
+        <li>执行 `dd` 命令前，务必确认 U 盘设备名（不要写成 /dev/sda）</li>
+        <li>重装过程中，保持网络稳定，避免中断</li>
+        <li>写入完成后，重启电脑从 U 盘启动安装</li>
+    </ul>
+</div>
 </body>
 </html>
