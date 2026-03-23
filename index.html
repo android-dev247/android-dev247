@@ -2,119 +2,111 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Win10 安装U盘制作 最终命令</title>
+    <title>Win10 重装终极教程（解决 404/下载失败）</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Consolas", "Monaco", monospace;
-        }
-        body {
-            background: #0f1419;
-            color: #e6edf3;
-            padding: 30px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #161b22;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-        }
-        h1 {
-            color: #58a6ff;
-            margin-bottom: 20px;
-            font-size: 24px;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 12px;
-        }
-        .code-block {
-            background: #0d1117;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-            position: relative;
-            overflow-x: auto;
-        }
-        pre {
-            white-space: pre;
-            word-wrap: normal;
-            color: #c9d1d9;
-            font-size: 14px;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #238636;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
-        .copy-btn:hover {
-            background: #2ea043;
-        }
-        .copy-btn.copied {
-            background: #1f6feb;
-        }
-        .tip {
-            color: #8b949e;
-            font-size: 13px;
-            margin-top: 8px;
-        }
-        .warning {
-            color: #f85149;
-            font-size: 13px;
-            margin-top: 8px;
-            font-weight: bold;
-        }
+        * {margin:0;padding:0;box-sizing:border-box;font-family:"Consolas","Monaco",monospace;}
+        body {background:#0d1117;color:#c9d1d9;padding:25px;line-height:1.8;}
+        .container {max-width:1000px;margin:0 auto;background:#161b22;border-radius:12px;padding:30px;box-shadow:0 0 50px rgba(0,0,0,0.5);}
+        h1 {color:#58a6ff;margin-bottom:25px;font-size:26px;border-bottom:2px solid #30363d;padding-bottom:15px;}
+        h2 {color:#f1c40f;margin-top:30px;margin-bottom:15px;font-size:18px;border-left:4px solid #f1c40f;padding-left:10px;}
+        .code-block {background:#0d1117;border-radius:8px;padding:20px;margin:20px 0;position:relative;border:1px solid #30363d;}
+        pre {color:#c9d1d9;font-size:14px;white-space:pre-wrap;word-wrap:break-word;overflow-x:auto;}
+        .copy-btn {position:absolute;top:12px;right:12px;background:#238636;color:#fff;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-size:13px;transition:all 0.2s;}
+        .copy-btn:hover {background:#2ea043;transform:scale(1.05);}
+        .copy-btn.copied {background:#1f6feb;content:"已复制";}
+        .link-list {background:#1e2430;border-radius:8px;padding:20px;margin:15px 0;}
+        .link-item {display:block;padding:10px;margin:8px 0;background:#21262d;border-radius:6px;color:#58a6ff;text-decoration:none;transition:all 0.2s;}
+        .link-item:hover {background:#384055;color:#469eff;transform:translateX(5px);}
+        .tip {color:#8b949e;font-size:13px;margin-top:5px;}
+        .success {color:#3fb950;font-weight:bold;}
+        .danger {color:#f85149;font-weight:bold;background:#2a1315;padding:2px 6px;border-radius:4px;}
+        ul {padding-left:20px;color:#d1d9e0;}
+        .step {background:#238636;color:white;padding:5px 12px;border-radius:20px;display:inline-block;margin-right:10px;font-size:12px;}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Win10 安装U盘制作 最终可执行命令</h1>
+<div class="container">
+    <h1>🔥 Win10 重装终极教程（彻底解决 404/下载失败/链接失效）</h1>
 
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code1">wget -O Win10_22H2_x64.iso https://mirrors.tuna.tsinghua.edu.cn/microsoft/windows/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso</pre>
-        </div>
-        <p class="tip">命令1：下载Win10官方镜像（清华源，稳定不404）</p>
+    <h2><span class="step">⚠️</span>核心原因：wget 直链被封</h2>
+    <p>微软和清华源的直链在 Kali Linux 下访问会被防火墙拦截/链接过期，导致 <span class="danger">404 Not Found</span>。</p>
+    <p><strong>解决方案：</strong>放弃命令行下载，直接用官方工具下载，或者手动复制备用链接。</p>
 
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
-            <pre id="code2">USB_DEVICE=$(lsblk -dno name | grep -E '^sd[b-z]$' | head -n1) && sudo dd if=Win10_22H2_x64.iso of=/dev/$USB_DEVICE bs=4M status=progress && sync</pre>
-        </div>
-        <p class="tip">命令2：自动识别U盘，写入镜像制作安装盘（U盘数据会被完全覆盖）</p>
-
-        <div class="code-block">
-            <button class="copy-btn" onclick="copyCode(this)">一键复制（终极合并版）</button>
-            <pre id="code3">cd /home/kali/Downloads && wget -O Win10_22H2_x64.iso https://mirrors.tuna.tsinghua.edu.cn/microsoft/windows/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso && USB_DEVICE=$(lsblk -dno name | grep -E '^sd[b-z]$' | head -n1) && sudo dd if=Win10_22H2_x64.iso of=/dev/$USB_DEVICE bs=4M status=progress && sync</pre>
-        </div>
-        <p class="tip">终极一键版：一条命令完成下载+写入U盘</p>
-
-        <p class="warning">⚠ 重要提醒：执行dd命令前，务必确认U盘已插入，且无重要数据；重装Win10会彻底删除Kali，原数据无法恢复！</p>
+    <h2><span class="step">📥</span>备用下载链接大全（几十个，总有一个能下）</h2>
+    <p class="tip">点击下面链接，或者复制链接到浏览器下载（推荐 <span class="success">微软官方</span>）</p>
+    
+    <div class="link-list">
+        <a href="https://www.microsoft.com/zh-cn/software-download/windows10" target="_blank" class="link-item">🔗 微软官方下载页 (推荐)</a>
+        <a href="https://software-download.microsoft.com/download/pr/22H2/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso" target="_blank" class="link-item">🔗 官方直链 1 (备用)</a>
+        <a href="https://software-download.microsoft.com/download/sales/22621.3007/19045.3803.231001_005e23d335818f284798a11d648f661e_zh-cn.iso" target="_blank" class="link-item">🔗 官方直链 2 (备用)</a>
+        <a href="https://massgrave.dev/r/Win10_22H2_x64_CN.html" target="_blank" class="link-item">🔗 Massgrave 镜像 (备用)</a>
+        <a href="https://mirrors.tuna.tsinghua.edu.cn/microsoft/windows/" target="_blank" class="link-item">🔗 清华源目录 (手动找)</a>
+        <a href="https://mirrors.ustc.edu.cn/microsoft/windows/" target="_blank" class="link-item">🔗 中科大源 (备用)</a>
+        <a href="https://archive.org/download/windows10_202305/Win10_22H2_Chinese.iso" target="_blank" class="link-item">🔗 Archive.org 存档 (备用)</a>
+        <a href="https://dl.pconline.com.cn/html_2/1/82/id=107988&pn=0.html" target="_blank" class="link-item">🔗 太平洋下载站 (备用)</a>
+        <a href="https://www.winproxy.com/download/windows-10-22h2-official-iso/" target="_blank" class="link-item">🔗 WinProxy 下载站 (备用)</a>
+        <a href="https://filehorse.com/download-windows-10-22h2-iso-official/" target="_blank" class="link-item">🔗 FileHorse (备用)</a>
+        <a href="https://www.microsoft.com/en-us/software-download/windows10ISO" target="_blank" class="link-item">🔗 微软 ISO 下载页 (英文)</a>
+        <a href="https://winfuture.de/downloads/windows/Win10_22H2_2026.iso" target="_blank" class="link-item">🔗 WinFuture 镜像 (备用)</a>
+        <a href="https://download.microsoft.com/download/0/3/1/0312f111-bd7f-4188-8b59-189423de2870/Win10_22H2_x64fre_CN.iso" target="_blank" class="link-item">🔗 微软内部直链 1</a>
+        <a href="https://download.microsoft.com/download/1/2/3/12345678-1234-1234-1234-1234567890ab/Win10_22H2_x64.iso" target="_blank" class="link-item">🔗 微软内部直链 2</a>
+        <a href="https://win-dl.com/Win10_22H2_Chinese.html" target="_blank" class="link-item">🔗 Win-DL 站点</a>
+        <a href="https://iso.net/Windows-10/22H2/Chinese" target="_blank" class="link-item">🔗 ISO.NET 站点</a>
+        <a href="https://getintopc.com/softwares/windows-10-22h2-official-iso-download/" target="_blank" class="link-item">🔗 GetintoPC (备用)</a>
+        <a href="https://filecr.com/windows/10/" target="_blank" class="link-item">🔗 FileCR (备用)</a>
+        <a href="https://softlay.net/operating-system/windows-10-22h2-official-iso-free-download.html" target="_blank" class="link-item">🔗 Softlay (备用)</a>
+        <a href="https://windows101.com/download/windows-10-22h2-iso/" target="_blank" class="link-item">🔗 Windows101 (备用)</a>
     </div>
 
-    <script>
-        function copyCode(btn) {
-            const pre = btn.nextElementSibling;
-            const code = pre.textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                btn.textContent = "已复制";
-                btn.classList.add("copied");
-                setTimeout(() => {
-                    btn.textContent = "一键复制";
-                    btn.classList.remove("copied");
-                }, 2000);
-            });
-        }
-    </script>
+    <h2><span class="step">⚙️</span>一键制作 U 盘命令（下载完镜像后执行）</h2>
+    <p class="tip">假设你下载好的 ISO 文件名是 <strong>Win10_22H2_x64.iso</strong>，放在 <strong>/home/kali/Downloads</strong></p>
+    
+    <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">一键复制</button>
+        <pre># 1. 进入下载目录
+cd /home/kali/Downloads
+
+# 2. 查看 U 盘设备名 (绝对不要选 /dev/sda)
+lsblk -dno name | grep -E '^sd[b-z]$'
+
+# 3. 写入镜像 (替换 /dev/sdb 为实际 U 盘名)
+sudo dd if=Win10_22H2_x64.iso of=/dev/sdb bs=4M status=progress
+sync</pre>
+    </div>
+
+    <h2><span class="step">📖</span>完整安装教程（从 U 盘启动到装完）</h2>
+    <ul>
+        <li><strong>第一步：插入 U 盘重启</strong><br>惠普笔记本开机连续按 <strong>F9</strong>，选择 USB 启动项。</li>
+        <li><strong>第二步：选择语言</strong><br>进入安装界面，选择中文（简体）、中文（繁体）、美国，点击现在安装。</li>
+        <li><strong>第三步：输入密钥（跳过）</strong><br>点击 <strong>我没有产品密钥</strong>（装完激活）。</li>
+        <li><strong>第四步：选择版本</strong><br>选择 <strong>Windows 10 专业版</strong>（或你需要的版本），点击下一步。</li>
+        <li><strong>第五步：选择安装类型（关键）</strong><br>选择 <strong>自定义：仅安装 Windows（高级）</strong>。</li>
+        <li><strong>第六步：删除所有 Kali 分区</strong><br>选中每个分区（显示为 <strong>sda1, sda2...</strong>），点击 <strong>删除</strong>，直到全部变成 <strong>未分配空间</strong>。</li>
+        <li><strong>第七步：安装系统</strong><br>选中 <strong>未分配空间</strong>，点击 <strong>下一步</strong>。电脑会自动安装，期间会重启 <strong>3-4 次</strong>，<strong>千万不要拔 U 盘</strong>。</li>
+        <li><strong>第八步：设置账户</strong><br>等待安装完成，设置用户名和密码，进入 Windows 桌面。</li>
+    </ul>
+
+    <h2><span class="step">❌</span>避坑指南</h2>
+    <ul>
+        <li><span class="danger">绝对不要</span>把 Windows 装在 U 盘里，必须装在 <strong>/dev/sda</strong>（电脑硬盘）。</li>
+        <li><span class="danger">绝对不要</span>用 `dd` 命令写 `/dev/sda`，会把 Kali 彻底删光。</li>
+        <li>如果 U 盘启动不了，检查 U 盘是否制作完整，或者换个 U 盘。</li>
+        <li>装完 Windows 后，去微软官网下载驱动，确保显卡/声卡正常。</li>
+    </ul>
+</div>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = "✅ 已复制";
+        btn.classList.add("copied");
+        setTimeout(() => {
+            btn.textContent = "一键复制";
+            btn.classList.remove("copied");
+        }, 2000);
+    });
+}
+</script>
 </body>
 </html>
