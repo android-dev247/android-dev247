@@ -3,114 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>系统镜像与工具下载汇总</title>
+    <title>一键跳转文件快传</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", sans-serif;
-        }
         body {
-            background-color: #f8f9fa;
-            padding: 30px;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
         }
-        .download-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 25px;
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .download-title {
-            font-size: 20px;
-            color: #212529;
-            border-left: 4px solid #007bff;
-            padding-left: 15px;
-            margin-bottom: 20px;
-            font-weight: 600;
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
         }
-        .download-section {
-            margin-bottom: 25px;
+        .jump-btn {
+            padding: 14px 32px;
+            font-size: 18px;
+            background-color: #7a42f5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .section-subtitle {
-            font-size: 16px;
-            color: #007bff;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #e9ecef;
-        }
-        .download-list {
-            list-style: none;
-            padding-left: 10px;
-        }
-        .download-item {
-            margin: 10px 0;
-            font-size: 14px;
-        }
-        .download-item a {
-            color: #007bff;
-            text-decoration: none;
-            word-break: break-all;
-        }
-        .download-item a:hover {
-            text-decoration: underline;
-        }
-        .download-item span {
-            color: #6c757d;
-            margin-right: 8px;
+        .jump-btn:hover {
+            background-color: #6332cc;
         }
     </style>
 </head>
 <body>
-    <div class="download-container">
-        <h1 class="download-title">Windows 镜像及启动盘工具下载</h1>
-        
-        <!-- Windows官方镜像下载区 -->
-        <div class="download-section">
-            <h2 class="section-subtitle">Windows 官方镜像下载</h2>
-            <ul class="download-list">
-                <li class="download-item">
-                    <span>Windows 10：</span>
-                    <a href="https://www.microsoft.com/zh-cn/software-download/windows10" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows10</a>
-                </li>
-                <li class="download-item">
-                    <span>Windows 11：</span>
-                    <a href="https://www.microsoft.com/zh-cn/software-download/windows11" target="_blank">https://www.microsoft.com/zh-cn/software-download/windows11</a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- 启动盘制作工具区 -->
-        <div class="download-section">
-            <h2 class="section-subtitle">USB启动盘制作工具</h2>
-            <ul class="download-list">
-                <li class="download-item">
-                    <span>Rufus 官网：</span>
-                    <a href="https://rufus.ie/zh/" target="_blank">https://rufus.ie/zh/</a>
-                </li>
-                <li class="download-item">
-                    <span>微软媒体创建工具：</span>
-                    <a href="https://www.microsoft.com/zh-cn/software-download/windows10" target="_blank">集成于Windows 10官方下载页</a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- 可信第三方镜像区 -->
-        <div class="download-section">
-            <h2 class="section-subtitle">可信第三方镜像下载（版本更全）</h2>
-            <ul class="download-list">
-                <li class="download-item">
-                    <span>MSDN I Tell You 新版：</span>
-                    <a href="https://next.itellyou.cn/" target="_blank">https://next.itellyou.cn/</a>
-                </li>
-                <li class="download-item">
-                    <span>TechBench 直链下载：</span>
-                    <a href="https://tb.rg-adguard.net/" target="_blank">https://tb.rg-adguard.net/</a>
-                </li>
-            </ul>
-        </div>
+    <div class="container">
+        <h1>📁 局域网文件快传</h1>
+        <button class="jump-btn" onclick="jumpToTransfer()">一键跳转文件传输网站</button>
     </div>
+
+    <script>
+        function jumpToTransfer() {
+            // 跳转到目标文件传输网站
+            window.open('https://transfer.52python.cn/?type=file', '_blank');
+        }
+    </script>
 </body>
 </html>
