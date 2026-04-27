@@ -1,460 +1,944 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>3D颗粒爱心旋转 | 粒子特效 | 星星背景</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
-        }
-        /* 可选：添加一个简单的提示文字，不影响体验 */
-        #info {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            color: rgba(255,255,255,0.6);
-            background: rgba(0,0,0,0.4);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            pointer-events: none;
-            z-index: 10;
-            backdrop-filter: blur(4px);
-            font-family: monospace;
-        }
-        @media (max-width: 600px) {
-            #info { display: none; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>枫叶 - 黑客攻防技术大全</title>
+<style>
+/* 基础样式 - 保留您的原始设计 */
+#snowCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #4A90E2 0%, #4A90E2 50%, #95A5A6 50%, #95A5A6 100%);
+  font-family: system-ui;
+  min-height: 100vh;
+}
+
+.bg-particles {
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  z-index:0;
+  opacity:0.3;
+}
+.particle {
+  position:absolute;
+  width:3px;height:3px;
+  background:rgba(255,255,255,0.4);
+  border-radius:50%;
+  animation:float 15s infinite linear;
+}
+
+@keyframes float {
+  0% { transform:translateY(100vh) translateX(0); opacity:0; }
+  10% { opacity:1; }
+  90% { opacity:1; }
+  100% { transform:translateY(-100px) translateX(100px); opacity:0; }
+}
+
+.scroll-text-wrap{
+  position:fixed;
+  width:100%;
+  height:40px;
+  overflow:hidden;
+  top:80px;
+  left:0;
+  z-index:1;
+  pointer-events:none;
+}
+.scroll-text{
+  white-space:nowrap;
+  color:rgba(255,255,255,0.6);
+  font-size:16px;
+  line-height:40px;
+  animation:textMove 25s linear infinite;
+}
+@keyframes textMove{
+  0%{transform:translateX(-100%)}
+  100%{transform:translateX(100%)}
+}
+
+.main-content {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  z-index: 2;
+  padding-bottom: 80px;
+}
+
+.page-container {
+  display: none;
+  width: 100%;
+  min-height: calc(100vh - 185px);
+  padding-top: 120px;
+  box-sizing: border-box;
+  align-items: center;
+  flex-direction: column;
+}
+
+.page-container.active {
+  display: flex;
+}
+
+.status-bar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  border: 2px solid #fff;
+  border-radius: 16px;
+  padding: 15px 20px;
+  display: flex;
+  gap: 12px;
+  font-size: 20px;
+  z-index: 100;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  color: #000;
+}
+
+.check {
+  width: 22px;
+  height: 22px;
+  border-left: 3px solid #000;
+  border-bottom: 3px solid #000;
+  transform: rotate(-45deg);
+}
+
+/* 资料卡片样式 */
+.content-card {
+  width: 92%;
+  max-width: 800px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 18px;
+  overflow: hidden;
+  margin: 15px 0;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  padding: 20px;
+  color: #333;
+}
+
+.attack-item {
+  background: rgba(255,255,255,0.9);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px 0;
+  border-left: 5px solid #2196F3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.attack-title {
+  color: #d32f2f;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.attack-content {
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.attack-section {
+  margin: 15px 0;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #4CAF50;
+}
+
+.attack-section-title {
+  font-weight: bold;
+  color: #2E7D32;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.code-block {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  border: 1px solid #333;
+}
+
+.defense-box {
+  background: #e8f5e9;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  color: #2E7D32;
+}
+
+.warning-box {
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  color: #c62828;
+}
+
+.tip-box {
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  color: #1565c0;
+}
+
+.stat-box {
+  background: #fff3e0;
+  border: 1px solid #ffe0b2;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #ef6c00;
+}
+
+/* 底部导航栏 */
+.bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 65px;
+  background: #ffffff;
+  display: flex;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+  z-index: 1000;
+}
+.navItem {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.navItem::before {
+  content: "";
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: #e3edfb;
+  transform: scale(0);
+  transition: 0.25s ease;
+}
+.navItem.active::before {
+  transform: scale(1);
+}
+.navIcon {
+  position: relative;
+  z-index: 2;
+  color: #757575;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.navItem.active .navIcon {
+  color: #2196F3;
+  font-weight: 600;
+}
+
+/* 返回按钮 */
+.back-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.9);
+  border: 2px solid #2196F3;
+  border-radius: 16px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 100;
+  color: #2196F3;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.back-btn:hover {
+  background: #2196F3;
+  color: white;
+}
+</style>
 </head>
 <body>
-    <div id="info">❤️ 3D 粒子爱心 | 旋转 | 120fps 流畅体验</div>
 
-    <!-- 引入 Three.js 核心库以及扩展组件 -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
-            }
-        }
-    </script>
+<!-- 顶部流动文字 -->
+<div class="scroll-text-wrap">
+  <div class="scroll-text">
+    黑客攻防教学 · 零基础入门 · Web安全 · XSS漏洞 · 代码学习 · 渗透测试 · 漏洞挖掘 · CSRF攻防 · ClickJacking攻击
+  </div>
+</div>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-        
-        // --- 初始化场景、相机、渲染器 (开启性能优化，追求高帧率) ---
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x000000); // 纯黑背景
-        scene.fog = null; // 禁用雾效提升性能
+<canvas id="snowCanvas"></canvas>
+<div class="bg-particles" id="bgParticles"></div>
 
-        // 透视相机: 视野, 宽高比, 近平面, 远平面
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 0, 3.5);
-        camera.lookAt(0, 0, 0);
+<!-- 状态栏 -->
+<div class="status-bar">
+  <span>学习中</span>
+  <div class="check"></div>
+</div>
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.toneMapping = THREE.ReinhardToneMapping;
-        renderer.toneMappingExposure = 1.2;
-        document.body.appendChild(renderer.domElement);
+<!-- 返回按钮 -->
+<div class="back-btn" onclick="switchTab(0)">返回首页</div>
 
-        // --- 后期特效: Bloom (发光效果增强颗粒爱心的视觉冲击，但不影响帧率，性能开销可控) ---
-        const renderScene = new RenderPass(scene, camera);
-        const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.3, 0.85);
-        bloomPass.threshold = 0.1;
-        bloomPass.strength = 0.65;
-        bloomPass.radius = 0.5;
-        const effectComposer = new EffectComposer(renderer);
-        effectComposer.addPass(renderScene);
-        effectComposer.addPass(bloomPass);
+<!-- 主内容容器 -->
+<div class="main-content">
+  <!-- 首页 -->
+  <div class="page-container active" id="home-page">
+    <div class="content-card">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #d32f2f; margin: 0;">黑客攻防技术大全</h2>
+        <p style="color: #666;">基于文档内容整理的完整攻防技术体系</p>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('xss')">
+        <div class="attack-title">1. XSS跨站脚本攻击</div>
+        <div class="attack-content">
+          在有漏洞的网站页面中注入恶意脚本，当用户访问页面时脚本在用户浏览器中执行。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('sql')">
+        <div class="attack-title">2. SQL注入攻击</div>
+        <div class="attack-content">
+          在用户输入的查询语句中注入SQL指令，绕过验证或非法访问、篡改数据库数据。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('fuzzing')">
+        <div class="attack-title">3. 模糊测试（Fuzzing）</div>
+        <div class="attack-content">
+          向目标程序输入大量异常、随机、畸形数据，触发程序崩溃或暴露内存漏洞。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('zero-day')">
+        <div class="attack-title">4. 零日攻击（Zero-day）</div>
+        <div class="attack-content">
+          利用软件厂商未发现、未修补的安全漏洞进行攻击，破坏力极强。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('traversal')">
+        <div class="attack-title">5. 路径/目录遍历攻击</div>
+        <div class="attack-content">
+          通过在路径中注入"../"等符号，突破网站根目录限制，访问服务器敏感文件。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('ddos')">
+        <div class="attack-title">6. DDoS分布式拒绝服务攻击</div>
+        <div class="attack-content">
+          利用大量傀儡机向目标服务器发送海量请求，耗尽服务器带宽与资源。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('mitm')">
+        <div class="attack-title">7. 中间人攻击（MITM）</div>
+        <div class="attack-content">
+          在用户与服务器之间拦截通信数据，窃听、篡改或伪造信息。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('bruteforce')">
+        <div class="attack-title">8. 暴力破解攻击</div>
+        <div class="attack-content">
+          通过自动化工具尝试所有可能的账号密码组合，获取登录权限。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('thirdparty')">
+        <div class="attack-title">9. 第三方/未知代码风险</div>
+        <div class="attack-content">
+          引入第三方插件、库、组件中隐藏的恶意代码或后门。
+        </div>
+      </div>
+      
+      <div class="attack-item" onclick="showAttack('phishing')">
+        <div class="attack-title">10. 网络钓鱼攻击</div>
+        <div class="attack-content">
+          伪装成可信机构诱导用户泄露账号密码、验证码等敏感信息。
+        </div>
+      </div>
+    </div>
+  </div>
 
-        // --- 辅助: 简易星空粒子系统 (小星星背景) ---
-        // 创建大量的静态星星点，分布在远处，营造深邃星空感
-        const starCount = 1800;
-        const starGeometry = new THREE.BufferGeometry();
-        const starPositions = new Float32Array(starCount * 3);
-        for (let i = 0; i < starCount; i++) {
-            // 分布在球壳范围或者立方体范围，为了背景深邃，范围较大 -30 到 30 之间，z轴稍微远离
-            starPositions[i*3] = (Math.random() - 0.5) * 200;
-            starPositions[i*3+1] = (Math.random() - 0.5) * 120;
-            starPositions[i*3+2] = (Math.random() - 0.5) * 80 - 40; // 在相机后方和前方都有分布，但主要远处
-        }
-        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-        
-        // 星星颜色: 略带微弱的白色/淡蓝/淡黄，增加层次
-        const starColors = new Float32Array(starCount * 3);
-        for (let i = 0; i < starCount; i++) {
-            const intensity = 0.4 + Math.random() * 0.8;
-            const colorChoice = Math.random();
-            if (colorChoice < 0.7) {
-                starColors[i*3] = intensity;
-                starColors[i*3+1] = intensity * 0.9;
-                starColors[i*3+2] = intensity;
-            } else if (colorChoice < 0.85) {
-                starColors[i*3] = intensity;
-                starColors[i*3+1] = intensity * 0.7;
-                starColors[i*3+2] = intensity * 0.5;
-            } else {
-                starColors[i*3] = intensity * 0.7;
-                starColors[i*3+1] = intensity * 0.8;
-                starColors[i*3+2] = intensity;
-            }
-        }
-        starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
-        
-        const starMaterial = new THREE.PointsMaterial({ size: 0.12, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
-        const stars = new THREE.Points(starGeometry, starMaterial);
-        scene.add(stars);
-        
-        // 额外添加一层更稀疏更亮的星星，增加景深感
-        const starCountBright = 600;
-        const starGeoBright = new THREE.BufferGeometry();
-        const starPosBright = new Float32Array(starCountBright * 3);
-        for (let i = 0; i < starCountBright; i++) {
-            starPosBright[i*3] = (Math.random() - 0.5) * 180;
-            starPosBright[i*3+1] = (Math.random() - 0.5) * 100;
-            starPosBright[i*3+2] = (Math.random() - 0.5) * 100 - 50;
-        }
-        starGeoBright.setAttribute('position', new THREE.BufferAttribute(starPosBright, 3));
-        const starMatBright = new THREE.PointsMaterial({ color: 0xffdd99, size: 0.18, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
-        const starsBright = new THREE.Points(starGeoBright, starMatBright);
-        scene.add(starsBright);
-        
-        // 再添加极小闪烁星星(通过简单动画在update中改变透明度或大小太耗性能，不做了，保持静态足够)
-        
-        // --- 核心: 颗粒爱心 ---
-        // 爱心参数方程: x = 16 * sin(t)^3, y = 13cos(t) - 5 cos(2t) - 2cos(3t) - cos(4t)
-        // 这是一个经典的笛卡尔爱心曲线，为了3D立体感，我们将其绕Y轴旋转一定厚度，并在Z轴方向扩展，生成粒子云。
-        // 为了颗粒感更加丰富，采用分层粒子: 主要爱心表面粒子 + 内部少量弥散粒子，使爱心看起来像发光颗粒云。
-        
-        // 粒子总数 (追求高密度颗粒效果，同时保证120fps，现代GPU轻松处理1.5w个点)
-        const particleCount = 18500;
-        
-        // 存储位置和颜色
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
-        
-        // 爱心缩放因子 (控制大小适应屏幕)
-        const scaleFactor = 0.055;
-        
-        // 生成策略: 大部分粒子集中在爱心表面和近表面，一部分粒子在爱心周围光晕状弥散
-        for (let i = 0; i < particleCount; i++) {
-            // 决定粒子类型: 0 核心表面粒子, 1 内部填充粒子, 2 外围光晕粒子
-            let type = 0;
-            const rand = Math.random();
-            if (rand < 0.75) type = 0;      // 表面及近表面主体
-            else if (rand < 0.92) type = 1; // 内部填充，增加体积感
-            else type = 2;                  // 外围光晕，营造梦幻颗粒感
-            
-            let x = 0, y = 0, z = 0;
-            let r = 0, g = 0, b = 0;
-            
-            if (type === 0) {
-                // 表面区域: 基于爱心曲线生成，并添加径向厚度 (法线方向微小偏移)
-                // 随机参数 t (角度参数)
-                const t = Math.random() * Math.PI * 2;
-                // 经典爱心公式
-                const xRaw = 16 * Math.pow(Math.sin(t), 3);
-                const yRaw = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
-                // 添加厚度: 在法线方向偏移，爱心曲线的法线方向近似可通过导数旋转获得，简化: 随机在垂直于曲线的平面加偏移
-                // 但为了简单且美观，主要沿Z轴扩展以及径向微调，形成立体颗粒簇
-                // 并且沿曲线方向也有微小偏移增加颗粒离散感
-                const offsetStrength = 0.28;
-                const offX = (Math.random() - 0.5) * offsetStrength;
-                const offY = (Math.random() - 0.5) * offsetStrength;
-                const offZ = (Math.random() - 0.5) * 0.65; // Z轴厚度，让爱心立体
-                
-                x = (xRaw + offX) * scaleFactor;
-                y = (yRaw + offY) * scaleFactor;
-                z = offZ * 0.8;
-                
-                // 颜色: 从中心红色到边缘橙红/粉红渐变，基于位置和随机微调
-                const normY = (yRaw + 5) / 18; // 映射大致范围 -5~13 -> 0~1
-                const intensity = 0.7 + Math.random() * 0.5;
-                // 主色调: 红/橙红
-                r = 0.9 + Math.random() * 0.3;
-                g = 0.2 + Math.random() * 0.35 + (1 - normY) * 0.2;
-                b = 0.2 + Math.random() * 0.3;
-                // 根据位置调整: 心尖处更亮，心窝处稍暗但更红
-                if (yRaw < -2) {
-                    r += 0.15;
-                    g += 0.05;
-                } else if (yRaw > 5) {
-                    g += 0.1;
-                    r -= 0.05;
-                }
-                // 限制范围并增加亮度随机
-                r = Math.min(1.0, r * intensity);
-                g = Math.min(0.85, g * intensity * 0.9);
-                b = Math.min(0.7, b * intensity * 0.8);
-            } 
-            else if (type === 1) {
-                // 内部填充粒子: 在爱心体积内部随机生成，缩小范围，使爱心看起来饱满
-                // 采用 rejection sampling 基于爱心形状内部的简单方法: 生成点在一定范围内，然后基于心形边界判断
-                // 为了性能，我们预先生成: 让点在心形内部偏移，实际上通过缩放心形曲线并添加随机扰动
-                const t = Math.random() * Math.PI * 2;
-                let xRaw = 16 * Math.pow(Math.sin(t), 3);
-                let yRaw = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
-                // 内部偏移: 向内收缩 0.3~0.7 倍，并加随机
-                const innerFactor = 0.3 + Math.random() * 0.5;
-                xRaw = xRaw * innerFactor;
-                yRaw = yRaw * innerFactor;
-                // 增加额外随机扩散
-                const spread = 0.35;
-                x = (xRaw + (Math.random() - 0.5) * spread) * scaleFactor;
-                y = (yRaw + (Math.random() - 0.5) * spread) * scaleFactor;
-                z = (Math.random() - 0.5) * 0.9;
-                
-                // 内部颜色更浓郁，偏深红/亮红
-                r = 0.85 + Math.random() * 0.35;
-                g = 0.15 + Math.random() * 0.3;
-                b = 0.1 + Math.random() * 0.3;
-                // 稍微增加亮度变化
-                const bright = 0.8 + Math.random() * 0.6;
-                r = Math.min(1.0, r * bright);
-                g = Math.min(0.7, g * bright);
-                b = Math.min(0.6, b * bright);
-            } 
-            else {
-                // 外围光晕粒子: 围绕爱心外围随机球形/椭球形分布，营造星尘效果
-                // 采用爱心形状的扩展范围，沿爱心曲线放大并加随机
-                const t = Math.random() * Math.PI * 2;
-                let xRaw = 16 * Math.pow(Math.sin(t), 3);
-                let yRaw = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
-                // 外围偏移较大
-                const outerScale = 1.1 + Math.random() * 0.6;
-                xRaw = xRaw * outerScale;
-                yRaw = yRaw * outerScale;
-                const radialOffset = (Math.random() - 0.5) * 0.9;
-                const angleZ = Math.random() * Math.PI * 2;
-                x = (xRaw + Math.cos(angleZ) * radialOffset) * scaleFactor;
-                y = (yRaw + Math.sin(angleZ) * radialOffset * 0.8) * scaleFactor;
-                z = (Math.random() - 0.5) * 1.4;
-                
-                // 外围颜色: 淡红, 金色, 粉红, 略带蓝紫
-                const colorType = Math.random();
-                if (colorType < 0.7) {
-                    r = 0.9 + Math.random() * 0.3;
-                    g = 0.3 + Math.random() * 0.5;
-                    b = 0.4 + Math.random() * 0.4;
-                } else if (colorType < 0.9) {
-                    r = 1.0;
-                    g = 0.6 + Math.random() * 0.4;
-                    b = 0.3 + Math.random() * 0.3;
-                } else {
-                    r = 0.7 + Math.random() * 0.3;
-                    g = 0.4 + Math.random() * 0.4;
-                    b = 0.9 + Math.random() * 0.3;
-                }
-                // 外围透明度通过材质整体控制透明度更好，颜色较亮且半透感
-                const alphaMul = 0.7 + Math.random() * 0.5;
-                r = Math.min(1.0, r * alphaMul);
-                g = Math.min(1.0, g * alphaMul);
-                b = Math.min(1.0, b * alphaMul);
-            }
-            
-            positions[i*3] = x;
-            positions[i*3+1] = y;
-            positions[i*3+2] = z;
-            
-            colors[i*3] = r;
-            colors[i*3+1] = g;
-            colors[i*3+2] = b;
-        }
-        
-        const heartGeometry = new THREE.BufferGeometry();
-        heartGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        heartGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        
-        // 创建圆形渐变纹理用于粒子，让每个颗粒更加柔和 (圆形渐变点精灵)
-        const createParticleTexture = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 32;
-            canvas.height = 32;
-            const ctx = canvas.getContext('2d');
-            ctx.beginPath();
-            ctx.arc(16, 16, 14, 0, 2 * Math.PI);
-            ctx.fillStyle = 'white';
-            ctx.fill();
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.shadowBlur = 0;
-            const gradient = ctx.createRadialGradient(16, 16, 0, 16, 16, 14);
-            gradient.addColorStop(0, 'rgba(255,255,255,1)');
-            gradient.addColorStop(0.4, 'rgba(255,180,100,0.9)');
-            gradient.addColorStop(0.7, 'rgba(255,80,80,0.6)');
-            gradient.addColorStop(1, 'rgba(255,0,0,0)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 32, 32);
-            return new THREE.CanvasTexture(canvas);
-        };
-        
-        const particleMaterial = new THREE.PointsMaterial({
-            size: 0.045,
-            vertexColors: true,
-            map: createParticleTexture(),
-            transparent: true,
-            opacity: 0.95,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,   // 允许粒子叠加，增强光晕感
-            depthTest: true
-        });
-        
-        const heartParticles = new THREE.Points(heartGeometry, particleMaterial);
-        scene.add(heartParticles);
-        
-        // 增加一层更细小的高光粒子，围绕爱心边缘，强化颗粒感 (额外的粒子层，让爱心看起来更闪耀)
-        const extraGlowCount = 4000;
-        const extraPositions = new Float32Array(extraGlowCount * 3);
-        const extraColors = new Float32Array(extraGlowCount * 3);
-        for (let i = 0; i < extraGlowCount; i++) {
-            const t = Math.random() * Math.PI * 2;
-            const xRaw = 16 * Math.pow(Math.sin(t), 3);
-            const yRaw = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
-            // 沿着法线方向轻微向外偏移
-            const outward = 0.12 + Math.random() * 0.28;
-            const angleOff = Math.random() * Math.PI * 2;
-            const offX = Math.cos(angleOff) * outward * 0.6;
-            const offY = Math.sin(angleOff) * outward * 0.6;
-            const offZ = (Math.random() - 0.5) * 0.5;
-            let x = (xRaw + offX) * scaleFactor;
-            let y = (yRaw + offY) * scaleFactor;
-            let z = offZ * 0.9;
-            // 随机抖动
-            x += (Math.random() - 0.5) * 0.03;
-            y += (Math.random() - 0.5) * 0.03;
-            extraPositions[i*3] = x;
-            extraPositions[i*3+1] = y;
-            extraPositions[i*3+2] = z;
-            
-            // 高光颜色: 橙红、金黄、亮白
-            const colRand = Math.random();
-            let r, g, b;
-            if (colRand < 0.6) {
-                r = 1.0;
-                g = 0.5 + Math.random() * 0.5;
-                b = 0.3 + Math.random() * 0.4;
-            } else if (colRand < 0.85) {
-                r = 1.0;
-                g = 0.8 + Math.random() * 0.2;
-                b = 0.5 + Math.random() * 0.4;
-            } else {
-                r = 1.0;
-                g = 0.9;
-                b = 0.7;
-            }
-            extraColors[i*3] = r;
-            extraColors[i*3+1] = g;
-            extraColors[i*3+2] = b;
-        }
-        const extraGlowGeo = new THREE.BufferGeometry();
-        extraGlowGeo.setAttribute('position', new THREE.BufferAttribute(extraPositions, 3));
-        extraGlowGeo.setAttribute('color', new THREE.BufferAttribute(extraColors, 3));
-        const glowMaterial = new THREE.PointsMaterial({ size: 0.028, vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
-        const extraGlowPoints = new THREE.Points(extraGlowGeo, glowMaterial);
-        scene.add(extraGlowPoints);
-        
-        // --- 简单环境光虽然点材质不受光影响，但为了场景如果有其他元素，不加也无妨，但是不加光也没问题，因为粒子自发光颜色---
-        
-        // --- 让星空有缓慢的自转，增加动态背景 (轻微，不影响性能) ---
-        // 为了让星空更有生气，星星整体缓慢旋转
-        // 爱心单独旋转，星空反向慢旋或者同向慢旋
-        
-        // --- 动画控制: 爱心旋转 (绕Y轴为主，略微X轴倾斜增加动感) ---
-        // 创建组以便整体旋转? 单独旋转heartParticles和extraGlowPoints即可，但星星背景最好不动或者微动，让爱心旋转更有对比
-        
-        let time = 0;
-        
-        // 性能监控标志 (不实际显示，但保证无卡顿，通过requestAnimationFrame 的帧间隔控制)
-        let lastTime = performance.now();
-        let frameCount = 0;
-        
-        // 辅助: 让星星背景有极缓慢的自转，深邃感
-        function animateStars() {
-            stars.rotation.y += 0.0004;
-            stars.rotation.x += 0.0002;
-            starsBright.rotation.y -= 0.0003;
-            starsBright.rotation.z += 0.0001;
-        }
-        
-        // 爱心旋转速度
-        let rotY = 0;
-        let rotX = 0.2; // 轻微倾斜
-        
-        // 创建一个小光晕效果: 在爱心中心添加一个点光源或者透镜光晕会降低性能，不添加额外光源，依靠bloom已经足够
-        
-        // --- 鼠标交互? 可以轻微影响旋转速度或者视角，但为了简洁不加入过多逻辑，专注于120帧，但加入极简的自动旋转---
-        
-        // 动画循环
-        function render() {
-            // 性能优化: 使用 requestAnimationFrame 自带节流，无额外开销，确保渲染帧率最大化
-            const now = performance.now();
-            const delta = Math.min(1/30, (now - lastTime) / 1000);
-            lastTime = now;
-            
-            // 更新旋转角度，匀速旋转 (每秒约0.8弧度，大约12秒一圈，优雅)
-            rotY += 0.008;
-            rotX = 0.15 + Math.sin(time * 0.3) * 0.05; // 轻微上下摆动，增加生动性
-            
-            // 应用旋转: 分别旋转爱心主体和高光层，使它们同步
-            heartParticles.rotation.y = rotY;
-            heartParticles.rotation.x = rotX;
-            extraGlowPoints.rotation.y = rotY;
-            extraGlowPoints.rotation.x = rotX;
-            
-            // 星空缓慢移动
-            animateStars();
-            
-            // 动态轻微改变粒子的大小 (极微小变化增加呼吸感，性能无影响)
-            // 为了帧率不频繁修改材质uniform，但只是size变化开销极小
-            const pulse = 0.98 + Math.sin(time * 3) * 0.02;
-            particleMaterial.size = 0.045 * pulse;
-            glowMaterial.size = 0.028 * (0.95 + Math.sin(time * 4.2) * 0.03);
-            // 星星大小微调
-            starMaterial.size = 0.12 * (0.9 + Math.sin(time * 0.5) * 0.1);
-            starMatBright.size = 0.18 * (0.9 + Math.sin(time * 0.7) * 0.1);
-            
-            // 更新后期效果强度稍微动态 (可选)
-            // bloomPass.strength = 0.65 + Math.sin(time * 1.2) * 0.05;
-            
-            // 相机轻微浮动 (非常细微，增强3D感)
-            camera.position.x += (0 - camera.position.x) * 0.05;
-            camera.position.y += (Math.sin(time * 0.2) * 0.02 - camera.position.y) * 0.05;
-            camera.lookAt(0, 0, 0);
-            
-            // 使用 EffectComposer 渲染
-            effectComposer.render();
-            
-            time += 0.016; // 近似每一帧增加，与delta无关，保持连续
-            
-            // 简单帧率监控 (不输出到控制台避免开销，只是理论上保证流畅)
-            requestAnimationFrame(render);
-        }
-        
-        // 启动动画
-        render();
-        
-        // 窗口大小适配，更新相机比例和渲染器尺寸
-        window.addEventListener('resize', onWindowResize, false);
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            effectComposer.setSize(window.innerWidth, window.innerHeight);
-        }
-        
-        // 控制台输出提示，表示运行流畅
-        console.log('3D颗粒爱心已启动 | 粒子数量: ' + (particleCount + extraGlowCount) + ' + 星星粒子: ' + (starCount + starCountBright) + ' | 高性能模式');
-        
-        // 可选: 添加一个简单的性能友好提示，确保没有额外开销
-    </script>
+  <!-- 详细资料页面 -->
+  <div class="page-container" id="detail-page">
+    <div class="content-card" id="attack-detail">
+      <!-- 内容由JavaScript动态加载 -->
+    </div>
+  </div>
+
+  <!-- 工具页面 -->
+  <div class="page-container" id="tools-page">
+    <div class="content-card">
+      <div style="text-align: center; margin: 30px 0;">
+        <h2 style="color: #d32f2f;">工具页面</h2>
+        <p style="color: #666;">功能开发中</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 底部导航栏 -->
+<div class="bottomNav">
+  <div class="navItem active" onclick="switchTab(0)">
+    <div class="navIcon">首页</div>
+  </div>
+  <div class="navItem" onclick="switchTab(1)">
+    <div class="navIcon">资料</div>
+  </div>
+  <div class="navItem" onclick="switchTab(2)">
+    <div class="navIcon">工具</div>
+  </div>
+</div>
+
+<script>
+// 攻击技术数据 - 完全基于文档内容
+const attackData = {
+  'xss': {
+    title: 'XSS跨站脚本攻击',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        在有漏洞的网站页面中注入恶意脚本，当用户访问页面时脚本在用户浏览器中执行。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        1. 反射型（URL注入）<br>
+        2. 存储型（留言/评论注入）<br>
+        3. DOM型（通过修改DOM触发）
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 窃取Cookie<br>
+        2. 会话劫持<br>
+        3. 篡改页面内容<br>
+        4. 植入恶意代码
+      </div>
+      
+      <div class="stat-box">
+        相关研究表明，跨站脚本攻击大约占据了所有攻击的40%，是最为常见的一类网络攻击。
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 设置Web应用防火墙（WAF）<br>
+        2. 对用户输入进行过滤和编码<br>
+        3. 使用CSP（内容安全策略）<br>
+        4. 设置HttpOnly Cookie
+      </div>
+    `
+  },
+  'sql': {
+    title: 'SQL注入攻击',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        在用户输入的查询语句中注入SQL指令，绕过验证或非法访问、篡改数据库数据。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        通过登录框、搜索框、URL参数等输入点注入恶意SQL语句。<br>
+        <div class="code-block">
+-- 经典SQL注入示例
+' OR 1=1 --
+admin' --
+'; DROP TABLE users; --
+        </div>
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 脱库（获取完整数据库）<br>
+        2. 获取管理员账号密码<br>
+        3. 删除数据<br>
+        4. 获取服务器权限
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 始终采用参数化查询（PreparedStatement）<br>
+        2. 对用户输入进行严格的验证和过滤<br>
+        3. 使用ORM框架的安全API<br>
+        4. 最小权限原则，数据库用户只授予必要权限<br>
+        5. 定期更新和修补数据库系统
+      </div>
+    `
+  },
+  'fuzzing': {
+    title: '模糊测试（Fuzzing）',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        向目标程序输入大量异常、随机、畸形数据，触发程序崩溃或暴露内存漏洞。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        1. 使用自动化工具向网络服务发送异常数据<br>
+        2. 对软件接口进行模糊测试<br>
+        3. 针对文件格式进行异常输入测试<br>
+        4. Python编写测试框架，观察内存变化
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">相关攻击技术</div>
+        1. Dword Shoot攻击：利用漏洞篡改堆空间<br>
+        2. Heap Spray：用无用数据填满内存，配合零日漏洞触发<br>
+        3. 栈&堆溢出：输入量爆炸时导致系统崩溃<br>
+        4. 格式字符串渗透：让printf吐出敏感信息<br>
+        5. 整数运算盲区：数值越界导致内存计算灾难
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">缓冲区溢出三要素</div>
+        超长输入 + 缺失错误处理 + 特权环境 = 灾难级后果
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 保持系统和应用安全更新<br>
+        2. 实施输入验证和边界检查<br>
+        3. 使用地址空间布局随机化（ASLR）<br>
+        4. 数据执行保护（DEP）<br>
+        5. 代码完整性检查
+      </div>
+    `
+  },
+  'zero-day': {
+    title: '零日攻击（Zero-day）',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        利用软件厂商未发现、未修补的安全漏洞进行攻击，破坏力极强。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        1. 提前获取安全补丁信息，分析补丁前后差异定位漏洞<br>
+        2. 直接攻击尚未更新的系统<br>
+        3. 利用内存漏洞结合Heap Spray等技术
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击案例</div>
+        谷歌在Windows和Chrome软件中发现了潜在的零日攻击，攻击者从两个方面获利：<br><br>
+        第一种情况：获得关于即将到来的安全更新的信息，在更新上线前分析出漏洞位置<br>
+        第二种情况：获取补丁信息，然后攻击尚未更新系统的用户
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 在新版本发布后及时更新软件和安全补丁<br>
+        2. 使用下一代防火墙和入侵检测系统<br>
+        3. 实施应用程序白名单<br>
+        4. 网络分段和最小权限访问<br>
+        5. 安全监控和异常行为检测
+      </div>
+    `
+  },
+  'traversal': {
+    title: '路径/目录遍历攻击',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        通过在路径中注入"../"等符号，突破网站根目录限制，访问服务器上的敏感文件。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        在URL或文件上传路径中构造"../"序列，向上遍历目录。<br>
+        <div class="code-block">
+http://example.com/../../etc/passwd
+http://example.com/../../../windows/win.ini
+        </div>
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 读取服务器配置文件<br>
+        2. 获取数据库账号密码<br>
+        3. 访问服务器其他网站文件<br>
+        4. 获取网站访问权限
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 对用户输入进行安全净化，防止传输到文件系统API<br>
+        2. 使用白名单验证文件路径<br>
+        3. 对文件路径进行规范化处理<br>
+        4. Web应用运行在受限权限账户下<br>
+        5. 定期进行安全审计和漏洞扫描
+      </div>
+    `
+  },
+  'ddos': {
+    title: 'DDoS分布式拒绝服务攻击',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        利用大量傀儡机（僵尸网络）向目标服务器发送海量请求，耗尽服务器带宽与资源。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        1. UDP洪水攻击<br>
+        2. TCP连接洪水攻击<br>
+        3. HTTP请求洪水攻击<br>
+        4. SYN Flood攻击<br>
+        5. 利用反射放大攻击
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 网站完全瘫痪，无法访问<br>
+        2. 业务中断，造成直接经济损失<br>
+        3. 单次DDoS攻击可令小企业平均损失12.3万美元<br>
+        4. 大型企业的损失可达230万美元<br>
+        5. 常作为其他攻击的掩护手段
+      </div>
+      
+      <div class="warning-box">
+        攻击统计数据：DDoS攻击会令网站暂时或永久掉线，常与其他攻击方法搭配使用，攻击者利用DDoS攻击吸引安全系统火力，从而暗中利用漏洞入侵系统。
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 通过内容分发网络（CDN）缓解流量压力<br>
+        2. 使用负载均衡器和可扩展资源<br>
+        3. 部署Web应用防火墙（WAF）<br>
+        4. DDoS防护服务（如Cloudflare、阿里云DDoS高防）<br>
+        5. 流量监控和异常检测系统<br>
+        6. 限制连接频率和请求数量
+      </div>
+    `
+  },
+  'mitm': {
+    title: '中间人攻击（MITM）',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        在用户与服务器之间拦截通信数据，窃听、篡改或伪造信息。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击条件</div>
+        1. 目标网站未使用HTTPS加密<br>
+        2. 利用ARP欺骗技术<br>
+        3. DNS劫持手段<br>
+        4. 公共WiFi网络中间人
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 窃取用户账号密码<br>
+        2. 获取个人隐私信息<br>
+        3. 篡改传输内容<br>
+        4. 注入恶意代码<br>
+        5. 会话劫持
+      </div>
+      
+      <div class="tip-box">
+        识别方法：检查网站URL是否以https开头，HTTPS中的"s"指的就是数据是加密的，缺了"s"就是未加密。
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 在网站上安装SSL证书，使用HTTPS加密<br>
+        2. 使用VPN进行加密通信<br>
+        3. 避免使用不安全的公共WiFi<br>
+        4. 使用HTTP严格传输安全（HSTS）<br>
+        5. 证书绑定（Certificate Pinning）<br>
+        6. 定期检查SSL证书有效性
+      </div>
+    `
+  },
+  'bruteforce': {
+    title: '暴力破解攻击',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        通过自动化工具尝试所有可能的账号密码组合，获取登录权限。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        1. 使用字典文件进行密码枚举<br>
+        2. 彩虹表攻击（预计算哈希值）<br>
+        3. 社会工程学收集弱口令<br>
+        4. 对SSH/远程桌面暴力破解<br>
+        5. 数据库登录暴力破解
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 入侵后台管理账号<br>
+        2. 获取服务器SSH权限<br>
+        3. 控制远程桌面连接<br>
+        4. 数据库权限提升<br>
+        5. 企业内网横向移动
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 创建强密码策略（长度、复杂度）<br>
+        2. 实施双因子身份验证（2FA）<br>
+        3. 限制登录尝试次数和频率<br>
+        4. 账户锁定机制<br>
+        5. 使用验证码（CAPTCHA）<br>
+        6. 登录异常行为监控<br>
+        7. 定期更换密码
+      </div>
+      
+      <div class="tip-box">
+        注意：暴力破解是获取Web应用登录信息相当直接的一种方式，同时也是非常容易缓解的攻击方式之一，尤其是从用户侧加以缓解最为方便。
+      </div>
+    `
+  },
+  'thirdparty': {
+    title: '第三方/未知代码风险',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        引入网站或系统的第三方插件、库、组件中隐藏的恶意代码或后门。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        1. 利用开源组件漏洞（如Log4j、Spring框架）<br>
+        2. 恶意插件和扩展程序<br>
+        3. 被篡改的软件安装包<br>
+        4. 供应链攻击（在开发工具中植入后门）<br>
+        5. 依赖混淆攻击
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 敏感数据泄露<br>
+        2. 服务器被远程控制<br>
+        3. 网站内容被篡改<br>
+        4. 加密货币挖矿<br>
+        5. 横向渗透内网
+      </div>
+      
+      <div class="warning-box">
+        注意：尽管不是对网站的直接攻击，但使用由第三方创建的未经验证代码，也可能导致严重的安全漏洞。代码或应用的原始创建者可能会在代码中隐藏恶意字符串，或者无意中留下后门。
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 开发人员分析和审计第三方代码<br>
+        2. 使用官方和可信来源的组件<br>
+        3. 定期更新依赖库和框架<br>
+        4. 软件成分分析（SCA）工具<br>
+        5. 代码签名和完整性验证<br>
+        6. 最小权限原则运行第三方代码<br>
+        7. 安全编码规范和代码审查
+      </div>
+    `
+  },
+  'phishing': {
+    title: '网络钓鱼攻击',
+    content: `
+      <div class="attack-section">
+        <div class="attack-section-title">攻击原理</div>
+        通过伪装成可信机构（银行、官方网站），诱导用户泄露账号密码、验证码等敏感信息。
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击方式</div>
+        1. 伪造官方电子邮件<br>
+        2. 仿冒钓鱼网站<br>
+        3. 恶意链接和附件<br>
+        4. 社交工程诱导<br>
+        5. 短信钓鱼（Smishing）<br>
+        6. 语音钓鱼（Vishing）
+      </div>
+      
+      <div class="attack-section">
+        <div class="attack-section-title">攻击危害</div>
+        1. 个人信息泄露<br>
+        2. 资金损失和财产诈骗<br>
+        3. 账号被盗用<br>
+        4. 企业机密泄露<br>
+        5. 勒索软件感染
+      </div>
+      
+      <div class="tip-box">
+        攻击类型：此类攻击可以是古怪的419骗局（尼日利亚骗局），或者涉及假冒电子邮件地址、貌似真实的网站和极具说服力用语的高端钓鱼攻击。
+      </div>
+      
+      <div class="defense-box">
+        <strong>防御方法：</strong><br>
+        1. 安全培训增强员工辨识能力<br>
+        2. 检查发送者电子邮件地址合法性<br>
+        3. 警惕异常请求和不合常理的内容<br>
+        4. 使用反钓鱼工具和浏览器扩展<br>
+        5. 实施邮件过滤和垃圾邮件检测<br>
+        6. 多因素身份验证<br>
+        7. 定期安全意识教育<br>
+        8. 报告可疑邮件的机制
+      </div>
+      
+      <div class="tip-box">
+        关键：缓解网络钓鱼骗局风险最有效的方法，是培训员工和自身，增强对此类欺诈的辨识能力。保持警惕，总是检查发送者电子邮件地址是否合法，邮件内容是否古怪，请求是否不合常理。
+      </div>
+    `
+  }
+};
+
+// 页面切换功能
+function switchTab(index) {
+  const pages = document.querySelectorAll('.page-container');
+  const navItems = document.querySelectorAll('.navItem');
+  
+  // 更新页面显示
+  pages.forEach(page => page.classList.remove('active'));
+  navItems.forEach(item => item.classList.remove('active'));
+  
+  if (pages[index]) {
+    pages[index].classList.add('active');
+    navItems[index].classList.add('active');
+  }
+}
+
+// 显示具体攻击技术详情
+function showAttack(attackId) {
+  const attack = attackData[attackId];
+  if (!attack) return;
+  
+  const detailContainer = document.getElementById('attack-detail');
+  detailContainer.innerHTML = `
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h2 style="color: #d32f2f; margin: 0;">${attack.title}</h2>
+      <p style="color: #666;">详细技术解析与防御方案</p>
+    </div>
+    ${attack.content}
+    <div style="text-align: center; margin-top: 30px;">
+      <button onclick="switchTab(0)" style="
+        background: #2196F3;
+        color: white;
+        border: none;
+        padding: 10px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      ">返回攻击列表</button>
+    </div>
+  `;
+  
+  switchTab(1); // 切换到详情页面
+}
+
+// 下雪特效
+const canvas = document.getElementById('snowCanvas');
+const ctx = canvas.getContext('2d');
+let width, height, snowflakes = [];
+
+function resizeCanvas() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function createSnow() {
+  snowflakes = [];
+  for (let i = 0; i < 120; i++) {
+    snowflakes.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 2 + 1,
+      d: Math.random() + 1,
+      o: Math.random() * 0.5 + 0.5
+    });
+  }
+}
+createSnow();
+
+function drawSnow() {
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  snowflakes.forEach(flake => {
+    ctx.beginPath();
+    ctx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
+    ctx.globalAlpha = flake.o;
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+function updateSnow() {
+  snowflakes.forEach(flake => {
+    flake.y += flake.d;
+    if (flake.y > height) {
+      flake.y = 0;
+      flake.x = Math.random() * width;
+    }
+  });
+}
+
+function animateSnow() {
+  drawSnow();
+  updateSnow();
+  requestAnimationFrame(animateSnow);
+}
+animateSnow();
+
+// 创建背景粒子
+const particlesContainer = document.getElementById('bgParticles');
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDelay = Math.random() * 15 + 's';
+  p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+  particlesContainer.appendChild(p);
+}
+
+// 初始化显示首页
+window.onload = function() {
+  switchTab(0);
+};
+</script>
 </body>
 </html>
